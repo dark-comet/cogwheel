@@ -5,7 +5,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
 
-class GatewayHeartbeatSendEvent(private val lastReceivedSequenceNumber: Int) : GatewaySendEvent {
+internal class GatewayHeartbeatSendEvent(private val lastReceivedSequenceNumber: Int) : GatewaySendEvent {
     override fun asPayload(): GatewayPayload {
         return GatewayPayload(
             op = GatewayOpCode.HEARTBEAT.code,

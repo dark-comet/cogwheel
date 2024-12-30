@@ -59,7 +59,7 @@ private constructor(
     
     private val eventSendQueue: Queue<GatewaySendEvent> = ConcurrentLinkedQueue()
     private var onEventReceived: ((Event) -> Unit)? = null
-    private var session: GatewaySession? = null 
+    private var session: KtorGatewaySession? = null 
     
     private val logger: Logger = LoggerFactory.getLogger(KtorGatewayClient::class.java)
     
@@ -183,7 +183,7 @@ private constructor(
         wssSession: DefaultClientWebSocketSession, 
         cancellation: CancellationToken
     ) {
-        val gatewaySession = GatewaySession(this, cancellation)
+        val gatewaySession = KtorGatewaySession(this, cancellation)
         
         synchronized(this) {
             this.session = gatewaySession
@@ -208,9 +208,9 @@ private constructor(
 
     private suspend fun receiveHelloEvent(
         wssSession: DefaultClientWebSocketSession, 
-        gatewaySession: GatewaySession
+        gatewaySession: KtorGatewaySession
     ): GatewayHelloEvent {
-        val event = receiveEvent(wssSession, gatewaySession)
+        val event = receiveEvent(wssSession, wssSession, gatewaySession)
 
         if (event !is GatewayHelloEvent) {
             val description = if (event == null) "null" else event::class.simpleName
@@ -239,9 +239,9 @@ private constructor(
 
     private suspend fun receiveReadyEvent(
         wssSession: DefaultClientWebSocketSession, 
-        gatewaySession: GatewaySession
+        gatewaySession: KtorGatewaySession
     ): GatewayReadyEvent {
-        val event = receiveEvent(wssSession, gatewaySession)
+        val event = receiveEvent(wssSession, wssSession, gatewaySession)
             
         if (event !is GatewayReadyEvent) {
             val description = if (event == null) "null" else event::class.simpleName
@@ -252,20 +252,13 @@ private constructor(
     }
 
     private suspend fun eventReceiverLoop(
-        scope: CoroutineScope,
-        session: DefaultClientWebSocketSession,
+        coroutineScope: CoroutineScope,
+        wssSession: DefaultClientWebSocketSession,
         cancellationToken: CancellationToken
     ) {
         while (!cancellationToken.isCanceled()) {
-            val payload = session.receiveDeserialized<GatewayPayload>()
-            logger.trace("Received payload: {}", payload)
-            
-            val event = GatewayEventMapping.decode(payload)
-            
-            if (event != null) {
-                scope.launch {
-                    onEventReceived?.invoke(event)
-                }
+            if (this.session != null) {
+                receiveEvent(coroutineScope, wssSession, this.session!!)
             }
         }
     }
@@ -293,8 +286,9 @@ private constructor(
     }
     
     private suspend fun receiveEvent(
-        wssSession: DefaultClientWebSocketSession, 
-        gatewaySession: GatewaySession
+        coroutineScope: CoroutineScope,
+        wssSession: DefaultClientWebSocketSession,
+        gatewaySession: KtorGatewaySession
     ): Event? {
         val payload = wssSession.receiveDeserialized<GatewayPayload>()
         val event = GatewayEventMapping.decode(payload)
@@ -313,7 +307,9 @@ private constructor(
         }
         
         if (event != null) {
-            fireEventReceived(event)
+            coroutineScope.launch {
+                fireEventReceived(event)
+            }
         }
         
         return event

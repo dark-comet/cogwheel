@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.models.Intents
 import xyz.darkcomet.cogwheel.network.http.CwHttpClient
 
 class DiscordClientBuilder 
-internal constructor(private val token: Token) {
+internal constructor(token: Token) {
     
     var clientVersion: String?
         get() = settings.customClientVersion

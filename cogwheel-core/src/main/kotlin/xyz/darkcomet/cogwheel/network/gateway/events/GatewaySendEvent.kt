@@ -2,6 +2,6 @@ package xyz.darkcomet.cogwheel.network.gateway.events
 
 import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
 
-interface GatewaySendEvent {
+internal interface GatewaySendEvent {
     fun asPayload() : GatewayPayload
 }

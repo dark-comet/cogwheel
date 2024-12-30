@@ -4,7 +4,7 @@ import xyz.darkcomet.cogwheel.models.ShardId
 import xyz.darkcomet.cogwheel.network.CancellationToken
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class GatewaySession(
+internal class KtorGatewaySession(
     private val client: KtorGatewayClient, 
     private val sessionCancellation: CancellationToken
 ) {

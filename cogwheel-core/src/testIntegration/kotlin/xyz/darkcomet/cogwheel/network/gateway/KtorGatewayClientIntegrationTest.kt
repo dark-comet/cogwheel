@@ -35,7 +35,7 @@ class KtorGatewayClientIntegrationTest {
 
             client.stop()
         }
-        
+
         assertions.start()
         
         runBlocking {

@@ -5,8 +5,11 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import org.slf4j.Logger
@@ -24,6 +27,8 @@ import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.network.gateway.GatewayEventMapping
 import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
+import xyz.darkcomet.cogwheel.network.gateway.events.GatewayHeartbeatSendEvent
+import xyz.darkcomet.cogwheel.network.gateway.events.GatewaySendEvent
 import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -52,7 +57,7 @@ private constructor(
 
     private var lastFetchedGatewayUrl: String? = null
     
-    private val eventSendQueue: Queue<GatewayPayload> = ConcurrentLinkedQueue()
+    private val eventSendQueue: Queue<GatewaySendEvent> = ConcurrentLinkedQueue()
     private var onEventReceived: ((Event) -> Unit)? = null
     private var session: GatewaySession? = null 
     
@@ -109,8 +114,8 @@ private constructor(
         }
     }
 
-    override fun onEventReceived(receiver: (Event) -> Unit) {
-        onEventReceived = receiver
+    override fun onEventReceived(listener: (Event) -> Unit) {
+        onEventReceived = listener
     }
 
     private suspend fun fetchGatewayUrl(
@@ -197,7 +202,7 @@ private constructor(
                 heartbeatIntervalMs = helloEvent.data.heartbeatInterval
             )
         }
-        
+
         gatewaySession.beginBackgroundHeartbeats()
     }
 
@@ -279,8 +284,10 @@ private constructor(
             }
             
             coroutine.launch { 
-                session.sendSerialized(sendEvent)
-                logger.trace("Sent payload: {}", sendEvent)
+                val payload = sendEvent.asPayload()
+                session.sendSerialized(payload)
+                
+                logger.trace("Sent event: {}, payload: {}", sendEvent::class.simpleName, payload)
             }
         }
     }
@@ -290,16 +297,20 @@ private constructor(
         gatewaySession: GatewaySession
     ): Event? {
         val payload = wssSession.receiveDeserialized<GatewayPayload>()
-        logger.trace("Received Gateway payload: {}", payload)
-
-        if (payload.s != null) {
-            if (payload.s < (gatewaySession.lastReceivedSequenceNumber ?: 0)) {
-                logger.warn("Received Gateway payload has 's' < last locally received 's' number: {} < {}", payload.s, gatewaySession.lastReceivedSequenceNumber)
-            }
-            gatewaySession.lastReceivedSequenceNumber = payload.s
+        val event = GatewayEventMapping.decode(payload)
+        
+        if (event != null) {
+            logger.trace("Received event: {}, payload: {}", event.javaClass.simpleName, payload)
+        } else {
+            logger.warn("Unsupported event type from payload: {}", payload)
         }
 
-        val event = GatewayEventMapping.decode(payload)
+        if (payload.s != null) {
+            if (payload.s < (gatewaySession.lastReceivedSequenceNumber.get())) {
+                logger.warn("Received Gateway payload has 's' < last locally received 's' number: {} < {}", payload.s, gatewaySession.lastReceivedSequenceNumber)
+            }
+            gatewaySession.lastReceivedSequenceNumber.set(payload.s)
+        }
         
         if (event != null) {
             fireEventReceived(event)
@@ -312,8 +323,13 @@ private constructor(
         onEventReceived?.invoke(event)
     }
     
-    internal fun heartbeat() {
-        
+    internal fun heartbeat(lastReceivedSequenceNumber: Int) {
+        val event = GatewayHeartbeatSendEvent(lastReceivedSequenceNumber)
+        sendEvent(event)
+    }
+
+    override fun sendEvent(event: GatewaySendEvent) {
+        eventSendQueue.add(event)
     }
 
     class Factory : CwGatewayClient.Factory {

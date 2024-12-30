@@ -2,6 +2,7 @@ package xyz.darkcomet.cogwheel.network.gateway.impl
 
 import xyz.darkcomet.cogwheel.models.ShardId
 import xyz.darkcomet.cogwheel.network.CancellationToken
+import java.util.concurrent.atomic.AtomicInteger
 
 internal class GatewaySession(
     private val client: KtorGatewayClient, 
@@ -15,7 +16,7 @@ internal class GatewaySession(
     var resumeGatewayUrl: String? = null
     var shard: ShardId? = null
     var heartbeatIntervalMs: Long? = null
-    var lastReceivedSequenceNumber: Int? = null
+    var lastReceivedSequenceNumber = AtomicInteger(0)
     
     private var heartbeatManager: HeartbeatManager? = null
     
@@ -41,7 +42,7 @@ internal class GatewaySession(
         }
     }
     
-    suspend fun beginBackgroundHeartbeats() {
+    fun beginBackgroundHeartbeats() {
         synchronized(this) {
             if (!initialized) {
                 throw IllegalStateException("Session is not initialized!")
@@ -50,7 +51,13 @@ internal class GatewaySession(
                 throw IllegalStateException("Background heartbeats already started!")
             }
 
-            val heartbeatManager = HeartbeatManager(sessionId!!, heartbeatIntervalMs!!, client, sessionCancellation)
+            val heartbeatManager = HeartbeatManager(
+                sessionId!!, 
+                heartbeatIntervalMs!!, 
+                client, 
+                lastReceivedSequenceNumber,
+                sessionCancellation
+            )
             this.heartbeatManager = heartbeatManager
             this.heartbeatStarted = true
         }

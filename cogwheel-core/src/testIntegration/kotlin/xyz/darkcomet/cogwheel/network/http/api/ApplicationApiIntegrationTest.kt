@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.TestDiscordClient
+import xyz.darkcomet.cogwheel.events.GatewayHelloEvent
 import xyz.darkcomet.cogwheel.network.http.requests.application.ModifyCurrentApplicationRequest
 import java.util.UUID
 

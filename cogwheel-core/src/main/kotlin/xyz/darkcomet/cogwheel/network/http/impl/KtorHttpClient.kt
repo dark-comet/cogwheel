@@ -63,7 +63,7 @@ internal class KtorHttpClient(
         
         val requestId = UUID.randomUUID()
         
-        logger.debug("Submitting HttpRequest: id={}, {} {}, bodyContent={}", requestId, request.method, endpointUrl, requestBody)
+        logger.trace("Submitting HttpRequest: id={}, {} {}, bodyContent={}", requestId, request.method, endpointUrl, requestBody)
         
         val httpResponse = httpClient.request(endpointUrl) {
             method = getHttpMethod(request.method)
@@ -83,7 +83,7 @@ internal class KtorHttpClient(
         
         val responseBody = httpResponse.bodyAsText()
 
-        logger.debug("Received HttpResponse for id={}, {}, bodyContent={}", requestId, httpResponse.toString(), responseBody)
+        logger.trace("Received HttpResponse for id={}, {}, bodyContent={}", requestId, httpResponse.toString(), responseBody)
 
         return KtorHttpResponse.Raw(httpResponse, responseBody)
     }

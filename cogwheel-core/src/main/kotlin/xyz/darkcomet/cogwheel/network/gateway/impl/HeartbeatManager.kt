@@ -16,7 +16,7 @@ internal class HeartbeatManager(
     private var firstHeartbeat = true
     
     suspend fun beginBackgroundHeartbeats() {
-        logger.debug("Begin heartbeat loop at {}ms intervals, sessionId: {}", heartbeatIntervalMs, sessionId)
+        logger.trace("Begin heartbeat loop at {}ms intervals, sessionId: {}", heartbeatIntervalMs, sessionId)
         
         while (!sessionCancellation.isCanceled()) {
             val delayMs: Long
@@ -29,9 +29,15 @@ internal class HeartbeatManager(
                 delayMs = heartbeatIntervalMs - 5_000 /* Safety margin to account for network latency */
             }
 
-            delay(delayMs)
+            for (step in 1..delayMs) {
+                delay(1)
+                
+                if (sessionCancellation.isCanceled()) {
+                    break
+                }
+            }
 
-            logger.debug("Gateway heartbeat. delay: {}", delayMs)
+            logger.trace("Gateway heartbeat, delay: {}", delayMs)
             client.heartbeat()
         }
     }

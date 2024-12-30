@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
 @Serializable
-data class GatewayEventPayload(
+data class GatewayPayload(
     val op: Int,
     val d: JsonElement? = null,
     val s: Int? = null,

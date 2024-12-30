@@ -1,11 +1,10 @@
 package xyz.darkcomet.cogwheel
 
-import kotlinx.coroutines.runBlocking
 import xyz.darkcomet.cogwheel.events.Event
 import xyz.darkcomet.cogwheel.events.InteractionCreateEvent
-import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.impl.authentication.OAuth2Token
+import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.network.http.api.*
 
 interface DiscordClient {
@@ -15,6 +14,7 @@ interface DiscordClient {
     fun events(): ClientEventManager
     
     suspend fun startGatewayConnection()
+    fun stop()
 
     interface ClientRestApi {
         fun application(): ApplicationApi
@@ -47,7 +47,9 @@ interface DiscordClient {
     }
     
     interface ClientEventManager {
-        fun <T : Event> subscribe(handler: DiscordClient.(T) -> Unit)
+        fun <T : Event> subscribe(eventType: Class<T>, listener: (T) -> Unit)
+        fun <T : Event> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
+        
         fun fireInteractionCreate(event: InteractionCreateEvent)
     }
     
@@ -64,15 +66,7 @@ interface DiscordClient {
             val builder = DiscordClientBuilder(token)
             init?.invoke(builder)
 
-            val client = builder.build()
-            
-            if (builder.isGatewayEnabled()) {
-                runBlocking {
-                    client.startGatewayConnection()
-                }
-            }
-            
-            return client
+            return builder.build()
         }
     }
 }

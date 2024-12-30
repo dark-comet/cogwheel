@@ -5,15 +5,13 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.darkcomet.cogwheel.events.Event
 import xyz.darkcomet.cogwheel.events.GatewayHelloEvent
 import xyz.darkcomet.cogwheel.events.GatewayReadyEvent
 import xyz.darkcomet.cogwheel.impl.authentication.Token
@@ -24,13 +22,18 @@ import xyz.darkcomet.cogwheel.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.network.entities.GatewayIdentifyEventDataEntity
 import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.network.gateway.GatewayEventMapping
-import xyz.darkcomet.cogwheel.network.gateway.GatewayEventPayload
+import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
+import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
 import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 
-class KtorGatewayClient 
+/*
+    Discord Gateway client implementation backed by the Ktor library. 
+    Specifications: https://discord.com/developers/docs/events/gateway
+ */
+internal class KtorGatewayClient 
 private constructor(
     private val token: Token, 
     private val intents: Intents, 
@@ -49,8 +52,8 @@ private constructor(
 
     private var lastFetchedGatewayUrl: String? = null
     
-    private val eventSendQueue: Queue<GatewayEventPayload> = ConcurrentLinkedQueue()
-    private val eventReceiveQueue: Queue<GatewayEventPayload> = ConcurrentLinkedQueue()
+    private val eventSendQueue: Queue<GatewayPayload> = ConcurrentLinkedQueue()
+    private var onEventReceived: ((Event) -> Unit)? = null
     private var session: GatewaySession? = null 
     
     private val logger: Logger = LoggerFactory.getLogger(KtorGatewayClient::class.java)
@@ -60,7 +63,7 @@ private constructor(
     }
 
     override suspend fun startGatewayConnection(
-        cancellationToken: CancellationToken,
+        cancellationToken: CancellationToken, 
         gatewayUrlFetcher: suspend () -> String?
     ) {
         logger.info("Starting Gateway connection...")
@@ -106,25 +109,29 @@ private constructor(
         }
     }
 
+    override fun onEventReceived(receiver: (Event) -> Unit) {
+        onEventReceived = receiver
+    }
+
     private suspend fun fetchGatewayUrl(
-        gatewayUrlFetcher: suspend () -> String?,
+        gatewayUrlFetcher: suspend () -> String?, 
         sessionCancellation: CancellationTokenSource
     ): String? {
-        logger.debug("Fetching Gateway URL...")
+        logger.trace("Fetching Gateway URL...")
         var attempts = 0
         var gatewayUrl: String?
 
         do {
             attempts++
             gatewayUrl = gatewayUrlFetcher.invoke()
-            logger.debug("Fetch Gateway URL attempt {}, got response: {}", attempts, gatewayUrl)
+            logger.trace("Fetch Gateway URL attempt {}, got response: {}", attempts, gatewayUrl)
             
             if (gatewayUrl != null) {
                 gatewayUrl = gatewayUrl.replace("wss://", "").trim()
             }
             
             if (sessionCancellation.isCanceled()) {
-                logger.debug("Aborted Gateway URL fetch: session canceled")
+                logger.trace("Aborted Gateway URL fetch: session canceled")
                 break
             }
         } while (gatewayUrl == null)
@@ -133,11 +140,11 @@ private constructor(
     }
 
     private suspend fun establishGatewaySession(
-        gatewayUrl: String,
-        sessionCount: Int,
+        gatewayUrl: String, 
+        sessionCount: Int, 
         sessionCancellation: CancellationToken
     ) {
-        logger.debug("Establishing Gateway connection: GET {} (session {})", lastFetchedGatewayUrl, sessionCount)
+        logger.trace("Establishing Gateway connection: GET {} (session {})", lastFetchedGatewayUrl, sessionCount)
         
         synchronized(this) {
             if (session != null) {
@@ -150,11 +157,15 @@ private constructor(
             val wssSession = this
             
             performHandshake(wssSession, sessionCancellation)
-
-            val receiverJob = launch { eventReceiverLoop(wssSession, sessionCancellation) }
+            
+            val receiverJob = launch { eventReceiverLoop(this, wssSession, sessionCancellation) }
             val senderJob = launch { eventSenderLoop(this, wssSession, sessionCancellation) }
-
-            eventProcessorLoop(wssSession, sessionCancellation)
+            
+            while (!sessionCancellation.isCanceled()) {
+                yield()
+            }
+            
+            httpClient.close()
             
             receiverJob.join()
             senderJob.join()
@@ -164,10 +175,10 @@ private constructor(
     }
 
     private suspend fun performHandshake(
-        wssSession: DefaultClientWebSocketSession,
-        sessionCancellation: CancellationToken
+        wssSession: DefaultClientWebSocketSession, 
+        cancellation: CancellationToken
     ) {
-        val gatewaySession = GatewaySession(this, sessionCancellation)
+        val gatewaySession = GatewaySession(this, cancellation)
         
         synchronized(this) {
             this.session = gatewaySession
@@ -191,17 +202,17 @@ private constructor(
     }
 
     private suspend fun receiveHelloEvent(
-        wssSession: DefaultClientWebSocketSession,
+        wssSession: DefaultClientWebSocketSession, 
         gatewaySession: GatewaySession
     ): GatewayHelloEvent {
-        val payload = receiveEvent(wssSession, gatewaySession)
-        val firstEvent = GatewayEventMapping.decode(payload)
+        val event = receiveEvent(wssSession, gatewaySession)
 
-        if (firstEvent !is GatewayHelloEvent) {
-            throw IllegalStateException("Invalid first payload during handshake! op: ${payload.op} (expected 10)")
+        if (event !is GatewayHelloEvent) {
+            val description = if (event == null) "null" else event::class.simpleName
+            throw IllegalStateException("Invalid first event during handshake: $description")
         }
         
-        return firstEvent
+        return event
     }
 
     private suspend fun sendIdentifyWithIntents(session: DefaultClientWebSocketSession) {
@@ -216,38 +227,47 @@ private constructor(
         )
         
         val dataElement = Json.encodeToJsonElement(GatewayIdentifyEventDataEntity.serializer(), data)
-        val payload = GatewayEventPayload(op = GatewayEventMapping.OP_IDENTIFY, d = dataElement)
+        val payload = GatewayPayload(op = GatewayOpCode.IDENTIFY.code, d = dataElement)
         
         session.sendSerialized(payload)
     }
 
     private suspend fun receiveReadyEvent(
-        wssSession: DefaultClientWebSocketSession,
+        wssSession: DefaultClientWebSocketSession, 
         gatewaySession: GatewaySession
     ): GatewayReadyEvent {
-        val payload = receiveEvent(wssSession, gatewaySession)
-        val secondEvent = GatewayEventMapping.decode(payload)
-
-        if (secondEvent !is GatewayReadyEvent) {
-            val eventDescription = if (secondEvent == null) "null" else secondEvent::class.simpleName
-            throw IllegalStateException("Invalid second payload during handshake! op: ${payload.op} (expected 0), got event: $eventDescription")
+        val event = receiveEvent(wssSession, gatewaySession)
+            
+        if (event !is GatewayReadyEvent) {
+            val description = if (event == null) "null" else event::class.simpleName
+            throw IllegalStateException("Invalid second event during handshake: $description")
         }
 
-        return secondEvent
+        return event
     }
 
-    private suspend fun eventReceiverLoop(session: DefaultClientWebSocketSession, cancellationToken: CancellationToken) {
+    private suspend fun eventReceiverLoop(
+        scope: CoroutineScope,
+        session: DefaultClientWebSocketSession,
+        cancellationToken: CancellationToken
+    ) {
         while (!cancellationToken.isCanceled()) {
-            val payload = session.receiveDeserialized<GatewayEventPayload>()
-            logger.debug("Received payload: {}", payload)
+            val payload = session.receiveDeserialized<GatewayPayload>()
+            logger.trace("Received payload: {}", payload)
             
-            eventReceiveQueue.add(payload)
+            val event = GatewayEventMapping.decode(payload)
+            
+            if (event != null) {
+                scope.launch {
+                    onEventReceived?.invoke(event)
+                }
+            }
         }
     }
     
     private suspend fun eventSenderLoop(
-        coroutine: CoroutineScope,
-        session: DefaultClientWebSocketSession,
+        coroutine: CoroutineScope, 
+        session: DefaultClientWebSocketSession, 
         cancellation: CancellationToken
     ) {
         while (!cancellation.isCanceled()) {
@@ -260,33 +280,40 @@ private constructor(
             
             coroutine.launch { 
                 session.sendSerialized(sendEvent)
-                logger.debug("Sent payload: {}", sendEvent)
+                logger.trace("Sent payload: {}", sendEvent)
             }
         }
     }
-
-    private fun eventProcessorLoop(session: DefaultClientWebSocketSession, cancellation: CancellationToken) {
-    }
-
+    
     private suspend fun receiveEvent(
-        wssSession: DefaultClientWebSocketSession,
+        wssSession: DefaultClientWebSocketSession, 
         gatewaySession: GatewaySession
-    ): GatewayEventPayload {
-        val payload = wssSession.receiveDeserialized<GatewayEventPayload>()
-        logger.debug("Received Gateway payload: {}", payload)
+    ): Event? {
+        val payload = wssSession.receiveDeserialized<GatewayPayload>()
+        logger.trace("Received Gateway payload: {}", payload)
 
         if (payload.s != null) {
-            if (payload.s < gatewaySession.lastReceivedSequenceNumber ?: 0) {
+            if (payload.s < (gatewaySession.lastReceivedSequenceNumber ?: 0)) {
                 logger.warn("Received Gateway payload has 's' < last locally received 's' number: {} < {}", payload.s, gatewaySession.lastReceivedSequenceNumber)
             }
             gatewaySession.lastReceivedSequenceNumber = payload.s
         }
 
-        return payload
+        val event = GatewayEventMapping.decode(payload)
+        
+        if (event != null) {
+            fireEventReceived(event)
+        }
+        
+        return event
     }
-
-    fun heartbeat() {
-        // TODO: 
+    
+    private fun fireEventReceived(event: Event) {
+        onEventReceived?.invoke(event)
+    }
+    
+    internal fun heartbeat() {
+        
     }
 
     class Factory : CwGatewayClient.Factory {

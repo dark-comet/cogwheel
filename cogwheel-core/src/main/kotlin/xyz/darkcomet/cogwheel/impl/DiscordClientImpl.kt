@@ -10,11 +10,14 @@ import xyz.darkcomet.cogwheel.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.network.http.api.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 internal open class DiscordClientImpl 
 internal constructor(settings: DiscordClientSettings) : DiscordClient {
     
     private val config: CwConfiguration = CwConfiguration.load()
+    private val cancellationToken = CancellationTokenSource()
     private val logger: Logger = LoggerFactory.getLogger(DiscordClientImpl::class.java)
 
     private val restClient: CwHttpClient
@@ -36,7 +39,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         
         restApi = ClientRestApiImpl(restClient)
         gatewayApi = ClientGatewayApiImpl(gatewayClient)
-        clientEventManager = ClientEventManagerImpl()
+        clientEventManager = ClientEventManagerImpl(gatewayClient)
         logger.info("DiscordClient initialized")
     }
 
@@ -45,11 +48,14 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             throw IllegalStateException("gatewayClient not initialized! Build DiscordClient using withGateway() first.")
         }
         
-        val cancellationToken = CancellationTokenSource()
-        
-        gatewayClient.startGatewayConnection(cancellationToken) {
-            restApi().gateway().get().entity!!.url
-        }
+        gatewayClient.startGatewayConnection(
+            cancellationToken, 
+            gatewayUrlFetcher = { restApi().gateway().get().entity?.url }
+        )
+    }
+
+    override fun stop() {
+        cancellationToken.cancel()
     }
 
     override fun restApi(): DiscordClient.ClientRestApi = restApi
@@ -116,16 +122,43 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         }
     }
     
-    internal class ClientEventManagerImpl : DiscordClient.ClientEventManager {
-        override fun <T : Event> subscribe(handler: DiscordClient.(T) -> Unit) {
-            TODO("Not yet implemented")
+    internal class ClientEventManagerImpl(client: CwGatewayClient?) : DiscordClient.ClientEventManager {
+        
+        private val listeners: MutableMap<Class<out Any>, ArrayList<(Event) -> Unit>> = HashMap()
+        
+        // TODO: Hacky -- is there a cleaner solution?
+        //       Want listener to be of type "(T) -> Unit" rather than "(Event) -> Unit" for cleaner client code
+        //       But JVM type-erasure makes this information hard to store.
+        private val mapping: MutableMap<Any, (Event) -> Unit> = HashMap()
+        
+        init {
+            client?.onEventReceived { event ->
+                listeners[event.javaClass]?.forEach {
+                    it.invoke(event)
+                }
+            }
+        }
+        
+        override fun <T : Event> subscribe(eventType: Class<T>, listener: (T) -> Unit) {
+            val delegate: (Event) -> Unit = {
+                @Suppress("UNCHECKED_CAST")
+                listener.invoke(it as T)
+            }
+            
+            mapping[listener] = delegate
+            listeners.putIfAbsent(eventType, ArrayList())
+            listeners[eventType]!!.add(delegate)
+        }
+
+        override fun <T : Event> unsubscribe(eventType: Class<T>, listener: (T) -> Unit) {
+            val delegateListener = mapping[listener]
+            
+            if (delegateListener != null) {
+                listeners[eventType]?.remove(delegateListener)
+            }
         }
 
         override fun fireInteractionCreate(event: InteractionCreateEvent) {
-            TODO("Not yet implemented")
-        }
-        
-        internal fun fire(event: Event) {
             TODO("Not yet implemented")
         }
     }

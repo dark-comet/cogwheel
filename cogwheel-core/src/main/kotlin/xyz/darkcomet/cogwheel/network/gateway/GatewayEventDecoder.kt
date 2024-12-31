@@ -4,18 +4,16 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import xyz.darkcomet.cogwheel.events.Event
-import xyz.darkcomet.cogwheel.events.GatewayHelloEvent
-import xyz.darkcomet.cogwheel.events.GatewayReadyEvent
+import xyz.darkcomet.cogwheel.events.*
 import xyz.darkcomet.cogwheel.network.entities.GatewayHelloEventDataEntity
 import xyz.darkcomet.cogwheel.network.entities.GatewayReadyEventDataEntity
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayReceivePayloadName
 import kotlin.reflect.typeOf
 
-internal class GatewayEventMapping private constructor() {
+internal class GatewayEventDecoder private constructor() {
     companion object {
-        private val LOGGER: Logger = LoggerFactory.getLogger(GatewayEventMapping::class.java)
+        private val LOGGER: Logger = LoggerFactory.getLogger(GatewayEventDecoder::class.java)
         private val JSON_DESERIALIZER = Json { ignoreUnknownKeys = true }
         
         fun decode(payload: GatewayPayload): Event? {
@@ -23,7 +21,10 @@ internal class GatewayEventMapping private constructor() {
                 GatewayOpCode.DISPATCH.code -> decodeDispatchEvent(payload)
                 GatewayOpCode.IDENTIFY.code -> unsupportedDecode(payload)
                 GatewayOpCode.HELLO.code -> decodeWithData<GatewayHelloEventDataEntity, GatewayHelloEvent>(payload) { GatewayHelloEvent(it) }
-                
+                GatewayOpCode.RECONNECT.code -> GatewayReconnectEvent()
+                GatewayOpCode.INVALID_SESSION.code -> GatewayInvalidSessionEvent(shouldTryResume = JSON_DESERIALIZER.decodeFromJsonElement(payload.d!!))
+                GatewayOpCode.HEARTBEAT.code -> GatewayHeartbeatEvent()
+                GatewayOpCode.HEARTBEAT_ACK.code -> GatewayHeartbeatAckEvent()
                 else -> null
             }
         }
@@ -31,7 +32,7 @@ internal class GatewayEventMapping private constructor() {
         private fun decodeDispatchEvent(payload: GatewayPayload): Event? {
             return when (payload.t) {
                 GatewayReceivePayloadName.READY.name -> decodeWithData<GatewayReadyEventDataEntity, GatewayReadyEvent>(payload) { GatewayReadyEvent(it) }
-                
+                GatewayReceivePayloadName.RESUMED.name -> GatewayResumedEvent()
                 else -> null
             }
         }
@@ -40,7 +41,10 @@ internal class GatewayEventMapping private constructor() {
             throw IllegalArgumentException("Not expected to receive event with op: ${payload.op}")
         }
 
-        private inline fun <reified TData, TResult> decodeWithData(payload: GatewayPayload, resultFactory: (TData) -> TResult): TResult? {
+        private inline fun <reified TData, TResult> decodeWithData(
+            payload: GatewayPayload, 
+            resultFactory: (TData) -> TResult
+        ): TResult? {
             if (payload.d == null) {
                 LOGGER.warn("Error parsing payload (op: {}) to type {}: 'd' == null", payload.op, typeOf<TData>())
                 return null;

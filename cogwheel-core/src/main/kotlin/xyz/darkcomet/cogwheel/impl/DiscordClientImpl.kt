@@ -48,7 +48,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             throw IllegalStateException("gatewayClient not initialized! Build DiscordClient using withGateway() first.")
         }
         
-        gatewayClient.startGatewayConnection(
+        gatewayClient.start(
             cancellationToken, 
             gatewayUrlFetcher = { restApi().gateway().get().entity?.url }
         )

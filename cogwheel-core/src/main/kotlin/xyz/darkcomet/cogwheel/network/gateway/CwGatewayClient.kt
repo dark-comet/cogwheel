@@ -8,7 +8,7 @@ import xyz.darkcomet.cogwheel.network.gateway.events.GatewaySendEvent
 
 internal interface CwGatewayClient {
     
-    suspend fun startGatewayConnection(
+    suspend fun start(
         cancellationToken: CancellationToken, 
         gatewayUrlFetcher: suspend () -> String?
     )

@@ -23,9 +23,11 @@ import xyz.darkcomet.cogwheel.network.entities.GatewayResumeDataEntity
 import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.network.gateway.GatewayEventDecoder
 import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
+import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayCloseCode
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.network.gateway.events.GatewayHeartbeatSendEvent
 import xyz.darkcomet.cogwheel.network.gateway.events.GatewaySendEvent
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -124,10 +126,7 @@ private constructor(
             logger.trace("Establishing Gateway connection: GET {} (session {})", gatewayUrl, sessionCount)
             
             try {
-                httpClient.wss(method = HttpMethod.Get, host = gatewayUrl) {
-                    logger.info("Connected to {} successfully!", gatewayUrl)
-                    launchGateway(this, isResume, shouldResumeNextAttempt, sessionCancellation)
-                }
+                establishWebsocketConnection(gatewayUrl, isResume, shouldResumeNextAttempt, sessionCancellation)
             } catch (exception: UnknownHostException) {
                 // TODO: Handle the case where resumeUrl may be invalid -- need to force reconnection
                 //       think about how to reliably tell this case apart from a loss of internet connectivity?
@@ -141,6 +140,39 @@ private constructor(
             }
 
             delay(1000)
+        }
+    }
+
+    private suspend fun establishWebsocketConnection(
+        gatewayUrl: String,
+        isResume: Boolean,
+        shouldResumeNextAttempt: AtomicBoolean,
+        sessionCancellation: CancellationTokenSource
+    ) {
+        httpClient.wss(method = HttpMethod.Get, host = gatewayUrl) {
+            logger.info("Connected to {}", gatewayUrl)
+            launchGateway(this, isResume, shouldResumeNextAttempt, sessionCancellation)
+
+            try {
+                // Verify it is indeed sensible to resume rather than re-identify based on 
+                // websocket close code specified by https://discord.com/developers/docs/topics/opcodes-and-status-codes
+                val rawCloseCode = closeReason.await()?.code
+                var gatewayCloseCode: GatewayCloseCode? = null
+
+                if (shouldResumeNextAttempt.get()) {
+                    gatewayCloseCode = GatewayCloseCode.from(rawCloseCode)
+                    shouldResumeNextAttempt.set(gatewayCloseCode?.shouldResume ?: true)
+                }
+
+                logger.trace(
+                    "Gateway WSS close code: {}, GatewayCloseCode: {}, resumeNext: {}", 
+                    rawCloseCode, 
+                    gatewayCloseCode, 
+                    shouldResumeNextAttempt.get()
+                )
+            } catch (exception: SocketTimeoutException) {
+                // Can happen when there is no internet. Ignore & retry.
+            }
         }
     }
 

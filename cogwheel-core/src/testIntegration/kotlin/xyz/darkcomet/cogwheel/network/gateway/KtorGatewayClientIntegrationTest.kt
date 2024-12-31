@@ -26,17 +26,17 @@ class KtorGatewayClientIntegrationTest {
         events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
         events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
 
-//        val assertions = Thread {
-//            val receivedReady = receiveReadyLatch.await(1000, TimeUnit.SECONDS)
-//            assertTrue(receivedReady, "Failed to receive READY event after 10 seconds!")
-//
-//            val receivedHello = receiveHelloLatch.await(1000, TimeUnit.SECONDS)
-//            assertTrue(receivedHello, "Failed to receive HELLO event after 10 seconds!")
-//
-//            client.stop()
-//        }
-//
-//        assertions.start()
+        val assertions = Thread {
+            val receivedReady = receiveReadyLatch.await(1000, TimeUnit.SECONDS)
+            assertTrue(receivedReady, "Failed to receive READY event after 10 seconds!")
+
+            val receivedHello = receiveHelloLatch.await(1000, TimeUnit.SECONDS)
+            assertTrue(receivedHello, "Failed to receive HELLO event after 10 seconds!")
+
+            client.stop()
+        }
+
+        assertions.start()
 
         runBlocking {
             client.startGatewayConnection()

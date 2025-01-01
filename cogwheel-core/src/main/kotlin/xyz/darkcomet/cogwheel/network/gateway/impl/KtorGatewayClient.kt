@@ -12,6 +12,8 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects.Gateway.*
 import xyz.darkcomet.cogwheel.events.*
 import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.models.Intents
@@ -40,9 +42,11 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 internal class KtorGatewayClient 
 private constructor(
-    private val token: Token, 
-    private val intents: Intents, 
-    private val libName: String
+    private val token: Token,
+    private val intents: Intents,
+    private val libName: String,
+    private val aspects: DiscordClientAspects.Gateway,
+    private val settings: CwGatewayClient.Settings
 ) : CwGatewayClient {
     
     private val httpClient: HttpClient = HttpClient(OkHttp) {
@@ -65,6 +69,13 @@ private constructor(
     private val logger: Logger = LoggerFactory.getLogger(KtorGatewayClient::class.java)
     
     init {
+        if (settings.fetchUrlMaxAttempts != null && settings.fetchUrlMaxAttempts <= 0) {
+            throw IllegalArgumentException("fetchUrlMaxAttempts must be > 0 if set")
+        }
+        if (settings.reconnectMaxAttempts != null && settings.reconnectMaxAttempts <= 0) {
+            throw IllegalArgumentException("reconnectMaxAttempts must be > 0 if set")
+        }
+        
         logger.info("Gateway HttpClient initialized")
     }
 
@@ -91,6 +102,11 @@ private constructor(
         while (!serviceCancellation.isCanceled()) {
             sessionCount++
             
+            if (settings.reconnectMaxAttempts != null && sessionCount > settings.reconnectMaxAttempts) {
+                logger.info("Aborted Gateway connection attempt: max attempt reached ({})", sessionCount)
+                break;
+            }
+            
             val sessionCancellation = object : CancellationTokenSource() {
                 override fun isCanceled(): Boolean {
                     return serviceCancellation.isCanceled() || this.canceled.get()
@@ -101,6 +117,7 @@ private constructor(
             var gatewayUrl: String
 
             val hasExistingSession = gatewaySession?.resumeGatewayUrl != null && gatewaySession?.sessionId != null
+            val shouldResumeNextAttemptOldValue = shouldResumeNextAttempt.get()
             
             if (!hasExistingSession || !shouldResumeNextAttempt.get()) {
                 // Unable to resume, start a new connection
@@ -124,6 +141,9 @@ private constructor(
             }
 
             logger.trace("Establishing Gateway connection: GET {} (session {})", gatewayUrl, sessionCount)
+            
+            val adviceArgs = ConnectionAttemptStartedArgs(sessionCount, isResume, shouldResumeNextAttemptOldValue)
+            aspects.connectionAttemptStarted.applyAdvices(adviceArgs)
             
             try {
                 establishWebsocketConnection(gatewayUrl, isResume, shouldResumeNextAttempt, sessionCancellation)
@@ -152,27 +172,33 @@ private constructor(
         httpClient.wss(method = HttpMethod.Get, host = gatewayUrl) {
             logger.info("Connected to {}", gatewayUrl)
             launchGateway(this, isResume, shouldResumeNextAttempt, sessionCancellation)
+            handleCloseCode(this, shouldResumeNextAttempt)
+        }
+    }
 
-            try {
-                // Verify it is indeed sensible to resume rather than re-identify based on 
-                // websocket close code specified by https://discord.com/developers/docs/topics/opcodes-and-status-codes
-                val rawCloseCode = closeReason.await()?.code
-                var gatewayCloseCode: GatewayCloseCode? = null
+    private suspend fun handleCloseCode(
+        wssSession: DefaultClientWebSocketSession,
+        shouldResumeNextAttempt: AtomicBoolean
+    ) {
+        try {
+            // Verify it is indeed sensible to resume rather than re-identify based on 
+            // websocket close code specified by https://discord.com/developers/docs/topics/opcodes-and-status-codes
+            val rawCloseCode = wssSession.closeReason.await()?.code
+            var gatewayCloseCode: GatewayCloseCode? = null
 
-                if (shouldResumeNextAttempt.get()) {
-                    gatewayCloseCode = GatewayCloseCode.from(rawCloseCode)
-                    shouldResumeNextAttempt.set(gatewayCloseCode?.shouldResume ?: true)
-                }
-
-                logger.trace(
-                    "Gateway WSS close code: {}, GatewayCloseCode: {}, resumeNext: {}", 
-                    rawCloseCode, 
-                    gatewayCloseCode, 
-                    shouldResumeNextAttempt.get()
-                )
-            } catch (exception: SocketTimeoutException) {
-                // Can happen when there is no internet. Ignore & retry.
+            if (shouldResumeNextAttempt.get()) {
+                gatewayCloseCode = GatewayCloseCode.from(rawCloseCode)
+                shouldResumeNextAttempt.set(gatewayCloseCode?.shouldResume ?: true)
             }
+
+            logger.trace(
+                "Gateway WSS close code: {}, GatewayCloseCode: {}, resumeNext: {}",
+                rawCloseCode,
+                gatewayCloseCode,
+                shouldResumeNextAttempt.get()
+            )
+        } catch (exception: SocketTimeoutException) {
+            // Can happen when there is no internet. Ignore & retry.
         }
     }
 
@@ -182,17 +208,25 @@ private constructor(
 
     private suspend fun fetchGatewayUrl(
         gatewayUrlFetcher: suspend () -> String?, 
-        sessionCancellation: CancellationTokenSource
+        sessionCancellation: CancellationToken
     ): String? {
         logger.trace("Fetching Gateway URL...")
         var attempts = 0
-        var gatewayUrl: String?
+        var gatewayUrl: String? = null
 
         do {
             attempts++
+
+            if (settings.fetchUrlMaxAttempts != null && attempts > settings.fetchUrlMaxAttempts) {
+                logger.info("Aborted Gateway URL fetch: exceeded max attempt limit ({})", attempts)
+                break
+            }
             
             try {
                 gatewayUrl = gatewayUrlFetcher.invoke()
+                
+                val adviceArgs = FetchGatewayUrlCompleteArgs(gatewayUrl)
+                aspects.fetchGatewayUrlComplete.applyAdvices(adviceArgs)
             } catch (exception: UnknownHostException) {
                 logger.warn("Fetch Gateway URL attempt {}, bad response: UnknownHostException", attempts)
                 gatewayUrl = null
@@ -270,7 +304,10 @@ private constructor(
                 shard = ShardId.from(readyEvent.data.shard),
                 heartbeatIntervalMs = helloEvent.data.heartbeatInterval
             )
-            gatewaySession.beginBackgroundHeartbeats()
+            
+            if (!settings.disableHeartbeats) {
+                gatewaySession.beginBackgroundHeartbeats()    
+            }
         }
     }
 
@@ -450,8 +487,14 @@ private constructor(
     }
 
     class Factory : CwGatewayClient.Factory {
-        override fun create(token: Token, intents: Intents, libName: String): CwGatewayClient {
-            return KtorGatewayClient(token, intents, libName)
+        override fun create(
+            token: Token,
+            intents: Intents,
+            libName: String,
+            aspects: DiscordClientAspects.Gateway,
+            settings: CwGatewayClient.Settings
+        ): CwGatewayClient {
+            return KtorGatewayClient(token, intents, libName, aspects, settings)
         }
     }
 }

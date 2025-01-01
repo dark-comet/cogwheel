@@ -34,7 +34,19 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         logger.info("Initialized CwHttpClient: {}", restClient.javaClass.name)
 
         gatewayClient = if (settings.gatewayEnabled) {
-            settings.cwGatewayClientFactory.create(settings.token, settings.gatewayIntents, config.clientName)
+            val gatewayClientSettings = CwGatewayClient.Settings(
+                settings.testDisableGatewayHeartbeats,
+                settings.gatewayFetchUrlMaxAttempts,
+                settings.gatewaySessionReconnectMaxAttempts
+            )
+            
+            settings.cwGatewayClientFactory.create(
+                settings.token, 
+                settings.gatewayIntents, 
+                config.clientName,
+                settings.aspects.gateway,
+                gatewayClientSettings
+            )
         } else null
         
         restApi = ClientRestApiImpl(restClient)

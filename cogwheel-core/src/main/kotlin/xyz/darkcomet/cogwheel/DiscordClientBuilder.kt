@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel
 
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.impl.DiscordClientImpl
 import xyz.darkcomet.cogwheel.impl.DiscordClientSettings
 import xyz.darkcomet.cogwheel.impl.authentication.Token
@@ -20,6 +21,21 @@ internal constructor(token: Token) {
     internal var cwHttpClientFactory: CwHttpClient.Factory
         get() = settings.cwHttpClientFactory
         set(value) { settings.cwHttpClientFactory = value }
+    
+    internal val aspects: DiscordClientAspects
+        get() = settings.aspects
+    
+    internal var gatewayFetchUrlMaxAttempts: Int?
+        get() = settings.gatewayFetchUrlMaxAttempts
+        set(value) { settings.gatewayFetchUrlMaxAttempts = value }
+    
+    internal var gatewaySessionReconnectMaxAttempts: Int?
+        get() = settings.gatewaySessionReconnectMaxAttempts
+        set(value) { settings.gatewaySessionReconnectMaxAttempts = value }
+    
+    internal var testDisableGatewayHeartbeats: Boolean
+        get() = settings.testDisableGatewayHeartbeats
+        set(value) { settings.testDisableGatewayHeartbeats = value }
     
     private val settings = DiscordClientSettings(token)
     

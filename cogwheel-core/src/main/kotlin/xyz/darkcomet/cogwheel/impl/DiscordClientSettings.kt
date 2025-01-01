@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel.impl
 
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.models.Intents
 import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
@@ -14,5 +15,10 @@ internal data class DiscordClientSettings(
     var customClientVersion: String? = null,
     var customClientUrl: String? = null,
     var gatewayEnabled: Boolean = false,
-    var gatewayIntents: Intents = Intents.none()
+    var gatewayIntents: Intents = Intents.none(),
+    var gatewayFetchUrlMaxAttempts: Int? = null,
+    var gatewaySessionReconnectMaxAttempts: Int? = null,
+    val aspects: DiscordClientAspects = DiscordClientAspects(),
+    // Test-use settings
+    var testDisableGatewayHeartbeats: Boolean = false
 )

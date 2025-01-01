@@ -70,6 +70,7 @@ idea {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+    maxParallelForks = 1
 }
 
 val testIntegration = task<Test>("testIntegration") {

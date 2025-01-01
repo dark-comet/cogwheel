@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel.network.gateway
 
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.events.Event
 import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.models.Intents
@@ -19,6 +20,18 @@ internal interface CwGatewayClient {
 
     @FunctionalInterface
     interface Factory {
-        fun create(token: Token, intents: Intents, libName: String): CwGatewayClient
+        fun create(
+            token: Token, 
+            intents: Intents, 
+            libName: String,
+            aspects: DiscordClientAspects.Gateway,
+            settings: Settings
+        ): CwGatewayClient
     }
+    
+    data class Settings(
+        val disableHeartbeats: Boolean,
+        val fetchUrlMaxAttempts: Int?,
+        val reconnectMaxAttempts: Int?,
+    )
 }

@@ -411,7 +411,7 @@ private constructor(
                 fireEventReceived(event)
             }
             
-            performSpecialEventHandling(event, wssSession, gatewaySession, shouldResumeNextAttempt)
+            performSpecialEventHandling(event, wssSession, shouldResumeNextAttempt)
         }
         
         return event
@@ -420,7 +420,6 @@ private constructor(
     private suspend fun performSpecialEventHandling(
         event: Event,
         wssSession: DefaultClientWebSocketSession,
-        gatewaySession: KtorGatewaySession,
         shouldResumeNextAttempt: AtomicBoolean
     ) {
         if (event is GatewayInvalidSessionEvent || event is GatewayReconnectEvent) {
@@ -430,11 +429,7 @@ private constructor(
                 shouldResumeNextAttempt.set(event.shouldTryResume)
             }
 
-            if (shouldResumeNextAttempt.get()) {
-                resumeGatewaySession(wssSession, gatewaySession)
-            } else {
-                wssSession.close()
-            }
+            wssSession.close()
         }
     }
 

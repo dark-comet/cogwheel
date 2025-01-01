@@ -14,7 +14,7 @@ internal interface CwGatewayClient {
         gatewayUrlFetcher: suspend () -> String?
     )
     
-    fun sendEvent(event: GatewaySendEvent)
+    fun sendEventAsync(event: GatewaySendEvent)
     
     fun onEventReceived(listener: (Event) -> Unit)
 

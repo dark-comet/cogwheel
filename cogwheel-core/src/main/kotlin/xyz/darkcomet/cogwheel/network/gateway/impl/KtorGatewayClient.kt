@@ -13,21 +13,21 @@ import okhttp3.OkHttpClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects
-import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects.Gateway.*
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects.Gateway.ConnectionAttemptStartedArgs
+import xyz.darkcomet.cogwheel.aspects.DiscordClientAspects.Gateway.FetchGatewayUrlCompleteArgs
 import xyz.darkcomet.cogwheel.events.*
 import xyz.darkcomet.cogwheel.impl.authentication.Token
 import xyz.darkcomet.cogwheel.models.Intents
 import xyz.darkcomet.cogwheel.models.ShardId
 import xyz.darkcomet.cogwheel.network.CancellationToken
 import xyz.darkcomet.cogwheel.network.CancellationTokenSource
-import xyz.darkcomet.cogwheel.network.entities.GatewayIdentifyEventDataEntity
-import xyz.darkcomet.cogwheel.network.entities.GatewayResumeDataEntity
 import xyz.darkcomet.cogwheel.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.network.gateway.GatewayEventDecoder
 import xyz.darkcomet.cogwheel.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayCloseCode
-import xyz.darkcomet.cogwheel.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.network.gateway.events.GatewayHeartbeatSendEvent
+import xyz.darkcomet.cogwheel.network.gateway.events.GatewayIdentifySendEvent
+import xyz.darkcomet.cogwheel.network.gateway.events.GatewayResumeSendEvent
 import xyz.darkcomet.cogwheel.network.gateway.events.GatewaySendEvent
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -327,20 +327,8 @@ private constructor(
     }
 
     private suspend fun sendIdentifyWithIntents(session: DefaultClientWebSocketSession) {
-        val data = GatewayIdentifyEventDataEntity(
-            token = token.value,
-            properties = GatewayIdentifyEventDataEntity.IdentifyConnectionPropertiesEntity(
-                os = System.getProperty("os.name"),
-                browser = libName,
-                device = libName
-            ),
-            intents = intents.value
-        )
-        
-        val dataElement = Json.encodeToJsonElement(GatewayIdentifyEventDataEntity.serializer(), data)
-        val payload = GatewayPayload(op = GatewayOpCode.IDENTIFY.code, d = dataElement)
-        
-        session.sendSerialized(payload)
+        val event = GatewayIdentifySendEvent(token, intents, libName)
+        sendEvent(event, session)
     }
 
     private suspend fun receiveReadyEvent(
@@ -378,18 +366,15 @@ private constructor(
         session: DefaultClientWebSocketSession
     ) {
         while (session.isActive) {
-            val sendEvent = eventSendQueue.poll()
+            val event = eventSendQueue.poll()
             
-            if (sendEvent == null) {
+            if (event == null) {
                 yield()
                 continue
             }
             
             coroutine.launch { 
-                val payload = sendEvent.asPayload()
-                session.sendSerialized(payload)
-                
-                logger.trace("Sent event: {}, payload: {}", sendEvent::class.simpleName, payload)
+                sendEvent(event, session)
             }
         }
     }
@@ -465,12 +450,8 @@ private constructor(
         }
         
         val seq = gatewaySession.lastReceivedSequenceNumber.get()
-        
-        val data = GatewayResumeDataEntity(token.value, sessionId, seq)
-        val dataElement = Json.encodeToJsonElement(GatewayResumeDataEntity.serializer(), data)
-        val payload = GatewayPayload(op = GatewayOpCode.RESUME.code, d = dataElement)
-        
-        wssSession.sendSerialized(payload)
+        val event = GatewayResumeSendEvent(token, sessionId, seq)
+        sendEvent(event, wssSession)
     }
 
     private fun fireEventReceived(event: Event) {
@@ -479,11 +460,18 @@ private constructor(
     
     internal fun heartbeat(lastReceivedSequenceNumber: Int) {
         val event = GatewayHeartbeatSendEvent(lastReceivedSequenceNumber)
-        sendEvent(event)
+        sendEventAsync(event)
     }
 
-    override fun sendEvent(event: GatewaySendEvent) {
+    override fun sendEventAsync(event: GatewaySendEvent) {
         eventSendQueue.add(event)
+    }
+    
+    suspend fun sendEvent(event: GatewaySendEvent, session: DefaultClientWebSocketSession) {
+        val payload = event.asPayload()
+        session.sendSerialized(payload)
+
+        logger.trace("Sent event: {}, payload: {}", event::class.simpleName, payload)
     }
 
     class Factory : CwGatewayClient.Factory {

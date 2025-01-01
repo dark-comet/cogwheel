@@ -1,7 +1,6 @@
 package xyz.darkcomet.cogwheel.network.gateway
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.IntegrationTestFixture
 import xyz.darkcomet.cogwheel.TestDiscordClient
@@ -18,7 +17,6 @@ import java.util.concurrent.atomic.AtomicReference
 class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
     
     @Test
-    @DisplayName("Can connect to Gateway server")
     fun testConnectionWorks() {
         val client = TestDiscordClient.fromEnvBotToken { 
             useGateway(Intents.none())
@@ -47,7 +45,6 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         - Will automatically reconnect by re-identify
      */
     @Test
-    @DisplayName("Will automatically re-identify on invalid session (caused by no heartbeat)")
     fun testSessionInvalid_noHeartbeat_resumeWorks() {
         val client = TestDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
@@ -86,7 +83,6 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
     }
     
     @Test
-    @DisplayName("Gateway URL fetch will retry")
     fun testFetchGatewayUrl_encountersUnknownHostException_retriesUntilSuccess() {
         val fetchGatewayUrlInvocations = AtomicInteger(0)
         val sessionAttemptInvocations = AtomicInteger(0)

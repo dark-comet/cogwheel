@@ -4,12 +4,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.TestDiscordClient
-import xyz.darkcomet.cogwheel.models.GuildDefaultMessageNotificationLevel
-import xyz.darkcomet.cogwheel.models.GuildExplicitContentFilterLevel
-import xyz.darkcomet.cogwheel.models.GuildVerificationLevel
 import xyz.darkcomet.cogwheel.models.Snowflake
-import xyz.darkcomet.cogwheel.network.http.requests.guild.CreateGuildRequest
-import xyz.darkcomet.cogwheel.network.http.requests.guild.ModifyGuildRequest
+import xyz.darkcomet.cogwheel.network.entities.request.CreateGuildRequestEntity
+import xyz.darkcomet.cogwheel.network.entities.request.ModifyGuildRequestEntity
 import java.util.*
 
 class GuildApiIntegrationTest {
@@ -22,7 +19,7 @@ class GuildApiIntegrationTest {
         runBlocking {
             // CREATE
             val guildName = "Test Guild " + UUID.randomUUID().toString()
-            val createRequest = CreateGuildRequest(guildName)
+            val createRequest = CreateGuildRequestEntity(guildName)
             val createResponse = guildApi.create(createRequest)
             
             try {
@@ -75,13 +72,13 @@ class GuildApiIntegrationTest {
     private suspend fun testModifyAndGet(guildId: Snowflake) {
         val newGuildName = "Test Guild " + UUID.randomUUID().toString()
         val newGuildDescription = "Updated description " + UUID.randomUUID().toString()
-        val newVerificationLevel = GuildVerificationLevel.HIGH
-        val newDefaultMessageNotificationLevel = GuildDefaultMessageNotificationLevel.ONLY_MENTIONS
-        val newExplicitContentFilterLevel = GuildExplicitContentFilterLevel.MEMBERS_WITHOUT_ROLES
+        val newVerificationLevel = 3 // HIGH
+        val newDefaultMessageNotificationLevel = 1 // ONLY_MENTIONS
+        val newExplicitContentFilterLevel = 1 // MEMBERS_WITHOUT_ROLES
         val newAfkTimeout = 1800
         val newPremiumProgressBarEnabled = true
 
-        val modifyRequest = ModifyGuildRequest(
+        val modifyRequest = ModifyGuildRequestEntity(
             name = newGuildName,
             verificationLevel = newVerificationLevel,
             defaultMessageNotifications = newDefaultMessageNotificationLevel,
@@ -100,9 +97,9 @@ class GuildApiIntegrationTest {
         
         assertAll(
             { assertEquals(guildId, modifyResponse.entity!!.id) },
-            { assertEquals(newVerificationLevel.value, modifyResponse.entity!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel.value, modifyResponse.entity!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel.value, modifyResponse.entity!!.explicitContentFilter) },
+            { assertEquals(newVerificationLevel, modifyResponse.entity!!.verificationLevel) },
+            { assertEquals(newDefaultMessageNotificationLevel, modifyResponse.entity!!.defaultMessageNotifications) },
+            { assertEquals(newExplicitContentFilterLevel, modifyResponse.entity!!.explicitContentFilter) },
             { assertEquals(newAfkTimeout, modifyResponse.entity!!.afkTimeout) },
             { assertEquals(newPremiumProgressBarEnabled, modifyResponse.entity!!.premiumProgressBarEnabled) },
         )
@@ -118,9 +115,9 @@ class GuildApiIntegrationTest {
 
         assertAll(
             { assertEquals(guildId, getResponse.entity!!.id) },
-            { assertEquals(newVerificationLevel.value, getResponse.entity!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel.value, getResponse.entity!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel.value, getResponse.entity!!.explicitContentFilter) },
+            { assertEquals(newVerificationLevel, getResponse.entity!!.verificationLevel) },
+            { assertEquals(newDefaultMessageNotificationLevel, getResponse.entity!!.defaultMessageNotifications) },
+            { assertEquals(newExplicitContentFilterLevel, getResponse.entity!!.explicitContentFilter) },
             { assertEquals(newAfkTimeout, getResponse.entity!!.afkTimeout) },
             { assertEquals(newPremiumProgressBarEnabled, getResponse.entity!!.premiumProgressBarEnabled) },
         )

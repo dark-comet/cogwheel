@@ -8,15 +8,15 @@ import xyz.darkcomet.cogwheel.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.network.http.requests.guild.CreateGuildRequest
-import xyz.darkcomet.cogwheel.network.http.requests.guild.ModifyGuildRequest
+import xyz.darkcomet.cogwheel.network.entities.request.CreateGuildRequestEntity
+import xyz.darkcomet.cogwheel.network.entities.request.ModifyGuildRequestEntity
 
 class GuildApi
 internal constructor(private val httpClient: CwHttpClient) {
     
-    suspend fun create(request: CreateGuildRequest): CwHttpResponse<GuildEntity> {
+    suspend fun create(request: CreateGuildRequestEntity): CwHttpResponse<GuildEntity> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds") {
-            jsonParams(request, CreateGuildRequest.serializer())
+            jsonParams(request, CreateGuildRequestEntity.serializer())
         }
         return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
     }
@@ -33,9 +33,9 @@ internal constructor(private val httpClient: CwHttpClient) {
         return httpClient.submit(httpRequest).toEntity(GuildPreviewEntity.serializer())
     }
 
-    suspend fun modify(guildId: Snowflake, request: ModifyGuildRequest): CwHttpResponse<GuildEntity> {
+    suspend fun modify(guildId: Snowflake, request: ModifyGuildRequestEntity): CwHttpResponse<GuildEntity> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}") {
-            jsonParams(request, ModifyGuildRequest.serializer())
+            jsonParams(request, ModifyGuildRequestEntity.serializer())
         }
         return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
     }

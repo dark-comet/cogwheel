@@ -2,6 +2,8 @@ package xyz.darkcomet.cogwheel.aspects
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.aspects.Advice
+import xyz.darkcomet.cogwheel.core.aspects.Aspect
 import java.util.concurrent.atomic.AtomicReference
 
 class AspectTest {

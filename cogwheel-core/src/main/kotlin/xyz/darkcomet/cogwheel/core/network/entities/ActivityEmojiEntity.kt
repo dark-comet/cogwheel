@@ -1,0 +1,11 @@
+package xyz.darkcomet.cogwheel.core.network.entities
+
+import kotlinx.serialization.Serializable
+import xyz.darkcomet.cogwheel.core.models.Snowflake
+
+@Serializable
+data class ActivityEmojiEntity(
+    val name: String,
+    val id: Snowflake? = null,
+    val animated: Boolean? = null
+)

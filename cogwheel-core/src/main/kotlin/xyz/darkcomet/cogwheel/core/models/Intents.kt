@@ -1,8 +1,15 @@
 package xyz.darkcomet.cogwheel.core.models
 
 class Intents(val value: Int) {
+    
+    init {
+        ENTRIES.add(this)
+    }
+    
     companion object {
-        val GUILDS = Intents(1)
+        private val ENTRIES = ArrayList<Intents>()
+        
+        val GUILDS = Intents(1 shl 0)
         val GUILD_MEMBERS = Intents(1 shl 1)
         val GUILD_MODERATION = Intents(1 shl 2)
         val GUILD_EMOJIS_AND_STICKERS = Intents(1 shl 3)
@@ -39,7 +46,13 @@ class Intents(val value: Int) {
         }
         
         fun all(): Intents {
-            return Intents(Int.MAX_VALUE)
+            var value = 0
+
+            for (intent in ENTRIES) {
+                value = value or intent.value
+            }
+
+            return Intents(value)
         }
     }
 }

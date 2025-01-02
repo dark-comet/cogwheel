@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.DiscordClient
 import xyz.darkcomet.cogwheel.core.network.http.api.*
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.events.InteractionCreateEvent
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
@@ -168,10 +167,6 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             if (delegateListener != null) {
                 listeners[eventType]?.remove(delegateListener)
             }
-        }
-
-        override fun fireInteractionCreate(event: InteractionCreateEvent) {
-            TODO("Not yet implemented")
         }
     }
 }

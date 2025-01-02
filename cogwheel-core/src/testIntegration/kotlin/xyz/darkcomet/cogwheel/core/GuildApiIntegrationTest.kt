@@ -3,19 +3,36 @@ package xyz.darkcomet.cogwheel.core
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
+import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
+import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
+import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
+import xyz.darkcomet.cogwheel.core.models.Intents
 import xyz.darkcomet.cogwheel.core.models.Snowflake
 import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGuildRequestEntity
 import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildRequestEntity
 import java.util.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class GuildApiIntegrationTest {
     
-    private val client = TestDiscordClient.fromEnvBotToken()
+    private val client = TestDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
     private val guildApi = client.restApi().guild()
 
     @Test
     fun testCreate_Get_GetPreview_Modify_Delete() {
-        runBlocking {
+        val receivedGuildCreateEvent = CountDownLatch(1)
+        client.events().subscribe(GuildCreateEvent::class.java) { receivedGuildCreateEvent.countDown() }
+        
+        val receivedGuildUpdateEvent = CountDownLatch(1)
+        client.events().subscribe(GuildUpdateEvent::class.java) { receivedGuildUpdateEvent.countDown() }
+        
+        val receivedGuildDeleteEvent = CountDownLatch(1)
+        client.events().subscribe(GuildDeleteEvent::class.java) { receivedGuildDeleteEvent.countDown() }
+        
+        withGateway {
             // CREATE
             val guildName = "Test Guild " + UUID.randomUUID().toString()
             val createRequest = CreateGuildRequestEntity(guildName)
@@ -27,6 +44,7 @@ class GuildApiIntegrationTest {
                     { assertEquals(201, createResponse.raw.statusCode) },
                     { assertNotNull(createResponse.entity) }
                 )
+                assertTrue(receivedGuildCreateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_CREATE gateway event")
                 
                 val guildId = createResponse.entity!!.id
                 assertNotNull(guildId)
@@ -34,18 +52,49 @@ class GuildApiIntegrationTest {
                 testGetPreview(guildId, guildName)
                 
                 testModifyAndGet(guildId)
+                assertTrue(receivedGuildUpdateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_UPDATE gateway event")
             } finally {
                 // DELETE
                 val guildId = createResponse.entity?.id
                 if (guildId != null) {
                     val deleteResponse = guildApi.delete(guildId)
+                    
                     assertAll(
                         { assertTrue(deleteResponse.raw.success) },
                         { assertEquals(204, deleteResponse.raw.statusCode) }
                     )
+
+                    assertTrue(receivedGuildDeleteEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_DELETE gateway event")
                 }
             }
         }    
+    }
+    
+    private fun withGateway(testCode: suspend () -> Unit) {
+        val gatewayAwaiter = CountDownLatch(1)
+        val gatewayShutdownOk = AtomicBoolean(false)
+
+        client.events().subscribe(GatewayReadyEvent::class.java) { gatewayAwaiter.countDown() }
+
+        val gatewayThread = Thread {
+            runBlocking {
+                client.startGatewayConnection()
+                gatewayShutdownOk.set(true)
+            }
+        }
+        gatewayThread.start()
+
+        assertTrue(gatewayAwaiter.await(30, TimeUnit.SECONDS), "Timed out waiting for gateway startup")
+
+        try {
+            runBlocking {
+                testCode.invoke()
+            }
+        } finally {
+            client.stop()
+            gatewayThread.join(60_000L)
+            assertTrue(gatewayShutdownOk.get(), "Failed to shutdown gateway connection on test end")
+        }
     }
 
     private suspend fun testGetPreview(guildId: Snowflake, guildName: String) {

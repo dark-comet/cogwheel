@@ -13,7 +13,7 @@ data class RoleEntity(
     val icon: String? = null,
     @SerialName("unicode_emoji") val unicodeEmoji: String? = null,
     val position: Int,
-    val permissions: String,
+    val permissions: Long,
     val managed: Boolean,
     val mentionable: Boolean,
     val tags: RoleTagsEntity? = null,

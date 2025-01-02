@@ -10,6 +10,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
+import okio.IOException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
@@ -32,6 +33,7 @@ import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewaySendEvent
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
+import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -197,7 +199,7 @@ private constructor(
                 gatewayCloseCode,
                 shouldResumeNextAttempt.get()
             )
-        } catch (exception: SocketTimeoutException) {
+        } catch (exception: IOException) {
             // Can happen when there is no internet. Ignore & retry.
         }
     }
@@ -259,7 +261,12 @@ private constructor(
             gatewaySession = null
         }
 
-        performHandshake(wssSession, isResume, shouldResumeNextAttempt)
+        val success = performHandshake(wssSession, isResume, shouldResumeNextAttempt)
+        
+        if (!success) {
+            wssSession.close()
+            return
+        }
 
         val receiverJob = wssSession.launch { eventReceiverLoop(this, wssSession, shouldResumeNextAttempt) }
         val senderJob = wssSession.launch { eventSenderLoop(this, wssSession) }
@@ -273,14 +280,14 @@ private constructor(
         receiverJob.join()
         senderJob.join()
 
-        logger.info("Gateway connection closed")
+        logger.info("Gateway connection closed: {}, {}", sessionCancellation.isCanceled(), wssSession.isActive)
     }
 
     private suspend fun performHandshake(
         wssSession: DefaultClientWebSocketSession,
         isResume: Boolean,
         shouldResumeNextAttempt: AtomicBoolean
-    ) {
+    ): Boolean {
         if (isResume) {
             assert(gatewaySession != null)
         } else {
@@ -296,6 +303,11 @@ private constructor(
         } else {
             sendIdentifyWithIntents(wssSession)
             val readyEvent = receiveReadyEvent(wssSession, gatewaySession, shouldResumeNextAttempt)
+            
+            if (readyEvent == null) {
+                this.gatewaySession = null
+                return false
+            }
 
             gatewaySession.initialize(
                 apiVersion = readyEvent.data.v,
@@ -309,6 +321,8 @@ private constructor(
                 gatewaySession.beginBackgroundHeartbeats()    
             }
         }
+        
+        return true
     }
 
     private suspend fun receiveHelloEvent(
@@ -335,10 +349,14 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayReadyEvent {
+    ): GatewayReadyEvent? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
             
         if (event !is GatewayReadyEvent) {
+            if (event is GatewayInvalidSessionEvent) {
+                return null // Most likely caused by malformed argument in HELLO event, give up
+            }
+            
             val description = if (event == null) "null" else event::class.simpleName
             throw IllegalStateException("Invalid second event during handshake: $description")
         }
@@ -352,11 +370,6 @@ private constructor(
         shouldResumeNextAttempt: AtomicBoolean
     ) {
         while (wssSession.isActive) {
-            if (this.gatewaySession == null) {
-                yield()
-                continue
-            }
-
             receiveEvent(coroutineScope, wssSession, this.gatewaySession!!, shouldResumeNextAttempt)
         }
     }
@@ -386,12 +399,18 @@ private constructor(
         shouldResumeNextAttempt: AtomicBoolean
     ): Event? {
         val payload = wssSession.receiveDeserialized<GatewayPayload>()
-        val event = GatewayEventDecoder.decode(payload)
+        var event: Event? = null
         
-        if (event != null) {
-            logger.trace("Received event: {}, payload: {}", event.javaClass.simpleName, payload)
-        } else {
-            logger.warn("Unsupported event type from payload: {}", payload)
+        try {
+            event = GatewayEventDecoder.decode(payload)
+        } catch (exception: Exception) {
+            logger.error("An error occurred while decoding payload: {}", payload, exception)
+        } finally {
+            if (event != null) {
+                logger.trace("Received event: {}, payload: {}", event.javaClass.simpleName, payload)
+            } else {
+                logger.warn("Unsupported event type from payload: {}", payload)
+            }
         }
 
         if (payload.s != null) {

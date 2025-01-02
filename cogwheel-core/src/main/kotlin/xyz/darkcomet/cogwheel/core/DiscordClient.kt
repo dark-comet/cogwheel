@@ -1,11 +1,10 @@
 package xyz.darkcomet.cogwheel.core
 
-import xyz.darkcomet.cogwheel.core.network.http.api.*
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.events.InteractionCreateEvent
 import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.network.http.api.*
 
 interface DiscordClient {
     
@@ -49,8 +48,6 @@ interface DiscordClient {
     interface ClientEventManager {
         fun <T : Event> subscribe(eventType: Class<T>, listener: (T) -> Unit)
         fun <T : Event> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
-        
-        fun fireInteractionCreate(event: InteractionCreateEvent)
     }
     
     companion object {

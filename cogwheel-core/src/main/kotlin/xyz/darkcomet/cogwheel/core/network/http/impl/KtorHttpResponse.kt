@@ -39,8 +39,12 @@ internal class KtorHttpResponse<T>(
                 return KtorHttpResponse(this, entity = null)
             }
 
-            val entity = JSON_DESERIALIZER.decodeFromString(deserializationStrategy, bodyContent)
-            return KtorHttpResponse(this, entity)
+            if (success) {
+                val entity = JSON_DESERIALIZER.decodeFromString(deserializationStrategy, bodyContent)
+                return KtorHttpResponse(this, entity)
+            } else {
+                return KtorHttpResponse(this, entity = null)
+            }
         }
         
     }

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class GatewayReadyEventDataEntity(
     val v: Int,
     val user: UserEntity,
-    val guilds: List<UnavailableGuildEntity>,
+    val guilds: List<GuildEntity>,
     @SerialName("session_id") val sessionId: String,
     @SerialName("resume_gateway_url") val resumeGatewayUrl: String,
     val shard: List<Int>? = null,

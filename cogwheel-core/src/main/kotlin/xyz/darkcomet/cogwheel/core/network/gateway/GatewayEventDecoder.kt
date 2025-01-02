@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.events.*
 import xyz.darkcomet.cogwheel.core.network.entities.GatewayHelloEventDataEntity
 import xyz.darkcomet.cogwheel.core.network.entities.GatewayReadyEventDataEntity
+import xyz.darkcomet.cogwheel.core.network.entities.GuildEntity
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayReceivePayloadName
 import kotlin.reflect.typeOf
@@ -33,6 +34,9 @@ internal class GatewayEventDecoder private constructor() {
             return when (payload.t) {
                 GatewayReceivePayloadName.READY.name -> decodeWithData<GatewayReadyEventDataEntity, GatewayReadyEvent>(payload) { GatewayReadyEvent(it) }
                 GatewayReceivePayloadName.RESUMED.name -> GatewayResumedEvent()
+                GatewayReceivePayloadName.GUILD_CREATE.name -> decodeWithData<GuildEntity, GuildCreateEvent>(payload) { GuildCreateEvent(it) }
+                GatewayReceivePayloadName.GUILD_UPDATE.name -> decodeWithData<GuildEntity, GuildUpdateEvent>(payload) { GuildUpdateEvent(it) }
+                GatewayReceivePayloadName.GUILD_DELETE.name -> decodeWithData<GuildEntity, GuildDeleteEvent>(payload) { GuildDeleteEvent(it) }
                 else -> null
             }
         }

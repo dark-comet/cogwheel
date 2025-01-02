@@ -3,5 +3,5 @@ package xyz.darkcomet.cogwheel.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Channel {
+class GuildSystemChannelFlags {
 }

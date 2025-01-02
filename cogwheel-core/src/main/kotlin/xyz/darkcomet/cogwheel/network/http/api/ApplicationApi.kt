@@ -1,6 +1,8 @@
 package xyz.darkcomet.cogwheel.network.http.api
 
+import xyz.darkcomet.cogwheel.models.Snowflake
 import xyz.darkcomet.cogwheel.network.entities.ApplicationEntity
+import xyz.darkcomet.cogwheel.network.entities.ApplicationInstanceEntity
 import xyz.darkcomet.cogwheel.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.network.http.CwHttpRequest
@@ -22,9 +24,12 @@ internal constructor(private val httpClient: CwHttpClient) {
         return httpClient.submit(httpRequest).toEntity(ApplicationEntity.serializer())
     }
     
-//    fun getActivityInstance(applicationId: Snowflake, instanceId: String): CwHttpResponse<ApplicationInstanceEntity?> {
-//        TODO("Not implemented yet")
-//    }
+    // TODO: Make this testable in integration tests
+    suspend fun getActivityInstance(applicationId: Snowflake, instanceId: String): CwHttpResponse<ApplicationInstanceEntity?> {
+        val request = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
+        return httpClient.submit(request).toEntity(ApplicationInstanceEntity.serializer())
+    }
+    
 //
 //    fun getRoleConnectionMetadataRecords(applicationId: Snowflake): CwHttpResponse {
 //        TODO("Not implemented yet")

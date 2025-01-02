@@ -24,11 +24,27 @@ class Snowflake(val value: Long) : Comparable<Snowflake> {
     
     val increment: Long
         get() = value and 0xFFF
-    
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is Snowflake) {
+            return false
+        }
+        
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
     override fun compareTo(other: Snowflake): Int {
         return timestampMs.compareTo(other.timestampMs)
     }
-    
+
+    override fun toString(): String {
+        return value.toString()
+    }
+
     companion object {
         private const val DISCORD_EPOCH_TIME_MS = 1_420_070_400_000L
         
@@ -40,7 +56,7 @@ class Snowflake(val value: Long) : Comparable<Snowflake> {
     class Serializer : KSerializer<Snowflake> {
         
         override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor("Snowflake", PrimitiveKind.STRING)
+            get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
 
         override fun deserialize(decoder: Decoder): Snowflake {
             val string = decoder.decodeString()

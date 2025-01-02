@@ -1,29 +1,49 @@
 package xyz.darkcomet.cogwheel.network.http.api
 
+import kotlinx.serialization.builtins.serializer
+import xyz.darkcomet.cogwheel.models.Snowflake
+import xyz.darkcomet.cogwheel.network.entities.GuildEntity
+import xyz.darkcomet.cogwheel.network.entities.GuildPreviewEntity
 import xyz.darkcomet.cogwheel.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.network.http.CwHttpRequest
+import xyz.darkcomet.cogwheel.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.network.http.requests.guild.CreateGuildRequest
+import xyz.darkcomet.cogwheel.network.http.requests.guild.ModifyGuildRequest
 
 class GuildApi
 internal constructor(private val httpClient: CwHttpClient) {
     
-//    fun create(request: CreateGuildRequest): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
-//    
-//    fun get(guildId: Snowflake, withCounts: Boolean = false): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
-//    
-//    fun getPreview(guildId: Snowflake): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
-//    
-//    fun modify(guildId: Snowflake, request: ModifyGuildRequest): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
-//    
-//    fun delete(guildId: Snowflake): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
+    suspend fun create(request: CreateGuildRequest): CwHttpResponse<GuildEntity> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds") {
+            jsonParams(request, CreateGuildRequest.serializer())
+        }
+        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+    }
+    
+    suspend fun get(guildId: Snowflake, withCounts: Boolean = false): CwHttpResponse<GuildEntity> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}") {
+            queryStringParam("with_counts", withCounts.toString())
+        }
+        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+    }
+
+    suspend fun getPreview(guildId: Snowflake): CwHttpResponse<GuildPreviewEntity> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/preview")
+        return httpClient.submit(httpRequest).toEntity(GuildPreviewEntity.serializer())
+    }
+
+    suspend fun modify(guildId: Snowflake, request: ModifyGuildRequest): CwHttpResponse<GuildEntity> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}") {
+            jsonParams(request, ModifyGuildRequest.serializer())
+        }
+        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+    }
+
+    suspend fun delete(guildId: Snowflake): CwHttpResponse<Unit> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}")
+        return httpClient.submit(httpRequest).toEntity(Unit.serializer())
+    }
 //    
 //    fun getChannels(guildId: Snowflake): CwHttpResponse {
 //        TODO("Not implemented yet")

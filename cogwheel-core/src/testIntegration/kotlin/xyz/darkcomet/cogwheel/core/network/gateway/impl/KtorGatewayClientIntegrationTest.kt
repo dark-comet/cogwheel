@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GatewayHelloEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayInvalidSessionEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
-import xyz.darkcomet.cogwheel.core.models.Intents
+import xyz.darkcomet.cogwheel.core.primitives.Intents
 import java.net.UnknownHostException
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

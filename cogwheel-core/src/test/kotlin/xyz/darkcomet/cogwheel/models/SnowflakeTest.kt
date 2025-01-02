@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.models
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import xyz.darkcomet.cogwheel.core.models.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class SnowflakeTest {
 

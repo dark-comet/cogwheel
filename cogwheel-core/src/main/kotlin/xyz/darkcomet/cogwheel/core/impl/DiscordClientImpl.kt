@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core.impl
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.DiscordClient
-import xyz.darkcomet.cogwheel.core.network.http.api.*
+import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
@@ -61,7 +61,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         
         gatewayClient.start(
             cancellationToken, 
-            gatewayUrlFetcher = { restApi().gateway().get().entity?.url }
+            gatewayUrlFetcher = { restApi().gateway.get().entity?.url }
         )
     }
 
@@ -74,49 +74,27 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
     override fun events(): DiscordClient.ClientEventManager = clientEventManager
     
     internal class ClientRestApiImpl(client: CwHttpClient) : DiscordClient.ClientRestApi {
-        private val applicationApi = ApplicationApi(client)
-        private val applicationRoleConnectionMetadataApi = ApplicationRoleConnectionMetadataApi(client)
-        private val auditLogApi = AuditLogApi(client)
-        private val autoModerationApi = AutoModerationApi(client)
-        private val channelApi = ChannelApi(client)
-        private val emojiApi = EmojiApi(client)
-        private val entitlementApi = EntitlementApi(client)
-        private val gatewayApi = GatewayApi(client)
-        private val guildApi = GuildApi(client)
-        private val guildScheduledEventApi = GuildScheduledEventApi(client)
-        private val guildTemplateApi = GuildTemplateApi(client)
-        private val inviteApi = InviteApi(client)
-        private val messageApi = MessageApi(client)
-        private val pollApi = PollApi(client)
-        private val skuApi = SkuApi(client)
-        private val stageInstanceApi = StageInstanceApi(client)
-        private val stickerApi = StickerApi(client)
-        private val subscriptionApi = SubscriptionApi(client)
-        private val userAPi = UserApi(client)
-        private val voiceApi = VoiceApi(client)
-        private val webhookApi = WebhookApi(client)
-
-        override fun application(): ApplicationApi = applicationApi
-        override fun applicationRoleConnectionMetadata(): ApplicationRoleConnectionMetadataApi = applicationRoleConnectionMetadataApi
-        override fun auditLog(): AuditLogApi = auditLogApi
-        override fun autoModeration(): AutoModerationApi = autoModerationApi
-        override fun channel(): ChannelApi = channelApi
-        override fun emoji(): EmojiApi = emojiApi
-        override fun entitlement(): EntitlementApi = entitlementApi
-        override fun gateway(): GatewayApi = gatewayApi
-        override fun guild(): GuildApi = guildApi
-        override fun guildScheduledEvent(): GuildScheduledEventApi = guildScheduledEventApi
-        override fun guildTemplate(): GuildTemplateApi = guildTemplateApi
-        override fun invite(): InviteApi = inviteApi
-        override fun message(): MessageApi = messageApi
-        override fun poll(): PollApi = pollApi
-        override fun sku(): SkuApi = skuApi
-        override fun stageInstance(): StageInstanceApi = stageInstanceApi
-        override fun sticker(): StickerApi = stickerApi
-        override fun subscription(): SubscriptionApi = subscriptionApi
-        override fun user(): UserApi = userAPi
-        override fun voice(): VoiceApi = voiceApi
-        override fun webhook(): WebhookApi = webhookApi
+        override val application = ApplicationResource(client)
+        override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataResource(client)
+        override val auditLog = AuditLogResource(client)
+        override val autoModeration = AutoModerationResource(client)
+        override val channel = ChannelResource(client)
+        override val emoji = EmojiResource(client)
+        override val entitlement = EntitlementResource(client)
+        override val gateway = GatewayResource(client)
+        override val guild = GuildResource(client)
+        override val guildScheduledEvent = GuildScheduledEventResource(client)
+        override val guildTemplate = GuildTemplateResource(client)
+        override val invite = InviteResource(client)
+        override val message = MessageResource(client)
+        override val poll = PollResource(client)
+        override val sku = SkuResource(client)
+        override val stageInstance = StageInstanceResource(client)
+        override val sticker = StickerResource(client)
+        override val subscription = SubscriptionResource(client)
+        override val user = UserResource(client)
+        override val voice = VoiceResource(client)
+        override val webhook = WebhookResource(client)
     }
     
     internal class ClientGatewayApiImpl(client: CwGatewayClient?) : DiscordClient.ClientGatewayApi {

@@ -4,7 +4,7 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.network.http.api.*
+import xyz.darkcomet.cogwheel.core.network.http.rest.*
 
 interface DiscordClient {
     
@@ -16,27 +16,27 @@ interface DiscordClient {
     fun stop()
 
     interface ClientRestApi {
-        fun application(): ApplicationApi
-        fun applicationRoleConnectionMetadata(): ApplicationRoleConnectionMetadataApi
-        fun auditLog(): AuditLogApi
-        fun autoModeration(): AutoModerationApi
-        fun channel(): ChannelApi
-        fun emoji(): EmojiApi
-        fun entitlement(): EntitlementApi
-        fun gateway(): GatewayApi
-        fun guild(): GuildApi
-        fun guildScheduledEvent(): GuildScheduledEventApi
-        fun guildTemplate(): GuildTemplateApi
-        fun invite(): InviteApi
-        fun message(): MessageApi
-        fun poll(): PollApi
-        fun sku(): SkuApi
-        fun stageInstance(): StageInstanceApi
-        fun sticker(): StickerApi
-        fun subscription(): SubscriptionApi
-        fun user(): UserApi
-        fun voice(): VoiceApi
-        fun webhook(): WebhookApi
+        val application: ApplicationResource
+        val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataResource
+        val auditLog: AuditLogResource
+        val autoModeration: AutoModerationResource
+        val channel: ChannelResource
+        val emoji: EmojiResource
+        val entitlement: EntitlementResource
+        val gateway: GatewayResource
+        val guild: GuildResource
+        val guildScheduledEvent: GuildScheduledEventResource
+        val guildTemplate: GuildTemplateResource
+        val invite: InviteResource
+        val message: MessageResource
+        val poll: PollResource
+        val sku: SkuResource
+        val stageInstance: StageInstanceResource
+        val sticker: StickerResource
+        val subscription: SubscriptionResource
+        val user: UserResource
+        val voice: VoiceResource
+        val webhook: WebhookResource
     }
     
     interface ClientGatewayApi {

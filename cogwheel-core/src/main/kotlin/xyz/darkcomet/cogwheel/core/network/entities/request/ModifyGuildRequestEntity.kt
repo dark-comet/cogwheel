@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.entities.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.darkcomet.cogwheel.core.models.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
 data class ModifyGuildRequestEntity(

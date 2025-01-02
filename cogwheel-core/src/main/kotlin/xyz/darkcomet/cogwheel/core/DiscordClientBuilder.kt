@@ -4,7 +4,7 @@ import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.impl.DiscordClientImpl
 import xyz.darkcomet.cogwheel.core.impl.DiscordClientSettings
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.models.Intents
+import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 
 class DiscordClientBuilder 

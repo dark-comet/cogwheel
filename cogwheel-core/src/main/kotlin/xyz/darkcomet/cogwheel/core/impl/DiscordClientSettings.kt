@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.impl
 
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.models.Intents
+import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.core.network.gateway.impl.KtorGatewayClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient

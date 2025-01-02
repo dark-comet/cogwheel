@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.entities
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.darkcomet.cogwheel.core.models.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 /**
  * Low-level representation of Discord API Guild entity and UnavailableGuild entity.
@@ -28,7 +28,7 @@ data class GuildEntity(
     @SerialName("verification_level") val verificationLevel: Int? = null,
     @SerialName("default_message_notifications") val defaultMessageNotifications: Int? = null,
     @SerialName("explicit_content_filter") val explicitContentFilter: Int? = null,
-    val roles: List<RoleEntity>? = null,
+    val roles: List<GuildRoleEntity>? = null,
     val emojis: List<EmojiEntity>? = null,
     val features: List<String>? = null,
     @SerialName("mfa_level") val mfaLevel: Int? = null,

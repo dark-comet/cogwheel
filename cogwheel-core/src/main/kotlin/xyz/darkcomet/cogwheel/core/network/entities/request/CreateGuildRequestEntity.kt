@@ -2,9 +2,9 @@ package xyz.darkcomet.cogwheel.core.network.entities.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.darkcomet.cogwheel.core.models.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.core.network.entities.ChannelEntity
-import xyz.darkcomet.cogwheel.core.network.entities.RoleEntity
+import xyz.darkcomet.cogwheel.core.network.entities.GuildRoleEntity
 
 @Serializable
 data class CreateGuildRequestEntity(
@@ -14,7 +14,7 @@ data class CreateGuildRequestEntity(
     @SerialName("verification_level") val verificationLevel: Int? = null,
     @SerialName("default_message_notifications") val defaultMessageNotifications: Int? = null,
     @SerialName("explicit_content_filter") val explicitContentFilter: Int? = null,
-    val roles: List<RoleEntity>? = null,
+    val roles: List<GuildRoleEntity>? = null,
     val channels: List<ChannelEntity>? = null,
     @SerialName("afk_channel_id") val afkChannelId: Snowflake? = null,
     @SerialName("afk_timeout") val afkTimeout: Int? = null,

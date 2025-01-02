@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.gateway
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.models.Intents
+import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.network.CancellationToken
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewaySendEvent
 

@@ -18,7 +18,7 @@ abstract class IntegrationTestFixture {
                 runBlocking {
                     for (guild in event.data.guilds) {
                         launch {
-                            val response = client.restApi().guild().delete(guild.id)
+                            val response = client.restApi().guild.delete(guild.id)
                             println("Delete owned guild: " + guild.id + ", status: " + response.raw.statusCode)
                         }
                     }

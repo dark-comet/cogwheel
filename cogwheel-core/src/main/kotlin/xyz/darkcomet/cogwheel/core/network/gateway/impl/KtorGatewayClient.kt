@@ -18,8 +18,8 @@ import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.Connecti
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.FetchGatewayUrlCompleteArgs
 import xyz.darkcomet.cogwheel.core.events.*
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.models.Intents
-import xyz.darkcomet.cogwheel.core.models.ShardId
+import xyz.darkcomet.cogwheel.core.primitives.Intents
+import xyz.darkcomet.cogwheel.core.primitives.ShardId
 import xyz.darkcomet.cogwheel.core.network.CancellationToken
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
@@ -30,10 +30,8 @@ import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayHeartbeatSendEv
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayIdentifySendEvent
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayResumeSendEvent
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewaySendEvent
-import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
-import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean

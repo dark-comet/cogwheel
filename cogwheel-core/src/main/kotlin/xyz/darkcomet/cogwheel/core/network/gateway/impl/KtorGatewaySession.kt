@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.core.network.gateway.impl
 
 import io.ktor.client.plugins.websocket.*
-import xyz.darkcomet.cogwheel.core.models.ShardId
+import xyz.darkcomet.cogwheel.core.primitives.ShardId
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class KtorGatewaySession(

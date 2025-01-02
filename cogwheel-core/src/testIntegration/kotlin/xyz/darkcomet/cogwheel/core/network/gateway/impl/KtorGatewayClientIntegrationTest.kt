@@ -1,7 +1,9 @@
-package xyz.darkcomet.cogwheel.core
+package xyz.darkcomet.cogwheel.core.network.gateway.impl
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
+import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GatewayHelloEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayInvalidSessionEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
@@ -16,7 +18,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
     
     @Test
     fun testConnectionWorks() {
-        val client = TestDiscordClient.fromEnvBotToken { 
+        val client = TestDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
         }
         
@@ -91,14 +93,14 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         val client = TestDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
             testDisableGatewayHeartbeats = true
-            
+
             aspects.gateway.fetchGatewayUrlComplete.addAdvice {
                 if (fetchGatewayUrlInvocations.get() < 3) {
                     fetchGatewayUrlInvocations.incrementAndGet()
                     throw UnknownHostException("Simulated failure during URL fetch")
                 }
             }
-            
+
             aspects.gateway.connectionAttemptStarted.addAdvice {
                 sessionAttemptInvocations.incrementAndGet()
             }

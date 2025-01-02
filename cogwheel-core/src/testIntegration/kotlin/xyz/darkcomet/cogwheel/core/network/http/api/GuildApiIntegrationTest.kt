@@ -1,8 +1,9 @@
-package xyz.darkcomet.cogwheel.core
+package xyz.darkcomet.cogwheel.core.network.http.api
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
 import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
 import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
@@ -18,7 +19,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class GuildApiIntegrationTest {
     
-    private val client = TestDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
+    private val client =
+        TestDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
     private val guildApi = client.restApi().guild()
 
     @Test

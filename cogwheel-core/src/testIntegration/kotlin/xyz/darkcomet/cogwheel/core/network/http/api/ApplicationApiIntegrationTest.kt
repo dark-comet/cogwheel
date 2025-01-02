@@ -1,9 +1,10 @@
-package xyz.darkcomet.cogwheel.core
+package xyz.darkcomet.cogwheel.core.network.http.api
 
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyCurrentApplicationRequestEntity
 import java.util.UUID
 

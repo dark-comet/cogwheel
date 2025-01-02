@@ -1,8 +1,10 @@
 package xyz.darkcomet.cogwheel.core.network.http.api
 
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
 import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
 import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
@@ -17,7 +19,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
-class GuildApiIntegrationTest {
+class GuildApiIntegrationTest : IntegrationTestFixture() {
     
     private val client =
         TestDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
@@ -34,7 +36,7 @@ class GuildApiIntegrationTest {
         val receivedGuildDeleteEvent = CountDownLatch(1)
         client.events().subscribe(GuildDeleteEvent::class.java) { receivedGuildDeleteEvent.countDown() }
         
-        withGateway {
+        withGateway(client) {
             // CREATE
             val guildName = "Test Guild " + UUID.randomUUID().toString()
             val createRequest = CreateGuildRequestEntity(guildName)
@@ -70,33 +72,6 @@ class GuildApiIntegrationTest {
                 }
             }
         }    
-    }
-    
-    private fun withGateway(testCode: suspend () -> Unit) {
-        val gatewayAwaiter = CountDownLatch(1)
-        val gatewayShutdownOk = AtomicBoolean(false)
-
-        client.events().subscribe(GatewayReadyEvent::class.java) { gatewayAwaiter.countDown() }
-
-        val gatewayThread = Thread {
-            runBlocking {
-                client.startGatewayConnection()
-                gatewayShutdownOk.set(true)
-            }
-        }
-        gatewayThread.start()
-
-        assertTrue(gatewayAwaiter.await(30, TimeUnit.SECONDS), "Timed out waiting for gateway startup")
-
-        try {
-            runBlocking {
-                testCode.invoke()
-            }
-        } finally {
-            client.stop()
-            gatewayThread.join(60_000L)
-            assertTrue(gatewayShutdownOk.get(), "Failed to shutdown gateway connection on test end")
-        }
     }
 
     private suspend fun testGetPreview(guildId: Snowflake, guildName: String) {

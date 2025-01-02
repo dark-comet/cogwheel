@@ -30,7 +30,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
         events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
 
-        runTest(client) {
+        withGateway(client) {
             val receivedReady = receiveReadyLatch.await(1000, TimeUnit.SECONDS)
             assertTrue(receivedReady, "Failed to receive READY event after 10 seconds!")
 
@@ -67,7 +67,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
             receiveInvalidSessionEvent.countDown()
         }
 
-        runTest(client) {
+        withGateway(client) {
             val receiveInvalidSession = receiveInvalidSessionEvent.await(5, TimeUnit.MINUTES)
             assertTrue(receiveInvalidSession, "Failed to receive INVALID_SESSION event after 5 minutes!")
 
@@ -110,7 +110,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
         events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
 
-        runTest(client) {
+        withGateway(client) {
             assertTrue(receiveHelloLatch.await(1, TimeUnit.MINUTES), "Failed to receive HELLO event in time")
             assertTrue(receiveReadyLatch.await(1, TimeUnit.MINUTES), "Failed to receive READY event in time")
             assertEquals(1, sessionAttemptInvocations.get(), "Unexpected session attempt count")

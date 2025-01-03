@@ -1,9 +1,9 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.SoundboardSoundEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildSoundboardSoundRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.SendSoundboardSoundRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListGuildSoundboardSoundsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.SoundboardSoundEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildSoundboardSoundRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.SendSoundboardSoundRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildSoundboardSoundsResponseEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

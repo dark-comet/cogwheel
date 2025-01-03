@@ -9,8 +9,8 @@ import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
 import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGuildRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildRequestEntity
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

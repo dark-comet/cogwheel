@@ -1,14 +1,14 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.entities.ChannelEntity
-import xyz.darkcomet.cogwheel.core.network.entities.InviteEntity
-import xyz.darkcomet.cogwheel.core.network.entities.MessageEntity
-import xyz.darkcomet.cogwheel.core.network.entities.ThreadMemberEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.*
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListJoinedPrivateArchivedThreadsResponseEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListPrivateArchivedThreadsResponseEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListPublicArchivedThreadsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.ChannelEntity
+import xyz.darkcomet.cogwheel.core.network.objects.InviteEntity
+import xyz.darkcomet.cogwheel.core.network.objects.MessageEntity
+import xyz.darkcomet.cogwheel.core.network.objects.ThreadMemberEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.*
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListJoinedPrivateArchivedThreadsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListPrivateArchivedThreadsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListPublicArchivedThreadsResponseEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp

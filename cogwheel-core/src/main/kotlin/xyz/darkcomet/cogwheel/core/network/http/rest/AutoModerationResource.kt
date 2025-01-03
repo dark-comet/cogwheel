@@ -1,8 +1,8 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.GuildAutoModerationRuleEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGuildAutoModerationRuleRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildAutoModerationRuleRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildAutoModerationRuleEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildAutoModerationRuleRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildAutoModerationRuleRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

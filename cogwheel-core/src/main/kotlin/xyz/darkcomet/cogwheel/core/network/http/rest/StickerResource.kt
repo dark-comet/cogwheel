@@ -1,9 +1,9 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.StickerEntity
-import xyz.darkcomet.cogwheel.core.network.entities.StickerPackEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGuildStickerRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildStickerRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.StickerEntity
+import xyz.darkcomet.cogwheel.core.network.objects.StickerPackEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildStickerRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildStickerRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

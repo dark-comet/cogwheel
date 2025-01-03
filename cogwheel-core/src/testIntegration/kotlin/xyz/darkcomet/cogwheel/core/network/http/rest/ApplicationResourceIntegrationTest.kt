@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.TestDiscordClient
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyCurrentApplicationRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentApplicationRequestEntity
 import java.util.UUID
 
 class ApplicationResourceIntegrationTest {

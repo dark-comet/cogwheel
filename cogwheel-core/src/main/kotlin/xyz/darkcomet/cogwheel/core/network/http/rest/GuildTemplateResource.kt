@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.GuildEntity
-import xyz.darkcomet.cogwheel.core.network.entities.GuildTemplateEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildTemplateEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

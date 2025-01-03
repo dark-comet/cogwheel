@@ -1,13 +1,13 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.entities.ApplicationEntity
-import xyz.darkcomet.cogwheel.core.network.entities.ApplicationActivityInstanceEntity
+import xyz.darkcomet.cogwheel.core.network.objects.ApplicationEntity
+import xyz.darkcomet.cogwheel.core.network.objects.ApplicationActivityInstanceEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyCurrentApplicationRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentApplicationRequestEntity
 
 class ApplicationResource
 internal constructor(private val httpClient: CwHttpClient) {

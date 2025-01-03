@@ -1,10 +1,10 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.MessageEntity
-import xyz.darkcomet.cogwheel.core.network.entities.WebhookEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.EditWebhookMessageRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ExecuteWebhookRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyWebhookRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.MessageEntity
+import xyz.darkcomet.cogwheel.core.network.objects.WebhookEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.EditWebhookMessageRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ExecuteWebhookRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyWebhookRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

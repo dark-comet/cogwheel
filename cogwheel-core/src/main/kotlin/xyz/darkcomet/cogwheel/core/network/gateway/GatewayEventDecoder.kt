@@ -5,9 +5,9 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.events.*
-import xyz.darkcomet.cogwheel.core.network.entities.GatewayHelloEventDataEntity
-import xyz.darkcomet.cogwheel.core.network.entities.GatewayReadyEventDataEntity
-import xyz.darkcomet.cogwheel.core.network.entities.GuildEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayHelloEventDataEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayReadyEventDataEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildEntity
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayReceivePayloadName
 import kotlin.reflect.typeOf

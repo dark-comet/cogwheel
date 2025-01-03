@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.EntitlementEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateTestEntitlementRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.EntitlementEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateTestEntitlementRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

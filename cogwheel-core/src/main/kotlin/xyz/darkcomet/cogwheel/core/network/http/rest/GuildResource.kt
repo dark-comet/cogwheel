@@ -1,17 +1,17 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.serializer
-import xyz.darkcomet.cogwheel.core.network.entities.*
+import xyz.darkcomet.cogwheel.core.network.objects.*
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.entities.request.*
-import xyz.darkcomet.cogwheel.core.network.entities.response.GuildBeginPruneResponseEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.GuildBulkBanResponseEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.GuildGetPruneCountResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.*
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBeginPruneResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBulkBanResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildGetPruneCountResponseEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListGuildActiveThreadsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildActiveThreadsResponseEntity
 
 class GuildResource
 internal constructor(private val httpClient: CwHttpClient) {

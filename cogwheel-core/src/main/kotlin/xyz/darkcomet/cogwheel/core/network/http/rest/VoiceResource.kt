@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.VoiceRegionEntity
-import xyz.darkcomet.cogwheel.core.network.entities.VoiceStateEntity
+import xyz.darkcomet.cogwheel.core.network.objects.VoiceRegionEntity
+import xyz.darkcomet.cogwheel.core.network.objects.VoiceStateEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

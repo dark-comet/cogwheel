@@ -1,11 +1,11 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.EmojiEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateApplicationEmojiRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGuildEmojiRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyApplicationEmojiRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyGuildEmojiRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.response.ListApplicationEmojisResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.EmojiEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateApplicationEmojiRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildEmojiRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyApplicationEmojiRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildEmojiRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListApplicationEmojisResponseEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

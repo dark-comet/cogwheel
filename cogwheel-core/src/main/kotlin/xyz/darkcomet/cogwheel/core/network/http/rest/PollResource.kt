@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.MessageEntity
-import xyz.darkcomet.cogwheel.core.network.entities.UserEntity
+import xyz.darkcomet.cogwheel.core.network.objects.MessageEntity
+import xyz.darkcomet.cogwheel.core.network.objects.UserEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

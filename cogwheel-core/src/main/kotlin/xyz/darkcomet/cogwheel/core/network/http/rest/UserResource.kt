@@ -1,10 +1,10 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.*
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateGroupDmRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.CreateUserDmRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyCurrentUserRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.request.UpdateCurrentUserApplicationRoleConnectionRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.*
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGroupDmRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateUserDmRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentUserRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.UpdateCurrentUserApplicationRoleConnectionRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

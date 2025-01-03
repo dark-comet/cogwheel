@@ -1,8 +1,8 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.entities.CreateGuildScheduledEventRequestEntity
-import xyz.darkcomet.cogwheel.core.network.entities.GuildScheduledEventEntity
-import xyz.darkcomet.cogwheel.core.network.entities.GuildScheduledEventUserEntity
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildScheduledEventRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

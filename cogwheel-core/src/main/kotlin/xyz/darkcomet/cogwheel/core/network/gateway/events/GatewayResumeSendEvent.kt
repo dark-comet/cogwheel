@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.gateway.events
 
 import kotlinx.serialization.json.Json
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.network.entities.GatewayResumeDataEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayResumeDataEntity
 import xyz.darkcomet.cogwheel.core.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 

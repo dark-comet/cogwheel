@@ -8,7 +8,7 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 
 internal class KtorHttpResponse<T>(
     override val raw: CwHttpResponse.Raw,
-    override val entity: T?
+    override val data: T?
 ) : CwHttpResponse<T> {
 
     internal class Raw(
@@ -25,25 +25,25 @@ internal class KtorHttpResponse<T>(
         override val statusMessage: String
             get() = httpResponse.status.description
 
-        override fun toEmptyContent(): CwHttpResponse<Void> {
-            return KtorHttpResponse(this, entity = null)
+        override fun withEmptyContent(): CwHttpResponse<Void> {
+            return KtorHttpResponse(this, data = null)
         }
 
-        override fun <T> toEntity(strategy: CwHttpResponse.Raw.() -> T?): CwHttpResponse<T> {
+        override fun <T> withDataObject(strategy: CwHttpResponse.Raw.() -> T?): CwHttpResponse<T> {
             val entity = strategy.invoke(this)
             return KtorHttpResponse(this, entity)
         }
 
-        override fun <T> toEntity(deserializationStrategy: DeserializationStrategy<T>): CwHttpResponse<T> {
+        override fun <T> withDataObject(strategy: DeserializationStrategy<T>): CwHttpResponse<T> {
             if (bodyContent.isBlank() || ContentType.Application.Json != httpResponse.contentType()) {
-                return KtorHttpResponse(this, entity = null)
+                return KtorHttpResponse(this, data = null)
             }
 
             if (success) {
-                val entity = JSON_DESERIALIZER.decodeFromString(deserializationStrategy, bodyContent)
+                val entity = JSON_DESERIALIZER.decodeFromString(strategy, bodyContent)
                 return KtorHttpResponse(this, entity)
             } else {
-                return KtorHttpResponse(this, entity = null)
+                return KtorHttpResponse(this, data = null)
             }
         }
         

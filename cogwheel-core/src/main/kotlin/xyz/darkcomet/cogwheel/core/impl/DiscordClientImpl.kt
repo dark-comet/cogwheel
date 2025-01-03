@@ -61,7 +61,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         
         gatewayClient.start(
             cancellationToken, 
-            gatewayUrlFetcher = { restApi().gateway.getGatewayUrl().entity?.url }
+            gatewayUrlFetcher = { restApi().gateway.getGatewayUrl().data?.url }
         )
     }
 

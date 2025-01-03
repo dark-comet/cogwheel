@@ -7,10 +7,10 @@ import xyz.darkcomet.cogwheel.core.TestDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
 import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
 import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildRequestEntity
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -35,18 +35,18 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         withGateway(client) {
             // CREATE
             val guildName = "Test Guild " + UUID.randomUUID().toString()
-            val createRequest = CreateGuildRequestEntity(guildName)
+            val createRequest = CreateGuildRequestParameters(guildName)
             val createResponse = guildApi.createGuild(createRequest)
             
             try {
                 assertAll(
                     { assertEquals(true, createResponse.raw.success) },
                     { assertEquals(201, createResponse.raw.statusCode) },
-                    { assertNotNull(createResponse.entity) }
+                    { assertNotNull(createResponse.data) }
                 )
                 assertTrue(receivedGuildCreateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_CREATE gateway event")
                 
-                val guildId = createResponse.entity!!.id
+                val guildId = createResponse.data!!.id
                 assertNotNull(guildId)
                 
                 testGetPreview(guildId, guildName)
@@ -55,7 +55,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
                 assertTrue(receivedGuildUpdateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_UPDATE gateway event")
             } finally {
                 // DELETE
-                val guildId = createResponse.entity?.id
+                val guildId = createResponse.data?.id
                 if (guildId != null) {
                     val deleteResponse = guildApi.deleteGuild(guildId)
                     
@@ -76,17 +76,17 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         assertAll(
             { assertEquals(true, getPreviewResponse.raw.success) },
             { assertEquals(200, getPreviewResponse.raw.statusCode) },
-            { assertNotNull(getPreviewResponse.entity) }
+            { assertNotNull(getPreviewResponse.data) }
         )
         assertAll(
-            { assertEquals(guildId, getPreviewResponse.entity!!.id) },
-            { assertEquals(guildName, getPreviewResponse.entity!!.name) },
-            { assertNull(getPreviewResponse.entity!!.icon) },
-            { assertNull(getPreviewResponse.entity!!.splash) },
-            { assertNull(getPreviewResponse.entity!!.discoverySplash) },
-            { assertTrue(getPreviewResponse.entity!!.emojis.isEmpty()) },
-            { assertNull(getPreviewResponse.entity!!.description) },
-            { assertTrue(getPreviewResponse.entity!!.stickers.isEmpty()) },
+            { assertEquals(guildId, getPreviewResponse.data!!.id) },
+            { assertEquals(guildName, getPreviewResponse.data!!.name) },
+            { assertNull(getPreviewResponse.data!!.icon) },
+            { assertNull(getPreviewResponse.data!!.splash) },
+            { assertNull(getPreviewResponse.data!!.discoverySplash) },
+            { assertTrue(getPreviewResponse.data!!.emojis.isEmpty()) },
+            { assertNull(getPreviewResponse.data!!.description) },
+            { assertTrue(getPreviewResponse.data!!.stickers.isEmpty()) },
         )
     }
 
@@ -99,7 +99,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         val newAfkTimeout = 1800
         val newPremiumProgressBarEnabled = true
 
-        val modifyRequest = ModifyGuildRequestEntity(
+        val modifyRequest = ModifyGuildRequestParameters(
             name = newGuildName,
             verificationLevel = newVerificationLevel,
             defaultMessageNotifications = newDefaultMessageNotificationLevel,
@@ -113,16 +113,16 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         assertAll(
             { assertEquals(true, modifyResponse.raw.success) },
             { assertEquals(200, modifyResponse.raw.statusCode) },
-            { assertNotNull(modifyResponse.entity) }
+            { assertNotNull(modifyResponse.data) }
         )
         
         assertAll(
-            { assertEquals(guildId, modifyResponse.entity!!.id) },
-            { assertEquals(newVerificationLevel, modifyResponse.entity!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel, modifyResponse.entity!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel, modifyResponse.entity!!.explicitContentFilter) },
-            { assertEquals(newAfkTimeout, modifyResponse.entity!!.afkTimeout) },
-            { assertEquals(newPremiumProgressBarEnabled, modifyResponse.entity!!.premiumProgressBarEnabled) },
+            { assertEquals(guildId, modifyResponse.data!!.id) },
+            { assertEquals(newVerificationLevel, modifyResponse.data!!.verificationLevel) },
+            { assertEquals(newDefaultMessageNotificationLevel, modifyResponse.data!!.defaultMessageNotifications) },
+            { assertEquals(newExplicitContentFilterLevel, modifyResponse.data!!.explicitContentFilter) },
+            { assertEquals(newAfkTimeout, modifyResponse.data!!.afkTimeout) },
+            { assertEquals(newPremiumProgressBarEnabled, modifyResponse.data!!.premiumProgressBarEnabled) },
         )
         
         // Test GET
@@ -131,16 +131,16 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         assertAll(
             { assertEquals(true, getResponse.raw.success) },
             { assertEquals(200, getResponse.raw.statusCode) },
-            { assertNotNull(getResponse.entity) }
+            { assertNotNull(getResponse.data) }
         )
 
         assertAll(
-            { assertEquals(guildId, getResponse.entity!!.id) },
-            { assertEquals(newVerificationLevel, getResponse.entity!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel, getResponse.entity!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel, getResponse.entity!!.explicitContentFilter) },
-            { assertEquals(newAfkTimeout, getResponse.entity!!.afkTimeout) },
-            { assertEquals(newPremiumProgressBarEnabled, getResponse.entity!!.premiumProgressBarEnabled) },
+            { assertEquals(guildId, getResponse.data!!.id) },
+            { assertEquals(newVerificationLevel, getResponse.data!!.verificationLevel) },
+            { assertEquals(newDefaultMessageNotificationLevel, getResponse.data!!.defaultMessageNotifications) },
+            { assertEquals(newExplicitContentFilterLevel, getResponse.data!!.explicitContentFilter) },
+            { assertEquals(newAfkTimeout, getResponse.data!!.afkTimeout) },
+            { assertEquals(newPremiumProgressBarEnabled, getResponse.data!!.premiumProgressBarEnabled) },
         )
     }
 }

@@ -1,11 +1,11 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.MessageEntity
-import xyz.darkcomet.cogwheel.core.network.objects.UserEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateMessageRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.EditMessageRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.MessageObject
+import xyz.darkcomet.cogwheel.core.network.objects.UserObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateMessageRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.EditMessageRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class MessageResource 
@@ -17,28 +17,28 @@ internal constructor(private val httpClient: CwHttpClient) {
         before: Snowflake? = null,
         after: Snowflake? = null,
         limit: Int? = null
-    ): CwHttpResponse<List<MessageEntity>> {
+    ): CwHttpResponse<List<MessageObject>> {
         TODO("To be implemented")
     }
     
     fun getChannelMessage(
         channelId: Snowflake,
         messageId: Snowflake
-    ): CwHttpResponse<MessageEntity> {
+    ): CwHttpResponse<MessageObject> {
         TODO("To be implemented")
     }
     
     fun createMessage(
         channelId: Snowflake,
-        request: CreateMessageRequestEntity
-    ): CwHttpResponse<MessageEntity> {
+        request: CreateMessageRequestParameters
+    ): CwHttpResponse<MessageObject> {
         TODO("To be implemented")
     }
     
     fun crossPostMessage(
         channelId: Snowflake,
         messageId: Snowflake
-    ): CwHttpResponse<MessageEntity> {
+    ): CwHttpResponse<MessageObject> {
         TODO("To be implemented")
     }
     
@@ -71,7 +71,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake,
         messageId: Snowflake,
         emojiId: Snowflake
-    ): CwHttpResponse<List<UserEntity>> {
+    ): CwHttpResponse<List<UserObject>> {
         TODO("To be implemented")
     }
     
@@ -93,8 +93,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     fun editMessage(
         channelId: Snowflake,
         messageId: Snowflake,
-        request: EditMessageRequestEntity
-    ): CwHttpResponse<MessageEntity> {
+        request: EditMessageRequestParameters
+    ): CwHttpResponse<MessageObject> {
         TODO("To be implemented")
     }
     

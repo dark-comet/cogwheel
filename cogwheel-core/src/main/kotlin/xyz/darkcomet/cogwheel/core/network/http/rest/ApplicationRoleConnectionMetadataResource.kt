@@ -1,18 +1,35 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.ApplicationRoleConnectionMetadataEntity
+import kotlinx.serialization.builtins.ListSerializer
+import xyz.darkcomet.cogwheel.core.network.objects.ApplicationRoleConnectionMetadataObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class ApplicationRoleConnectionMetadataResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun getApplicationRoleConnectionMetadataRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
-        TODO("To be implemented")
+    suspend fun getApplicationRoleConnectionMetadataRecords(
+        applicationId: Snowflake
+    ): CwHttpResponse<List<ApplicationRoleConnectionMetadataObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/role-connections/metadata")
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
     }
     
-    fun updateApplicationRoleConnectionMetadataRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
-        TODO("To be implemented")
+    suspend fun updateApplicationRoleConnectionMetadataRecords(
+        applicationId: Snowflake,
+        request: List<ApplicationRoleConnectionMetadataObject>
+    ): CwHttpResponse<List<ApplicationRoleConnectionMetadataObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/applications/${applicationId}/role-connections/metadata") {
+            jsonParams(request, ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
+        }
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
     }
     
 }

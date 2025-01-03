@@ -1,5 +1,5 @@
 package xyz.darkcomet.cogwheel.core.events
 
-import xyz.darkcomet.cogwheel.core.network.objects.GuildEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildObject
 
-data class GuildUpdateEvent(val data: GuildEntity) : Event
+data class GuildUpdateEvent(val data: GuildObject) : Event

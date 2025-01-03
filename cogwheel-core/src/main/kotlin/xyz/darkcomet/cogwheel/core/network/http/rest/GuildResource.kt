@@ -1,76 +1,86 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.serializer
-import xyz.darkcomet.cogwheel.core.network.objects.*
-import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.objects.request.*
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBeginPruneResponseEntity
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBulkBanResponseEntity
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildGetPruneCountResponseEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildActiveThreadsResponseEntity
+import xyz.darkcomet.cogwheel.core.network.objects.*
+import xyz.darkcomet.cogwheel.core.network.objects.request.*
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBeginPruneResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBulkBanResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.response.GuildGetPruneCountResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildActiveThreadsResponseObject
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class GuildResource
 internal constructor(private val httpClient: CwHttpClient) {
     
-    suspend fun createGuild(request: CreateGuildRequestEntity): CwHttpResponse<GuildEntity> {
+    suspend fun createGuild(request: CreateGuildRequestParameters): CwHttpResponse<GuildObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds") {
-            jsonParams(request, CreateGuildRequestEntity.serializer())
+            jsonParams(request, CreateGuildRequestParameters.serializer())
         }
-        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(GuildObject.serializer())
     }
     
-    suspend fun getGuild(guildId: Snowflake, withCounts: Boolean = false): CwHttpResponse<GuildEntity> {
+    suspend fun getGuild(guildId: Snowflake, withCounts: Boolean = false): CwHttpResponse<GuildObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}") {
             queryStringParam("with_counts", withCounts.toString())
         }
-        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(GuildObject.serializer())
     }
 
-    suspend fun getGuildPreview(guildId: Snowflake): CwHttpResponse<GuildPreviewEntity> {
+    suspend fun getGuildPreview(guildId: Snowflake): CwHttpResponse<GuildPreviewObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/preview")
-        return httpClient.submit(httpRequest).toEntity(GuildPreviewEntity.serializer())
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(GuildPreviewObject.serializer())
     }
 
-    suspend fun modifyGuild(guildId: Snowflake, request: ModifyGuildRequestEntity): CwHttpResponse<GuildEntity> {
+    suspend fun modifyGuild(guildId: Snowflake, request: ModifyGuildRequestParameters): CwHttpResponse<GuildObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}") {
-            jsonParams(request, ModifyGuildRequestEntity.serializer())
+            jsonParams(request, ModifyGuildRequestParameters.serializer())
         }
-        return httpClient.submit(httpRequest).toEntity(GuildEntity.serializer())
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(GuildObject.serializer())
     }
 
     suspend fun deleteGuild(guildId: Snowflake): CwHttpResponse<Unit> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}")
-        return httpClient.submit(httpRequest).toEntity(Unit.serializer())
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withDataObject(Unit.serializer())
     }
 
-    fun getGuildChannels(guildId: Snowflake): CwHttpResponse<ChannelEntity> {
+    fun getGuildChannels(guildId: Snowflake): CwHttpResponse<ChannelObject> {
         TODO("Not implemented yet")
     }
 
     fun createGuildChannel(
-        guildId: Snowflake, 
-        request: CreateGuildChannelRequestEntity, 
+        guildId: Snowflake,
+        request: CreateGuildChannelRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<ChannelEntity> {
+    ): CwHttpResponse<ChannelObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildChannelPositions(
         guildId: Snowflake, 
-        request: ModifyGuildChannelPositionsRequestEntity
+        request: ModifyGuildChannelPositionsRequestParameters
     ): CwHttpResponse<Unit> {
         TODO("Not implemented yet")
     }
 
-    fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListGuildActiveThreadsResponseEntity> {
+    fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListGuildActiveThreadsResponseObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildMember(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildMemberEntity> {
+    fun getGuildMember(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildMemberObject> {
         TODO("Not implemented yet")
     }
 
@@ -78,7 +88,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         limit: Int? = null, 
         after: Snowflake? = null
-    ): CwHttpResponse<List<GuildMemberEntity>> {
+    ): CwHttpResponse<List<GuildMemberObject>> {
         TODO("Not implemented yet")
     }
 
@@ -86,31 +96,31 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         query: String,
         limit: Int = 1
-    ): CwHttpResponse<List<GuildMemberEntity>> {
+    ): CwHttpResponse<List<GuildMemberObject>> {
         TODO("Not implemented yet")
     }
 
     fun addGuildMember(
         guildId: Snowflake, 
         userId: Snowflake,
-        request: AddGuildMemberRequestEntity
-    ): CwHttpResponse<GuildMemberEntity> {
+        request: AddGuildMemberRequestParameters
+    ): CwHttpResponse<GuildMemberObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildMember(
-        guildId: Snowflake, 
-        userId: Snowflake, 
-        request: ModifyGuildMemberRequestEntity, 
+        guildId: Snowflake,
+        userId: Snowflake,
+        request: ModifyGuildMemberRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildMemberEntity> {
+    ): CwHttpResponse<GuildMemberObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyCurrentMember(
         guildId: Snowflake, 
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildMemberEntity> {
+    ): CwHttpResponse<GuildMemberObject> {
         TODO("Not implemented yet")
     }
 
@@ -145,18 +155,18 @@ internal constructor(private val httpClient: CwHttpClient) {
         limit: Int? = null, 
         before: Snowflake? = null, 
         after: Snowflake? = null
-    ): CwHttpResponse<List<GuildBanEntity>> {
+    ): CwHttpResponse<List<GuildBanObject>> {
         TODO("Not implemented yet")
     }
 
-    fun getBan(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildBanEntity> {
+    fun getBan(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildBanObject> {
         TODO("Not implemented yet")
     }
 
     fun createGuildBan(
-        guildId: Snowflake, 
-        userId: Snowflake, 
-        request: CreateGuildBanRequestEntity, 
+        guildId: Snowflake,
+        userId: Snowflake,
+        request: CreateGuildBanRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
         TODO("Not implemented yet")
@@ -171,49 +181,49 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
 
     fun bulkGuildBan(
-        guildId: Snowflake, 
-        request: BulkGuildBanRequestEntity, 
+        guildId: Snowflake,
+        request: BulkGuildBanRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildBulkBanResponseEntity> {
+    ): CwHttpResponse<GuildBulkBanResponseObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<GuildRoleEntity>> {
+    fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<GuildRoleObject>> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<GuildRoleEntity> {
+    fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<GuildRoleObject> {
         TODO("Not implemented yet")
     }
 
     fun createGuildRole(
-        guildId: Snowflake, 
-        request: CreateGuildRoleRequestEntity, 
+        guildId: Snowflake,
+        request: CreateGuildRoleRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildRoleEntity> {
+    ): CwHttpResponse<GuildRoleObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildRolePositions(
-        guildId: Snowflake, 
-        request: List<ModifyGuildRolePositionRequestEntity>, 
+        guildId: Snowflake,
+        request: List<ModifyGuildRolePositionRequestParameters>,
         auditLogReason: String? = null
-    ): CwHttpResponse<List<GuildRoleEntity>> {
+    ): CwHttpResponse<List<GuildRoleObject>> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildRole(
-        guildId: Snowflake, 
-        roleId: Snowflake, 
-        request: ModifyGuildRoleRequestEntity, 
+        guildId: Snowflake,
+        roleId: Snowflake,
+        request: ModifyGuildRoleRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildRoleEntity> {
+    ): CwHttpResponse<GuildRoleObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildMfaLevel(
-        guildId: Snowflake, 
-        request: ModifyGuildMfaLevelRequestEntity, 
+        guildId: Snowflake,
+        request: ModifyGuildMfaLevelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Int> {
         TODO("Not implemented yet")
@@ -231,27 +241,27 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         days: Int? = null, 
         includeRoleIds: List<Snowflake>? = null
-    ): CwHttpResponse<GuildGetPruneCountResponseEntity> {
+    ): CwHttpResponse<GuildGetPruneCountResponseObject> {
         TODO("Not implemented yet")
     }
 
     fun beginGuildPrune(
-        guildId: Snowflake, 
-        request: BeginGuildPruneRequestEntity, 
+        guildId: Snowflake,
+        request: BeginGuildPruneRequestParameters,
         auditLogReason: String?
-    ): CwHttpResponse<GuildBeginPruneResponseEntity> {
+    ): CwHttpResponse<GuildBeginPruneResponseObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildVoiceRegions(guildId: Snowflake): CwHttpResponse<List<VoiceRegionEntity>> {
+    fun getGuildVoiceRegions(guildId: Snowflake): CwHttpResponse<List<VoiceRegionObject>> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildInvites(guildId: Snowflake): CwHttpResponse<List<InviteEntity>> {
+    fun getGuildInvites(guildId: Snowflake): CwHttpResponse<List<InviteObject>> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildIntegrations(guildId: Snowflake): CwHttpResponse<List<GuildIntegrationEntity>> {
+    fun getGuildIntegrations(guildId: Snowflake): CwHttpResponse<List<GuildIntegrationObject>> {
         TODO("Not implemented yet")
     }
 
@@ -259,55 +269,58 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         integrationId: Snowflake, 
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildIntegrationEntity> {
+    ): CwHttpResponse<GuildIntegrationObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildWidgetSettings(guildId: Snowflake): CwHttpResponse<GuildWidgetSettingsEntity> {
+    fun getGuildWidgetSettings(guildId: Snowflake): CwHttpResponse<GuildWidgetSettingsObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildWidgetSettings(
-        guildId: Snowflake, 
-        request: ModifyGuildWidgetRequestEntity, 
+        guildId: Snowflake,
+        request: ModifyGuildWidgetRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildWidgetSettingsEntity> {
+    ): CwHttpResponse<GuildWidgetSettingsObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildWidget(guildId: Snowflake): CwHttpResponse<GuildWidgetEntity> {
+    fun getGuildWidget(guildId: Snowflake): CwHttpResponse<GuildWidgetObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildVanityUrl(guildId: Snowflake): CwHttpResponse<InviteEntity> {
+    fun getGuildVanityUrl(guildId: Snowflake): CwHttpResponse<InviteObject> {
         TODO("Not implemented yet")
     }
     
-    fun getGuildWidgetImage(guildId: Snowflake, style: String? = null): CwHttpResponse<String> {
+    fun getGuildWidgetImage(
+        guildId: Snowflake, 
+        style: String? = null
+    ): CwHttpResponse<String> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildWelcomeScreen(guildId: Snowflake): CwHttpResponse<GuildWelcomeScreenEntity> {
+    fun getGuildWelcomeScreen(guildId: Snowflake): CwHttpResponse<GuildWelcomeScreenObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildWelcomeScreen(
-        guildId: Snowflake, 
-        request: ModifyGuildWelcomeScreenRequestEntity,
+        guildId: Snowflake,
+        request: ModifyGuildWelcomeScreenRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildWelcomeScreenEntity> {
+    ): CwHttpResponse<GuildWelcomeScreenObject> {
         TODO("Not implemented yet")
     }
 
-    fun getGuildOnboarding(guildId: Snowflake): CwHttpResponse<GuildOnboardingEntity> {
+    fun getGuildOnboarding(guildId: Snowflake): CwHttpResponse<GuildOnboardingObject> {
         TODO("Not implemented yet")
     }
 
     fun modifyGuildOnboarding(
-        guildId: Snowflake, 
-        request: ModifyGuildOnboardingRequestEntity, 
+        guildId: Snowflake,
+        request: ModifyGuildOnboardingRequestParameters,
         auditLogReason: String?
-    ): CwHttpResponse<GuildOnboardingEntity> {
+    ): CwHttpResponse<GuildOnboardingObject> {
         TODO("Not implemented yet")
     }
     

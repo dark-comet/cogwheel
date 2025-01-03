@@ -1,25 +1,25 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.StickerEntity
-import xyz.darkcomet.cogwheel.core.network.objects.StickerPackEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildStickerRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildStickerRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.StickerObject
+import xyz.darkcomet.cogwheel.core.network.objects.StickerPackObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildStickerRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildStickerRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class StickerResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun getSticker(stickerId: Snowflake): CwHttpResponse<StickerEntity> {
+    fun getSticker(stickerId: Snowflake): CwHttpResponse<StickerObject> {
         TODO("To be implemented")
     }
     
-    fun listStickerPacks(): CwHttpResponse<List<StickerPackEntity>> {
+    fun listStickerPacks(): CwHttpResponse<List<StickerPackObject>> {
         TODO("To be implemented")
     }
     
-    fun getStickerPack(packId: Snowflake): CwHttpResponse<StickerPackEntity> {
+    fun getStickerPack(packId: Snowflake): CwHttpResponse<StickerPackObject> {
         TODO("To be implemented")
     }
     
@@ -30,24 +30,24 @@ internal constructor(private val httpClient: CwHttpClient) {
     fun getGuildSticker(
         guildId: Snowflake, 
         stickerId: Snowflake
-    ): CwHttpResponse<StickerEntity> {
+    ): CwHttpResponse<StickerObject> {
         TODO("To be implemented")
     }
     
     fun createGuildSticker(
-        guildId: Snowflake, 
-        request: CreateGuildStickerRequestEntity,
+        guildId: Snowflake,
+        request: CreateGuildStickerRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<StickerEntity> {
+    ): CwHttpResponse<StickerObject> {
         TODO("To be implemented")
     }
     
     fun modifyGuildSticker(
         guildId: Snowflake,
         stickerId: Snowflake,
-        request: ModifyGuildStickerRequestEntity,
+        request: ModifyGuildStickerRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<StickerEntity> {
+    ): CwHttpResponse<StickerObject> {
         TODO("To be implemented")
     }
     

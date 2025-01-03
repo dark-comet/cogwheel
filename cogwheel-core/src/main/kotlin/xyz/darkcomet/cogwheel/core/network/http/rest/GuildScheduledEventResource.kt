@@ -1,31 +1,31 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildScheduledEventRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventEntity
-import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventObject
+import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class GuildScheduledEventResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listScheduledEventsForGuild(guildId: Snowflake): CwHttpResponse<List<GuildScheduledEventEntity>> {
+    fun listScheduledEventsForGuild(guildId: Snowflake): CwHttpResponse<List<GuildScheduledEventObject>> {
         TODO("To be implemented")
     }
     
     fun createGuildScheduledEvent(
         guildId: Snowflake,
-        request: CreateGuildScheduledEventRequestEntity,
+        request: CreateGuildScheduledEventRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildScheduledEventEntity> {
+    ): CwHttpResponse<GuildScheduledEventObject> {
         TODO("To be implemented")
     }
     
     fun getGuildScheduledEvent(
         guildId: Snowflake, 
         eventId: Snowflake
-    ): CwHttpResponse<GuildScheduledEventEntity> {
+    ): CwHttpResponse<GuildScheduledEventObject> {
         TODO("To be implemented")
     }
     
@@ -33,7 +33,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake,
         eventId: Snowflake,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildScheduledEventEntity> {
+    ): CwHttpResponse<GuildScheduledEventObject> {
         TODO("To be implemented")
     }
     
@@ -47,7 +47,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     fun getGuildScheduledEventUsers(
         guildId: Snowflake, 
         eventId: Snowflake
-    ): CwHttpResponse<List<GuildScheduledEventUserEntity>> {
+    ): CwHttpResponse<List<GuildScheduledEventUserObject>> {
         TODO("To be implemented")
     }
     

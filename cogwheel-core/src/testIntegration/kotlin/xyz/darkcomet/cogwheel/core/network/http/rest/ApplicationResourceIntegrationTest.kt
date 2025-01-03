@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.TestDiscordClient
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentApplicationRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentApplicationRequestParameters
 import java.util.UUID
 
 class ApplicationResourceIntegrationTest {
@@ -24,15 +24,12 @@ class ApplicationResourceIntegrationTest {
     @Test
     fun testEditCurrentApplication() {
         runBlocking { 
-            val request = ModifyCurrentApplicationRequestEntity(
-                description = "test description: ${UUID.randomUUID()}"
-            )
-            
+            val request = ModifyCurrentApplicationRequestParameters(description = "test description: ${UUID.randomUUID()}")
             val response = api.application.editCurrentApplication(request)
             
             assertEquals(true, response.raw.success)
-            assertNotNull(response.entity)
-            assertEquals(request.description, response.entity!!.description)
+            assertNotNull(response.data)
+            assertEquals(request.description, response.data!!.description)
         }
     }
 }

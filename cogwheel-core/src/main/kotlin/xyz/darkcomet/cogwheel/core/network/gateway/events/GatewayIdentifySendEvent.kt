@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.gateway.events
 import kotlinx.serialization.json.Json
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
 import xyz.darkcomet.cogwheel.core.primitives.Intents
-import xyz.darkcomet.cogwheel.core.network.objects.GatewayIdentifyEventDataEntity
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayIdentifyEventDataObject
 import xyz.darkcomet.cogwheel.core.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 
@@ -13,9 +13,9 @@ class GatewayIdentifySendEvent(
     private val libName: String
 ) : GatewaySendEvent {
     override fun asPayload(): GatewayPayload {
-        val data = GatewayIdentifyEventDataEntity(
+        val data = GatewayIdentifyEventDataObject(
             token = token.value,
-            properties = GatewayIdentifyEventDataEntity.IdentifyConnectionPropertiesEntity(
+            properties = GatewayIdentifyEventDataObject.IdentifyConnectionPropertiesEntity(
                 os = System.getProperty("os.name"),
                 browser = libName,
                 device = libName
@@ -25,7 +25,7 @@ class GatewayIdentifySendEvent(
 
         return GatewayPayload(
             op = GatewayOpCode.IDENTIFY.code, 
-            d = Json.encodeToJsonElement(GatewayIdentifyEventDataEntity.serializer(), data)
+            d = Json.encodeToJsonElement(GatewayIdentifyEventDataObject.serializer(), data)
         )
     }
 }

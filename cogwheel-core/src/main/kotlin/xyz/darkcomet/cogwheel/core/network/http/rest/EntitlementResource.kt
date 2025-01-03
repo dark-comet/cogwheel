@@ -1,9 +1,9 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.EntitlementEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateTestEntitlementRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.EntitlementObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateTestEntitlementRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class EntitlementResource 
@@ -19,14 +19,14 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake? = null,
         excludeEnded: Boolean? = null,
         excludeDeleted: Boolean? = null
-    ): CwHttpResponse<List<EntitlementEntity>> {
+    ): CwHttpResponse<List<EntitlementObject>> {
         TODO("To be implemented")
     }
     
     fun getEntitlement(
         applicationId: Snowflake, 
         entitlementId: Snowflake
-    ): CwHttpResponse<EntitlementEntity> {
+    ): CwHttpResponse<EntitlementObject> {
         TODO("To be implemented")
     }
     
@@ -39,8 +39,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     
     fun createTestEntitlement(
         applicationId: Snowflake, 
-        request: CreateTestEntitlementRequestEntity
-    ): CwHttpResponse<EntitlementEntity> {
+        request: CreateTestEntitlementRequestParameters
+    ): CwHttpResponse<EntitlementObject> {
         TODO("To be implemented")
     }
     

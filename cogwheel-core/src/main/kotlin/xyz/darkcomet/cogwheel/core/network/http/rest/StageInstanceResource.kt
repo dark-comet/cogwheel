@@ -1,27 +1,27 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.StageInstanceEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateStageInstanceRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyStageInstanceRequestEntity
+import xyz.darkcomet.cogwheel.core.network.objects.StageInstanceObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateStageInstanceRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyStageInstanceRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class StageInstanceResource 
 internal constructor(httpClient: CwHttpClient) {
     
-    fun createStageInstance(request: CreateStageInstanceRequestEntity): CwHttpResponse<StageInstanceEntity> {
+    fun createStageInstance(request: CreateStageInstanceRequestParameters): CwHttpResponse<StageInstanceObject> {
         TODO("To be implemented")
     }
     
-    fun getStageInstance(channelId: Snowflake): CwHttpResponse<StageInstanceEntity> {
+    fun getStageInstance(channelId: Snowflake): CwHttpResponse<StageInstanceObject> {
         TODO("To be implemented")
     }
     
     fun modifyStageInstance(
         channelId: Snowflake, 
-        request: ModifyStageInstanceRequestEntity
-    ): CwHttpResponse<StageInstanceEntity> {
+        request: ModifyStageInstanceRequestParameters
+    ): CwHttpResponse<StageInstanceObject> {
         TODO("To be implemented")
     }
     

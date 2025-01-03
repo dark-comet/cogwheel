@@ -22,6 +22,12 @@ internal constructor(
             return this
         }
         
+        fun optionalQueryStringParam(key: String, value: Any?) {
+            if (value != null) {
+                queryStringParam(key, value.toString())
+            }
+        }
+        
         fun <T> jsonParams(value: T, serializationStrategy: SerializationStrategy<T>) : Builder {
             bodyContent = JSON_SERIALIZER.encodeToString(serializationStrategy, value)
             return this

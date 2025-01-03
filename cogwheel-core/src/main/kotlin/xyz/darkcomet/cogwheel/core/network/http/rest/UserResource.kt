@@ -1,34 +1,34 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import xyz.darkcomet.cogwheel.core.network.objects.*
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGroupDmRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateUserDmRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentUserRequestEntity
-import xyz.darkcomet.cogwheel.core.network.objects.request.UpdateCurrentUserApplicationRoleConnectionRequestEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGroupDmRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.CreateUserDmRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentUserRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.UpdateCurrentUserApplicationRoleConnectionRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class UserResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun getCurrentUser(): CwHttpResponse<UserEntity> {
+    fun getCurrentUser(): CwHttpResponse<UserObject> {
         TODO("To be implemented")
     }
     
-    fun getUser(userId: Snowflake): CwHttpResponse<UserEntity> {
+    fun getUser(userId: Snowflake): CwHttpResponse<UserObject> {
         TODO("To be implemented")
     }
     
-    fun modifyCurrentUser(request: ModifyCurrentUserRequestEntity): CwHttpResponse<UserEntity> {
+    fun modifyCurrentUser(request: ModifyCurrentUserRequestParameters): CwHttpResponse<UserObject> {
         TODO("To be implemented")
     }
     
-    fun getCurrentUserGuilds(): CwHttpResponse<List<GuildEntity>> {
+    fun getCurrentUserGuilds(): CwHttpResponse<List<GuildObject>> {
         TODO("To be implemented")
     }
     
-    fun getCurrentUserGuildMember(guildId: Snowflake): CwHttpResponse<GuildMemberEntity> {
+    fun getCurrentUserGuildMember(guildId: Snowflake): CwHttpResponse<GuildMemberObject> {
         TODO("To be implemented")
     }
     
@@ -36,26 +36,26 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun createDm(request: CreateUserDmRequestEntity): CwHttpResponse<ChannelEntity> {
+    fun createDm(request: CreateUserDmRequestParameters): CwHttpResponse<ChannelObject> {
         TODO("To be implemented")
     }
     
-    fun createGroupDm(request: CreateGroupDmRequestEntity): CwHttpResponse<ChannelEntity> {
+    fun createGroupDm(request: CreateGroupDmRequestParameters): CwHttpResponse<ChannelObject> {
         TODO("To be implemented")
     }
     
-    fun getCurrentUserConnections(): CwHttpResponse<ConnectionEntity> {
+    fun getCurrentUserConnections(): CwHttpResponse<ConnectionObject> {
         TODO("To be implemented")
     }
     
-    fun getCurrentUserApplicationRoleConnection(applicationId: Snowflake): CwHttpResponse<UserApplicationRoleConnectionEntity> {
+    fun getCurrentUserApplicationRoleConnection(applicationId: Snowflake): CwHttpResponse<UserApplicationRoleConnectionObject> {
         TODO("To be implemented")
     }
     
     fun updateCurrentUserApplicationRoleConnection(
         applicationId: Snowflake, 
-        request: UpdateCurrentUserApplicationRoleConnectionRequestEntity
-    ): CwHttpResponse<UserApplicationRoleConnectionEntity> {
+        request: UpdateCurrentUserApplicationRoleConnectionRequestParameters
+    ): CwHttpResponse<UserApplicationRoleConnectionObject> {
         TODO("To be implemented")
     }
     

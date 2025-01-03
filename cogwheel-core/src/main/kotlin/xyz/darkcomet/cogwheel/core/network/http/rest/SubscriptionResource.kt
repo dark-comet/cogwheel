@@ -8,11 +8,11 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class SubscriptionResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listForSku(skuId: Snowflake): CwHttpResponse<List<SubscriptionEntity>> {
+    fun listSkuSubscriptions(skuId: Snowflake): CwHttpResponse<List<SubscriptionEntity>> {
         TODO("To be implemented")
     }
     
-    fun getForSku(skuId: Snowflake, subscriptionId: Snowflake): CwHttpResponse<SubscriptionEntity> {
+    fun getSkuSubscription(skuId: Snowflake, subscriptionId: Snowflake): CwHttpResponse<SubscriptionEntity> {
         TODO("To be implemented")
     }
     

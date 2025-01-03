@@ -13,15 +13,18 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class EmojiResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listForGuild(guildId: Snowflake): CwHttpResponse<List<EmojiEntity>> {
+    fun listGuildEmojis(guildId: Snowflake): CwHttpResponse<List<EmojiEntity>> {
         TODO("To be implemented")
     }
     
-    fun getForGuild(guildId: Snowflake, emojiId: Snowflake): CwHttpResponse<EmojiEntity> {
+    fun getGuildEmoji(
+        guildId: Snowflake, 
+        emojiId: Snowflake
+    ): CwHttpResponse<EmojiEntity> {
         TODO("To be implemented")
     }
     
-    fun createForGuild(
+    fun createGuildEmoji(
         guildId: Snowflake,
         request: CreateGuildEmojiRequestEntity,
         auditLogReason: String? = null
@@ -29,7 +32,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun modifyForGuild(
+    fun modifyGuildEmoji(
         guildId: Snowflake,
         emojiId: Snowflake,
         request: ModifyGuildEmojiRequestEntity,
@@ -38,22 +41,25 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun listForApplication(applicationId: Snowflake): CwHttpResponse<ListApplicationEmojisResponseEntity> {
+    fun listApplicationEmojis(applicationId: Snowflake): CwHttpResponse<ListApplicationEmojisResponseEntity> {
         TODO("To be implemented")
     }
     
-    fun getForApplication(applicationId: Snowflake, emojiId: Snowflake): CwHttpResponse<EmojiEntity> {
+    fun getApplicationEmoji(
+        applicationId: Snowflake, 
+        emojiId: Snowflake
+    ): CwHttpResponse<EmojiEntity> {
         TODO("To be implemented")
     }
     
-    fun createForApplication(
+    fun createApplicationEmoji(
         applicationId: Snowflake, 
         request: CreateApplicationEmojiRequestEntity
     ): CwHttpResponse<EmojiEntity> {
         TODO("To be implemented")
     }
     
-    fun modifyForApplication(
+    fun modifyApplicationEmoji(
         applicationId: Snowflake, 
         emojiId: Snowflake, 
         request: ModifyApplicationEmojiRequestEntity
@@ -61,7 +67,10 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun deleteForApplication(applicationId: Snowflake, emojiId: Snowflake): CwHttpResponse<Unit> {
+    fun deleteApplicationEmoji(
+        applicationId: Snowflake, 
+        emojiId: Snowflake
+    ): CwHttpResponse<Unit> {
         TODO("To be implemented")
     }
 }

@@ -14,21 +14,21 @@ class ApplicationResourceIntegrationTest {
     private val api = client.restApi()
     
     @Test
-    fun testGetCurrent() {
+    fun testGetCurrentApplication() {
         runBlocking {
-            val response = api.application.getCurrent()
+            val response = api.application.getCurrentApplication()
             assertEquals(true, response.raw.success)
         }
     }
     
     @Test
-    fun testEditCurrent() {
+    fun testEditCurrentApplication() {
         runBlocking { 
             val request = ModifyCurrentApplicationRequestEntity(
                 description = "test description: ${UUID.randomUUID()}"
             )
             
-            val response = api.application.editCurrent(request)
+            val response = api.application.editCurrentApplication(request)
             
             assertEquals(true, response.raw.success)
             assertNotNull(response.entity)

@@ -61,7 +61,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         
         gatewayClient.start(
             cancellationToken, 
-            gatewayUrlFetcher = { restApi().gateway.get().entity?.url }
+            gatewayUrlFetcher = { restApi().gateway.getGatewayUrl().entity?.url }
         )
     }
 
@@ -89,6 +89,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         override val message = MessageResource(client)
         override val poll = PollResource(client)
         override val sku = SkuResource(client)
+        override val soundboard = SoundboardResource(client)
         override val stageInstance = StageInstanceResource(client)
         override val sticker = StickerResource(client)
         override val subscription = SubscriptionResource(client)

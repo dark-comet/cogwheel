@@ -8,7 +8,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class SkuResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun list(applicationId: Snowflake): CwHttpResponse<List<SkuEntity>> {
+    fun listSkus(applicationId: Snowflake): CwHttpResponse<List<SkuEntity>> {
         TODO("To be implemented")
     }
     

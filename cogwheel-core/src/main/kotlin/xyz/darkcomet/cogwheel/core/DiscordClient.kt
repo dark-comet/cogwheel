@@ -31,6 +31,7 @@ interface DiscordClient {
         val message: MessageResource
         val poll: PollResource
         val sku: SkuResource
+        val soundboard: SoundboardResource
         val stageInstance: StageInstanceResource
         val sticker: StickerResource
         val subscription: SubscriptionResource

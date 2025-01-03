@@ -9,7 +9,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class EntitlementResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun list(
+    fun listEntitlements(
         applicationId: Snowflake,
         userId: Snowflake? = null,
         skuIds: List<Snowflake>? = null,
@@ -23,22 +23,32 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun get(applicationId: Snowflake, entitlementId: Snowflake): CwHttpResponse<EntitlementEntity> {
+    fun getEntitlement(
+        applicationId: Snowflake, 
+        entitlementId: Snowflake
+    ): CwHttpResponse<EntitlementEntity> {
         TODO("To be implemented")
     }
     
-    fun consume(applicationId: Snowflake, entitlementId: Snowflake): CwHttpResponse<Unit> {
+    fun consumeEntitlement(
+        applicationId: Snowflake, 
+        entitlementId: Snowflake
+    ): CwHttpResponse<Unit> {
         TODO("To be implemented")
     }
     
-    fun createTest(
+    fun createTestEntitlement(
         applicationId: Snowflake, 
         request: CreateTestEntitlementRequestEntity
     ): CwHttpResponse<EntitlementEntity> {
         TODO("To be implemented")
     }
     
-    fun deleteTest(applicationId: Snowflake, entitlementId: Snowflake): CwHttpResponse<Unit> {
+    fun deleteTestEntitlement(
+        applicationId: Snowflake, 
+        entitlementId: Snowflake
+    ): CwHttpResponse<Unit> {
         TODO("To be implemented")
     }
+    
 }

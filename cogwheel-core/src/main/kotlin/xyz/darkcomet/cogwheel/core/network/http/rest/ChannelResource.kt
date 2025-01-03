@@ -16,11 +16,11 @@ import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 class ChannelResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun get(channelId: Snowflake): CwHttpResponse<ChannelEntity> {
+    fun getChannel(channelId: Snowflake): CwHttpResponse<ChannelEntity> {
         TODO("Not implemented yet")
     }
 
-    fun modify(
+    fun modifyChannel(
         channelId: Snowflake, 
         request: ModifyChannelRequestEntity, 
         auditLogReason: String? = null
@@ -28,14 +28,14 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("Not implemented yet")
     }
 
-    fun deleteOrClose(
+    fun deleteOrCloseChannel(
         channelId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelEntity> {
         TODO("Not implemented yet")
     }
     
-    fun editPermissions(
+    fun editChannelPermissions(
         channelId: Snowflake,
         overwriteId: Snowflake,
         request: EditChannelPermissionsRequestEntity,
@@ -44,11 +44,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("Not implemented yet")
     }
     
-    fun getInvites(channelId: Snowflake) : CwHttpResponse<List<InviteEntity>> {
+    fun getChannelInvites(channelId: Snowflake) : CwHttpResponse<List<InviteEntity>> {
         TODO("Not implemented yet")
     }
     
-    fun createInvite(
+    fun createChannelInvite(
         channelId: Snowflake,
         request: CreateChannelInviteRequestEntity,
         auditLogReason: String? = null
@@ -56,7 +56,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("Not implemented yet")
     }
     
-    fun deletePermission(
+    fun deleteChannelPermission(
         channelId: Snowflake, 
         overwriteId: Snowflake, 
         auditLogReason: String? = null

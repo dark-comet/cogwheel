@@ -7,11 +7,11 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 class InviteResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun get(inviteCode: String): CwHttpResponse<InviteEntity> {
+    fun getInvite(inviteCode: String): CwHttpResponse<InviteEntity> {
         TODO("To be implemented")
     }
     
-    fun delete(inviteCode: String): CwHttpResponse<InviteEntity> {
+    fun deleteInvite(inviteCode: String): CwHttpResponse<InviteEntity> {
         TODO("To be implemented")
     }
     

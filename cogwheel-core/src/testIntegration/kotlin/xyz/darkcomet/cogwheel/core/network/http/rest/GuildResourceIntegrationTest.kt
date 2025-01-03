@@ -36,7 +36,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             // CREATE
             val guildName = "Test Guild " + UUID.randomUUID().toString()
             val createRequest = CreateGuildRequestEntity(guildName)
-            val createResponse = guildApi.create(createRequest)
+            val createResponse = guildApi.createGuild(createRequest)
             
             try {
                 assertAll(
@@ -57,7 +57,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
                 // DELETE
                 val guildId = createResponse.entity?.id
                 if (guildId != null) {
-                    val deleteResponse = guildApi.delete(guildId)
+                    val deleteResponse = guildApi.deleteGuild(guildId)
                     
                     assertAll(
                         { assertTrue(deleteResponse.raw.success) },
@@ -71,7 +71,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
     }
 
     private suspend fun testGetPreview(guildId: Snowflake, guildName: String) {
-        val getPreviewResponse = guildApi.getPreview(guildId)
+        val getPreviewResponse = guildApi.getGuildPreview(guildId)
         
         assertAll(
             { assertEquals(true, getPreviewResponse.raw.success) },
@@ -108,7 +108,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             premiumProgressBarEnabled = newPremiumProgressBarEnabled,
             description = newGuildDescription
         )
-        val modifyResponse = guildApi.modify(guildId, modifyRequest)
+        val modifyResponse = guildApi.modifyGuild(guildId, modifyRequest)
 
         assertAll(
             { assertEquals(true, modifyResponse.raw.success) },
@@ -126,7 +126,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         )
         
         // Test GET
-        val getResponse = guildApi.get(guildId, withCounts = true)
+        val getResponse = guildApi.getGuild(guildId, withCounts = true)
 
         assertAll(
             { assertEquals(true, getResponse.raw.success) },

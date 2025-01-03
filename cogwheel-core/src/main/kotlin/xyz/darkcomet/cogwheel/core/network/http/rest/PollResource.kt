@@ -17,7 +17,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         TODO("To be implemented")
     }
     
-    fun end(channelId: Snowflake, messageId: Int): CwHttpResponse<MessageEntity> {
+    fun endPoll(channelId: Snowflake, messageId: Int): CwHttpResponse<MessageEntity> {
         TODO("To be implemented")
     }
     

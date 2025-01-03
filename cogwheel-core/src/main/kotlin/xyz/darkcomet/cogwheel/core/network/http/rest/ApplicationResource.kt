@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.core.network.entities.ApplicationEntity
-import xyz.darkcomet.cogwheel.core.network.entities.ApplicationInstanceEntity
+import xyz.darkcomet.cogwheel.core.network.entities.ApplicationActivityInstanceEntity
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
@@ -12,12 +12,12 @@ import xyz.darkcomet.cogwheel.core.network.entities.request.ModifyCurrentApplica
 class ApplicationResource
 internal constructor(private val httpClient: CwHttpClient) {
     
-    suspend fun getCurrent(): CwHttpResponse<ApplicationEntity?> {
+    suspend fun getCurrentApplication(): CwHttpResponse<ApplicationEntity?> {
         val request = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
         return httpClient.submit(request).toEntity(ApplicationEntity.serializer())
     }
     
-    suspend fun editCurrent(request: ModifyCurrentApplicationRequestEntity): CwHttpResponse<ApplicationEntity?> {
+    suspend fun editCurrentApplication(request: ModifyCurrentApplicationRequestEntity): CwHttpResponse<ApplicationEntity?> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/applications/@me") {
             jsonParams(request, ModifyCurrentApplicationRequestEntity.serializer())
         }
@@ -25,18 +25,12 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     // TODO: Make this testable in integration tests
-    suspend fun getActivityInstance(applicationId: Snowflake, instanceId: String): CwHttpResponse<ApplicationInstanceEntity?> {
+    suspend fun getApplicationActivityInstance(
+        applicationId: Snowflake, 
+        instanceId: String
+    ): CwHttpResponse<ApplicationActivityInstanceEntity?> {
         val request = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
-        return httpClient.submit(request).toEntity(ApplicationInstanceEntity.serializer())
+        return httpClient.submit(request).toEntity(ApplicationActivityInstanceEntity.serializer())
     }
-    
-//
-//    fun getRoleConnectionMetadataRecords(applicationId: Snowflake): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
-//
-//    fun updateRoleConnectionMetadataRecords(applicationId: Snowflake, request: UpdateApplicationRoleConnectionRecordsRequest): CwHttpResponse {
-//        TODO("Not implemented yet")
-//    }
     
 }

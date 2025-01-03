@@ -8,8 +8,10 @@ import xyz.darkcomet.cogwheel.core.network.entities.response.GetGatewayUrlRespon
 
 class GatewayResource
 internal constructor(private val httpClient: CwHttpClient) {
-    suspend fun get(): CwHttpResponse<GetGatewayUrlResponseEntity> {
+    
+    suspend fun getGatewayUrl(): CwHttpResponse<GetGatewayUrlResponseEntity> {
         val request = CwHttpRequest.create(CwHttpMethod.GET, "/gateway")
         return httpClient.submit(request).toEntity(GetGatewayUrlResponseEntity.serializer())
     }
+    
 }

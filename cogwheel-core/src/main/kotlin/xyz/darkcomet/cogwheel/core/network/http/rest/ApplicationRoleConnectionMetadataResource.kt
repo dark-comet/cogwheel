@@ -6,11 +6,13 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 
 class ApplicationRoleConnectionMetadataResource 
 internal constructor(private val httpClient: CwHttpClient) {
-    fun getRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
+    
+    fun getApplicationRoleConnectionMetadataRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
         TODO("To be implemented")
     }
     
-    fun updateRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
+    fun updateApplicationRoleConnectionMetadataRecords(): CwHttpResponse<List<ApplicationRoleConnectionMetadataEntity>> {
         TODO("To be implemented")
     }
+    
 }

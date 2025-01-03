@@ -9,18 +9,18 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class AutoModerationResource internal constructor(httpClient: CwHttpClient) {
 
-    fun listRules(guildId: Snowflake): CwHttpResponse<List<GuildAutoModerationRuleEntity>> {
+    fun listAutoModerationRulesForGuild(guildId: Snowflake): CwHttpResponse<List<GuildAutoModerationRuleEntity>> {
         TODO("Not implemented yet")
     }
 
-    fun getRule(
+    fun getAutoModerationRule(
         guildId: Snowflake, 
         autoModerationRuleId: Snowflake
     ): CwHttpResponse<GuildAutoModerationRuleEntity> {
         TODO("Not implemented yet")
     }
 
-    fun createRule(
+    fun createAutoModerationRule(
         guildId: Snowflake, 
         request: CreateGuildAutoModerationRuleRequestEntity, 
         auditLogReason: String? = null
@@ -28,7 +28,7 @@ class AutoModerationResource internal constructor(httpClient: CwHttpClient) {
         TODO("Not implemented yet")
     }
 
-    fun modifyRule(
+    fun modifyAutoModerationRule(
         guildId: Snowflake,
         autoModerationRuleId: Snowflake,
         request: ModifyGuildAutoModerationRuleRequestEntity,
@@ -37,7 +37,7 @@ class AutoModerationResource internal constructor(httpClient: CwHttpClient) {
         TODO("Not implemented yet")
     }
 
-    fun deleteRule(
+    fun deleteAutoModerationRule(
         guildId: Snowflake, 
         autoModerationRuleId: Snowflake, 
         auditLogReason: String? = null

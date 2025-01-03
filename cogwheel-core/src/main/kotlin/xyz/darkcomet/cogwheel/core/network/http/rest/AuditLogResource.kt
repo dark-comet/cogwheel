@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class AuditLogResource internal constructor(httpClient: CwHttpClient) {
 
-    fun get(
+    fun getGuildAuditLog(
         guildId: Snowflake,
         userId: Snowflake? = null,
         actionType: Int? = null,

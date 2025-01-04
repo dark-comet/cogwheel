@@ -27,7 +27,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(GuildAuditLogObject.serializer())
+        return response.withData(GuildAuditLogObject.serializer())
     }
     
 }

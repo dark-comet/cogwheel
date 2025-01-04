@@ -10,10 +10,12 @@ internal constructor(
     val method: CwHttpMethod,
     val endpointPath: String,
     val queryParameters: Map<String, String>,
+    val headers: Map<String, String>,
     val bodyContent: String?
 ) {
-    internal class Builder(private val method: CwHttpMethod, private val urlPath: String)
-    {
+    internal class Builder(private val method: CwHttpMethod, private val urlPath: String) {
+        
+        private val headers = HashMap<String, String>()
         private val queryParameters = HashMap<String, String>()
         private var bodyContent: String? = null
         
@@ -28,6 +30,12 @@ internal constructor(
             }
         }
         
+        fun optionalAuditLogReason(auditLogReason: String?) {
+            if (auditLogReason != null) {
+                headers["X-Audit-Log-Reason"] = auditLogReason
+            }
+        }
+        
         fun <T> jsonParams(value: T, serializationStrategy: SerializationStrategy<T>) : Builder {
             bodyContent = JSON_SERIALIZER.encodeToString(serializationStrategy, value)
             return this
@@ -35,11 +43,12 @@ internal constructor(
         
         internal fun build() : CwHttpRequest {
             val queryParamsCopy = Collections.unmodifiableMap(HashMap(queryParameters))
-            return CwHttpRequest(method, urlPath, queryParamsCopy, bodyContent)
+            return CwHttpRequest(method, urlPath, queryParamsCopy, headers, bodyContent)
         }
     }
     
     companion object {
+        
         private val JSON_SERIALIZER = Json { encodeDefaults = false }
         
         internal fun create(method: CwHttpMethod, urlPath: String, init: (Builder.() -> Unit)? = null): CwHttpRequest {
@@ -49,4 +58,5 @@ internal constructor(
             return builder.build()
         }
     }
+    
 }

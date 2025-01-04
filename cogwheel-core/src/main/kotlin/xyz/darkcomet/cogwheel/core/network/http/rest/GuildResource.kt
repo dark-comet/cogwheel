@@ -22,7 +22,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(GuildObject.serializer())
+        return response.withData(GuildObject.serializer())
     }
     
     suspend fun getGuild(guildId: Snowflake, withCounts: Boolean = false): CwHttpResponse<GuildObject> {
@@ -31,14 +31,14 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(GuildObject.serializer())
+        return response.withData(GuildObject.serializer())
     }
 
     suspend fun getGuildPreview(guildId: Snowflake): CwHttpResponse<GuildPreviewObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/preview")
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(GuildPreviewObject.serializer())
+        return response.withData(GuildPreviewObject.serializer())
     }
 
     suspend fun modifyGuild(guildId: Snowflake, request: ModifyGuildRequestParameters): CwHttpResponse<GuildObject> {
@@ -47,14 +47,14 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(GuildObject.serializer())
+        return response.withData(GuildObject.serializer())
     }
 
     suspend fun deleteGuild(guildId: Snowflake): CwHttpResponse<Unit> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}")
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(Unit.serializer())
+        return response.withData(Unit.serializer())
     }
 
     fun getGuildChannels(guildId: Snowflake): CwHttpResponse<ChannelObject> {

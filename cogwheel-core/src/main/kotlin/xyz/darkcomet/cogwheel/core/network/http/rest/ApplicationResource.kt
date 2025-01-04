@@ -16,7 +16,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(ApplicationObject.serializer())
+        return response.withData(ApplicationObject.serializer())
     }
     
     suspend fun editCurrentApplication(request: ModifyCurrentApplicationRequestParameters): CwHttpResponse<ApplicationObject?> {
@@ -25,7 +25,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(ApplicationObject.serializer())
+        return response.withData(ApplicationObject.serializer())
     }
     
     // TODO: Make this testable in integration tests
@@ -36,7 +36,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(ApplicationActivityInstanceObject.serializer())
+        return response.withData(ApplicationActivityInstanceObject.serializer())
     }
     
 }

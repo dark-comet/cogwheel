@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.models
+package xyz.darkcomet.cogwheel.core.primitives
 
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals

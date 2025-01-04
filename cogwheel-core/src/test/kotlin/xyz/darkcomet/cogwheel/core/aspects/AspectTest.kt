@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.aspects
+package xyz.darkcomet.cogwheel.core.aspects
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

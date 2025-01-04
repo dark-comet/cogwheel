@@ -11,7 +11,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     
     suspend fun getGatewayUrl(): CwHttpResponse<GetGatewayUrlResponseObject> {
         val request = CwHttpRequest.create(CwHttpMethod.GET, "/gateway")
-        return httpClient.submit(request).withDataObject(GetGatewayUrlResponseObject.serializer())
+        return httpClient.submit(request).withData(GetGatewayUrlResponseObject.serializer())
     }
     
 }

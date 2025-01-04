@@ -17,7 +17,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/role-connections/metadata")
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
+        return response.withData(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
     }
     
     suspend fun updateApplicationRoleConnectionMetadataRecords(
@@ -29,7 +29,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
         
-        return response.withDataObject(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
+        return response.withData(ListSerializer(ApplicationRoleConnectionMetadataObject.serializer()))
     }
     
 }

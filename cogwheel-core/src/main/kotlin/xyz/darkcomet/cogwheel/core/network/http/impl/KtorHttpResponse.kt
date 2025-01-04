@@ -25,7 +25,7 @@ internal class KtorHttpResponse<T>(
         override val statusMessage: String
             get() = httpResponse.status.description
 
-        override fun withNoData(): CwHttpResponse<Void> {
+        override fun withNoData(): CwHttpResponse<Unit> {
             return KtorHttpResponse(this, data = null)
         }
 

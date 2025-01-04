@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.ktor.client.websockets)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.datetime)
     
     api(libs.slf4j.api)
     implementation(libs.slf4j.provider)

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 /**
- * Low-level representation of Discord API Guild entity and UnavailableGuild entity.
+ * Low-level representation of Discord API Guild object and UnavailableGuild object.
  * 
  * @see <a href="https://discord.com/developers/docs/resources/guild">Discord API Reference: Guild</a>
  */

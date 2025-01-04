@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GatewayIdentifyEventDataObject(
     val token: String,
-    val properties: IdentifyConnectionPropertiesEntity,
+    val properties: IdentifyConnectionPropertiesObject,
     val compress: Boolean? = null,
     @SerialName("large_threshold") val largeThreshold: Int? = null,
     val shard: List<Int>? = null,
@@ -14,7 +14,7 @@ data class GatewayIdentifyEventDataObject(
     val intents: Int
 ) {
     @Serializable
-    data class IdentifyConnectionPropertiesEntity(
+    data class IdentifyConnectionPropertiesObject(
         val os: String,
         val browser: String,
         val device: String

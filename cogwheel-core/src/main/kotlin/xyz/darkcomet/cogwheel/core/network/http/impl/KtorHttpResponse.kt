@@ -30,8 +30,8 @@ internal class KtorHttpResponse<T>(
         }
 
         override fun <T> withData(strategy: CwHttpResponse.Raw.() -> T?): CwHttpResponse<T> {
-            val entity = strategy.invoke(this)
-            return KtorHttpResponse(this, entity)
+            val data = strategy.invoke(this)
+            return KtorHttpResponse(this, data)
         }
 
         override fun <T> withData(strategy: DeserializationStrategy<T>): CwHttpResponse<T> {
@@ -40,8 +40,8 @@ internal class KtorHttpResponse<T>(
             }
 
             if (success) {
-                val entity = JSON_DESERIALIZER.decodeFromString(strategy, bodyContent)
-                return KtorHttpResponse(this, entity)
+                val data = JSON_DESERIALIZER.decodeFromString(strategy, bodyContent)
+                return KtorHttpResponse(this, data)
             } else {
                 return KtorHttpResponse(this, data = null)
             }

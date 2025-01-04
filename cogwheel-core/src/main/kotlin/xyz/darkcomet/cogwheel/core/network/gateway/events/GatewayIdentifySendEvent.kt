@@ -15,7 +15,7 @@ class GatewayIdentifySendEvent(
     override fun asPayload(): GatewayPayload {
         val data = GatewayIdentifyEventDataObject(
             token = token.value,
-            properties = GatewayIdentifyEventDataObject.IdentifyConnectionPropertiesEntity(
+            properties = GatewayIdentifyEventDataObject.IdentifyConnectionPropertiesObject(
                 os = System.getProperty("os.name"),
                 browser = libName,
                 device = libName

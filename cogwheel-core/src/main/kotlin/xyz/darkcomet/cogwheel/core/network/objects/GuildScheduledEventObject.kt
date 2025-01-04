@@ -19,7 +19,7 @@ data class GuildScheduledEventObject(
     val status: Int,
     @SerialName("entity_type") val entityType: Int,
     @SerialName("entity_id") val entityId: Snowflake?,
-    @SerialName("entity_metadata") val entityMetadata: GuildScheduledEventEntityMetadataObject? = null,
+    @SerialName("entity_metadata") val entityMetadata: GuildScheduledEventMetadataObject? = null,
     val creator: UserObject? = null,
     @SerialName("user_count") val userCount: Int? = null,
     val image: String? = null,

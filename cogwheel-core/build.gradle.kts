@@ -70,7 +70,6 @@ idea {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
-    maxParallelForks = 1
 }
 
 val testIntegration = task<Test>("testIntegration") {
@@ -88,6 +87,7 @@ val testIntegration = task<Test>("testIntegration") {
     shouldRunAfter("test")
     
     useJUnitPlatform()
+    maxParallelForks = 1
     
     testLogging {
         events("passed")

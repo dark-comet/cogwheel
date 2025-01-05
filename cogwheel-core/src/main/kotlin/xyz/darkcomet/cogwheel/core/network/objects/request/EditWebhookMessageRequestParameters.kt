@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.network.objects.*
 
 @Serializable
-class EditWebhookMessageRequestParameters(
+data class EditWebhookMessageRequestParameters(
     val content: String? = null,
     val embeds: List<EmbedObject>? = null,
     @SerialName("allowed_mentions") val allowedMentions: AllowedMentionsObject? = null,

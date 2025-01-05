@@ -32,14 +32,14 @@ data class MessageObject(
     val messageSnapshots: MessageSnapshotObject? = null,
     val referencedMessage: MessageReferenceObject? = null,
     val interactionMetadata: MessageInteractionMetadataObject? = null,
-//    val interaction: MessageInteractionObject? = null,
+    val interaction: MessageInteractionObject? = null,
     val thread: ChannelObject? = null,
     val components: List<MessageComponentObject>? = null,
-//    val stickerItems: List<MessageStickerItemObject>? = null,
+    val stickerItems: List<StickerObject>? = null,
     val stickers: List<StickerObject>? = null,
     val position: Int? = null,
-//    val roleSubscriptionData: RoleSubscriptionDataObject? = null,
-//    val resolved: ResolvedObject? = null,
+    val roleSubscriptionData: RoleSubscriptionDataObject? = null,
+    val resolved: ResolvedDataObject? = null,
     val poll: PollObject? = null,
-//    val call: MessageCallObject? = null
+    val call: MessageCallObject? = null
 )

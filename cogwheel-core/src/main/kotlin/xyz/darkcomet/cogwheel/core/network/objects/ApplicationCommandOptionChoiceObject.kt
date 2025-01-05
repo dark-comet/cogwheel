@@ -5,12 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 abstract class ApplicationCommandOptionChoiceObject {
-
     abstract val name: String
     
     @SerialName("name_localizations")
     abstract val nameLocalizations: Map<String, String>?
-    
 }
 
 @Serializable

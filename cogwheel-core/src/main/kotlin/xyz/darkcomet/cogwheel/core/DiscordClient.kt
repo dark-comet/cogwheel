@@ -4,7 +4,11 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdateVoiceStateSendEvent
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayPresenceUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayRequestGuildMembersRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
 
 interface DiscordClient {
     
@@ -41,9 +45,9 @@ interface DiscordClient {
     }
     
     interface ClientGatewayApi {
-        fun requestGuildMembers() // TODO
-        fun updateVoiceState() // TODO
-        fun updatePresence() // TODO
+        fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters)
+        fun updateVoiceState(request: GatewayVoiceStateUpdateRequestParameters)
+        fun updatePresence(request: GatewayPresenceUpdateRequestParameters)
     }
     
     interface ClientEventManager {

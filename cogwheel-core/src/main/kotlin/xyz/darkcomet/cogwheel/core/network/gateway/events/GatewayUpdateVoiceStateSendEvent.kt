@@ -4,15 +4,16 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import xyz.darkcomet.cogwheel.core.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
 
-internal class GatewayHeartbeatSendEvent(
-    private val lastReceivedSequenceNumber: Int
+internal class GatewayUpdateVoiceStateSendEvent(
+    private val request: GatewayVoiceStateUpdateRequestParameters
 ) : GatewaySendEvent {
-        
+    
     override fun asPayload(): GatewayPayload {
         return GatewayPayload(
-            op = GatewayOpCode.HEARTBEAT.code,
-            d = Json.encodeToJsonElement(lastReceivedSequenceNumber)
+            op = GatewayOpCode.VOICE_STATE_UPDATE.code,
+            d = Json.encodeToJsonElement(request)
         )
     }
     

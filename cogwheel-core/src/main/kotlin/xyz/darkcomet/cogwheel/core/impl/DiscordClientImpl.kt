@@ -8,7 +8,13 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
+import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayRequestGuildMembersSendEvent
+import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdatePresenceSendEvent
+import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdateVoiceStateSendEvent
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayPresenceUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayRequestGuildMembersRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -56,7 +62,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
 
     override suspend fun startGatewayConnection() {
         if (gatewayClient == null) {
-            throw IllegalStateException("gatewayClient not initialized! Build DiscordClient using withGateway() first.")
+            throw IllegalStateException("Gateway not initialized! Build DiscordClient with useGateway() first.")
         }
         
         gatewayClient.start(
@@ -98,18 +104,35 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         override val webhook = WebhookResource(client)
     }
     
-    internal class ClientGatewayApiImpl(client: CwGatewayClient?) : DiscordClient.ClientGatewayApi {
-        override fun requestGuildMembers() {
-            TODO("Not yet implemented")
+    internal class ClientGatewayApiImpl(private val client: CwGatewayClient?) : DiscordClient.ClientGatewayApi {
+        
+        override fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters) {
+            assertClientInitialized()
+            
+            val event = GatewayRequestGuildMembersSendEvent(request)
+            client!!.sendEventAsync(event)
         }
 
-        override fun updateVoiceState() {
-            TODO("Not yet implemented")
+        override fun updateVoiceState(request: GatewayVoiceStateUpdateRequestParameters) {
+            assertClientInitialized()
+
+            val event = GatewayUpdateVoiceStateSendEvent(request)
+            client!!.sendEventAsync(event)
         }
 
-        override fun updatePresence() {
-            TODO("Not yet implemented")
+        override fun updatePresence(request: GatewayPresenceUpdateRequestParameters) {
+            assertClientInitialized()
+
+            val event = GatewayUpdatePresenceSendEvent(request)
+            client!!.sendEventAsync(event)
         }
+
+        private fun assertClientInitialized() {
+            if (client == null) {
+                throw IllegalStateException("Gateway not initialized! Build DiscordClient with useGateway() first.")
+            }
+        }
+        
     }
     
     internal class ClientEventManagerImpl(client: CwGatewayClient?) : DiscordClient.ClientEventManager {

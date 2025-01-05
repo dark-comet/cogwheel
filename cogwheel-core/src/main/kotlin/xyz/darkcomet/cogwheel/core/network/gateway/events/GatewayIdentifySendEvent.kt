@@ -7,11 +7,12 @@ import xyz.darkcomet.cogwheel.core.network.objects.GatewayIdentifyEventDataObjec
 import xyz.darkcomet.cogwheel.core.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 
-class GatewayIdentifySendEvent(
+internal class GatewayIdentifySendEvent(
     private val token: Token,
     private val intents: Intents,
     private val libName: String
 ) : GatewaySendEvent {
+    
     override fun asPayload(): GatewayPayload {
         val data = GatewayIdentifyEventDataObject(
             token = token.value,
@@ -28,4 +29,5 @@ class GatewayIdentifySendEvent(
             d = Json.encodeToJsonElement(GatewayIdentifyEventDataObject.serializer(), data)
         )
     }
+    
 }

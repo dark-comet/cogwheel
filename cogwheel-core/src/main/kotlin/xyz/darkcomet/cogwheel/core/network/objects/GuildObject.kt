@@ -28,7 +28,7 @@ data class GuildObject(
     @SerialName("verification_level") val verificationLevel: Int? = null,
     @SerialName("default_message_notifications") val defaultMessageNotifications: Int? = null,
     @SerialName("explicit_content_filter") val explicitContentFilter: Int? = null,
-    val roles: List<GuildRoleObject>? = null,
+    val roles: List<RoleObject>? = null,
     val emojis: List<EmojiObject>? = null,
     val features: List<String>? = null,
     @SerialName("mfa_level") val mfaLevel: Int? = null,

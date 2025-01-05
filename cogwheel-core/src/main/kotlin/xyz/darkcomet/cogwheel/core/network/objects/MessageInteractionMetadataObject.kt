@@ -3,5 +3,5 @@ package xyz.darkcomet.cogwheel.core.network.objects
 import kotlinx.serialization.Serializable
 
 @Serializable
-class ConnectionObject {
-}
+abstract class MessageInteractionMetadataObject // TODO
+

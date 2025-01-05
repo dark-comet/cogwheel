@@ -8,7 +8,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 data class EmojiObject(
     val id: Snowflake?,
     val name: String?,
-    val roles: List<GuildRoleObject>? = null,
+    val roles: List<RoleObject>? = null,
     val user: UserObject? = null,
     @SerialName("require_colons") val requireColons: Boolean? = null,
     val managed: Boolean? = null,

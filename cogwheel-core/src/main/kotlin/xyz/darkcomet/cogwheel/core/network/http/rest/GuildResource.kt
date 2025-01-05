@@ -289,46 +289,46 @@ internal constructor(private val httpClient: CwHttpClient) {
         return response.withData(GuildBulkBanResponseObject.serializer())
     }
 
-    suspend fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<GuildRoleObject>> {
+    suspend fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<RoleObject>> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/roles")
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(ListSerializer(GuildRoleObject.serializer()))
+        return response.withData(ListSerializer(RoleObject.serializer()))
     }
 
-    suspend fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<GuildRoleObject> {
+    suspend fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<RoleObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/roles/${roleId}")
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(GuildRoleObject.serializer())
+        return response.withData(RoleObject.serializer())
     }
 
     suspend fun createGuildRole(
         guildId: Snowflake,
         request: CreateGuildRoleRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildRoleObject> {
+    ): CwHttpResponse<RoleObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/roles") {
             jsonParams(request, CreateGuildRoleRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(GuildRoleObject.serializer())
+        return response.withData(RoleObject.serializer())
     }
 
     suspend fun modifyGuildRolePositions(
         guildId: Snowflake,
         request: List<ModifyGuildRolePositionRequestParameters>,
         auditLogReason: String? = null
-    ): CwHttpResponse<List<GuildRoleObject>> {
+    ): CwHttpResponse<List<RoleObject>> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/roles") {
             jsonParams(request, ListSerializer(ModifyGuildRolePositionRequestParameters.serializer()))
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(ListSerializer(GuildRoleObject.serializer()))
+        return response.withData(ListSerializer(RoleObject.serializer()))
     }
 
     suspend fun modifyGuildRole(
@@ -336,14 +336,14 @@ internal constructor(private val httpClient: CwHttpClient) {
         roleId: Snowflake,
         request: ModifyGuildRoleRequestParameters,
         auditLogReason: String? = null
-    ): CwHttpResponse<GuildRoleObject> {
+    ): CwHttpResponse<RoleObject> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/roles/${roleId}") {
             jsonParams(request, ModifyGuildRoleRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(GuildRoleObject.serializer())
+        return response.withData(RoleObject.serializer())
     }
 
     suspend fun modifyGuildMfaLevel(

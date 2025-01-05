@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
-data class CreateUserDmRequestParameters(
-    @SerialName("recipient_id") val recipientId: Snowflake
+data class ModifyUserVoiceStateRequestParameters(
+    @SerialName("channel_id") val channelId: Snowflake,
+    val suppress: Boolean? = null
 )

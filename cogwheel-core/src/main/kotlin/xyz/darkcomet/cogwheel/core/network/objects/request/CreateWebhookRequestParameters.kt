@@ -1,11 +1,10 @@
 package xyz.darkcomet.cogwheel.core.network.objects.request
 
 import kotlinx.serialization.Serializable
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 
 @Serializable
-data class CreateGuildStickerRequestParameters(
+data class CreateWebhookRequestParameters(
     val name: String,
-    val description: String,
-    val tags: String,
-    val file: String
+    val avatar: ImageData? = null,
 )

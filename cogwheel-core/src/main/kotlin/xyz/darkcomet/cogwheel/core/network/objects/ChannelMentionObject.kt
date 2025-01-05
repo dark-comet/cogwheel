@@ -5,11 +5,9 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
-data class SkuObject(
+data class ChannelMentionObject(
     val id: Snowflake,
+    @SerialName("guild_id") val guildId: Snowflake,
     val type: Int,
-    @SerialName("application_id") val applicationId: Snowflake,
-    val name: String,
-    val slug: String,
-    val flags: Int
+    val name: String
 )

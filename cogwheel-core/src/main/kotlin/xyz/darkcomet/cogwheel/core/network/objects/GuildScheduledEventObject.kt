@@ -3,6 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.objects
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
@@ -19,9 +20,9 @@ data class GuildScheduledEventObject(
     val status: Int,
     @SerialName("entity_type") val entityType: Int,
     @SerialName("entity_id") val entityId: Snowflake?,
-    @SerialName("entity_metadata") val entityMetadata: GuildScheduledEventMetadataObject? = null,
+    @SerialName("entity_metadata") val entityMetadata: GuildScheduledEventEntityMetadataObject? = null,
     val creator: UserObject? = null,
     @SerialName("user_count") val userCount: Int? = null,
-    val image: String? = null,
+    val image: ImageData? = null,
     @SerialName("recurrence_rule") val recurrenceRule: GuildScheduledEventRecurrenceRuleObject? = null,
 )

@@ -1,54 +1,95 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
+import kotlinx.serialization.builtins.ListSerializer
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventObject
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserObject
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildScheduledEventRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class GuildScheduledEventResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listScheduledEventsForGuild(guildId: Snowflake): CwHttpResponse<List<GuildScheduledEventObject>> {
-        TODO("To be implemented")
+    suspend fun listScheduledEventsForGuild(guildId: Snowflake): CwHttpResponse<List<GuildScheduledEventObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildScheduledEventObject.serializer()))
     }
     
-    fun createGuildScheduledEvent(
+    suspend fun createGuildScheduledEvent(
         guildId: Snowflake,
         request: CreateGuildScheduledEventRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/scheduled-events") {
+            jsonParams(request, CreateGuildScheduledEventRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildScheduledEventObject.serializer())
     }
     
-    fun getGuildScheduledEvent(
+    suspend fun getGuildScheduledEvent(
         guildId: Snowflake, 
-        eventId: Snowflake
+        eventId: Snowflake,
+        withUserCount: Boolean? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events/${eventId}") {
+            optionalQueryStringParam("with_user_count", withUserCount)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildScheduledEventObject.serializer())
     }
     
-    fun modifyGuildScheduledEvent(
+    suspend fun modifyGuildScheduledEvent(
         guildId: Snowflake,
         eventId: Snowflake,
+        request: ModifyGuildScheduledEventRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/scheduled-events/${eventId}") {
+            jsonParams(request, ModifyGuildScheduledEventRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildScheduledEventObject.serializer())
     }
     
-    fun deleteGuildScheduledEvent(
+    suspend fun deleteGuildScheduledEvent(
         guildId: Snowflake, 
         eventId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/scheduled-events/${eventId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun getGuildScheduledEventUsers(
+    suspend fun getGuildScheduledEventUsers(
         guildId: Snowflake, 
-        eventId: Snowflake
+        eventId: Snowflake,
+        limit: Int? = null,
+        withMember: Boolean? = null,
+        before: Snowflake? = null,
+        after: Snowflake? = null,
     ): CwHttpResponse<List<GuildScheduledEventUserObject>> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events/${eventId}/users") {
+            optionalQueryStringParam("limit", limit)
+            optionalQueryStringParam("with_member", withMember)
+            optionalQueryStringParam("before", before)
+            optionalQueryStringParam("after", after)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildScheduledEventUserObject.serializer()))
     }
     
 }

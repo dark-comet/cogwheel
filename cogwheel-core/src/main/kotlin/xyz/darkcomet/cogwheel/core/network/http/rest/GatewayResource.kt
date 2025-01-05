@@ -10,8 +10,10 @@ class GatewayResource
 internal constructor(private val httpClient: CwHttpClient) {
     
     suspend fun getGatewayUrl(): CwHttpResponse<GetGatewayUrlResponseObject> {
-        val request = CwHttpRequest.create(CwHttpMethod.GET, "/gateway")
-        return httpClient.submit(request).withData(GetGatewayUrlResponseObject.serializer())
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/gateway")
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withData(GetGatewayUrlResponseObject.serializer())
     }
     
 }

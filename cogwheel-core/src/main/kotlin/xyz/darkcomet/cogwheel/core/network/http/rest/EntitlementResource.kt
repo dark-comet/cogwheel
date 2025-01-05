@@ -1,15 +1,20 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
+import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.objects.EntitlementObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.GuildTemplateObject
 import xyz.darkcomet.cogwheel.core.network.objects.request.CreateTestEntitlementRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import java.util.stream.Collectors
 
 class EntitlementResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listEntitlements(
+    suspend fun listEntitlements(
         applicationId: Snowflake,
         userId: Snowflake? = null,
         skuIds: List<Snowflake>? = null,
@@ -20,35 +25,64 @@ internal constructor(private val httpClient: CwHttpClient) {
         excludeEnded: Boolean? = null,
         excludeDeleted: Boolean? = null
     ): CwHttpResponse<List<EntitlementObject>> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/entitlements") {
+            optionalQueryStringParam("user_ids", userId)
+            optionalQueryStringParam("before", before)
+            optionalQueryStringParam("after", after)
+            optionalQueryStringParam("limit", limit)
+            optionalQueryStringParam("guild_id", guildId)
+            optionalQueryStringParam("exclude_ended", excludeEnded)
+            optionalQueryStringParam("exclude_deleted", excludeDeleted)
+            
+            if (skuIds != null) {
+                optionalQueryStringParam("sku_ids", skuIds.stream().map { it.toString() }.collect(Collectors.joining(",")))
+            }
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(EntitlementObject.serializer()))
     }
     
-    fun getEntitlement(
+    suspend fun getEntitlement(
         applicationId: Snowflake, 
         entitlementId: Snowflake
     ): CwHttpResponse<EntitlementObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/entitlements/${entitlementId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(EntitlementObject.serializer())
     }
     
-    fun consumeEntitlement(
+    suspend fun consumeEntitlement(
         applicationId: Snowflake, 
         entitlementId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/applications/${applicationId}/entitlements/${entitlementId}/consume")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun createTestEntitlement(
+    suspend fun createTestEntitlement(
         applicationId: Snowflake, 
         request: CreateTestEntitlementRequestParameters
     ): CwHttpResponse<EntitlementObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/applications/${applicationId}/entitlements") {
+            jsonParams(request, CreateTestEntitlementRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(EntitlementObject.serializer())
     }
     
-    fun deleteTestEntitlement(
+    suspend fun deleteTestEntitlement(
         applicationId: Snowflake, 
         entitlementId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/applications/${applicationId}/entitlements/${entitlementId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
 }

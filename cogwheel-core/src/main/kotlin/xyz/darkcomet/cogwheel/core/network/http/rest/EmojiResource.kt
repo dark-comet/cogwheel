@@ -1,8 +1,11 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.network.objects.EmojiObject
+import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.EmojiObject
 import xyz.darkcomet.cogwheel.core.network.objects.request.CreateApplicationEmojiRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildEmojiRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyApplicationEmojiRequestParameters
@@ -13,64 +16,112 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class EmojiResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun listGuildEmojis(guildId: Snowflake): CwHttpResponse<List<EmojiObject>> {
-        TODO("To be implemented")
+    suspend fun listGuildEmojis(guildId: Snowflake): CwHttpResponse<List<EmojiObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/emojis/${guildId}/emojis")
+        val response = httpClient.submit(httpRequest)
+        
+        return response.withData((ListSerializer(EmojiObject.serializer())))
     }
     
-    fun getGuildEmoji(
+    suspend fun getGuildEmoji(
         guildId: Snowflake, 
         emojiId: Snowflake
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/emojis/${guildId}/emojis/${emojiId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData((EmojiObject.serializer()))
     }
     
-    fun createGuildEmoji(
+    suspend fun createGuildEmoji(
         guildId: Snowflake,
         request: CreateGuildEmojiRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/emojis/${guildId}/emojis") {
+            jsonParams(request, CreateGuildEmojiRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData((EmojiObject.serializer()))
     }
     
-    fun modifyGuildEmoji(
+    suspend fun modifyGuildEmoji(
         guildId: Snowflake,
         emojiId: Snowflake,
         request: ModifyGuildEmojiRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/emojis/${guildId}/emojis/${emojiId}") {
+            jsonParams(request, ModifyGuildEmojiRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData((EmojiObject.serializer()))
     }
     
-    fun listApplicationEmojis(applicationId: Snowflake): CwHttpResponse<ListApplicationEmojisResponseObject> {
-        TODO("To be implemented")
+    suspend fun deleteGuildEmoji(
+        guildId: Snowflake,
+        emojiId: Snowflake,
+        auditLogReason: String? = null
+    ): CwHttpResponse<Unit> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/emojis/${guildId}/emojis/${emojiId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun getApplicationEmoji(
+    suspend fun listApplicationEmojis(applicationId: Snowflake): CwHttpResponse<ListApplicationEmojisResponseObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/emojis")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListApplicationEmojisResponseObject.serializer())
+    }
+    
+    suspend fun getApplicationEmoji(
         applicationId: Snowflake, 
         emojiId: Snowflake
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/${applicationId}/emojis/${emojiId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(EmojiObject.serializer())
     }
     
-    fun createApplicationEmoji(
+    suspend fun createApplicationEmoji(
         applicationId: Snowflake, 
         request: CreateApplicationEmojiRequestParameters
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/applications/${applicationId}/emojis") {
+            jsonParams(request, CreateApplicationEmojiRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(EmojiObject.serializer())
     }
     
-    fun modifyApplicationEmoji(
+    suspend fun modifyApplicationEmoji(
         applicationId: Snowflake, 
         emojiId: Snowflake, 
         request: ModifyApplicationEmojiRequestParameters
     ): CwHttpResponse<EmojiObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/applications/${applicationId}/emojis/${emojiId}") {
+            jsonParams(request, ModifyApplicationEmojiRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(EmojiObject.serializer())
     }
     
-    fun deleteApplicationEmoji(
+    suspend fun deleteApplicationEmoji(
         applicationId: Snowflake, 
         emojiId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/applications/${applicationId}/emojis/${emojiId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 }

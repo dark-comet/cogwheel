@@ -1,9 +1,13 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
+import kotlinx.serialization.builtins.ListSerializer
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.MessageObject
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.request.BulkDeleteMessagesRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.CreateMessageRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.EditMessageRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
@@ -11,101 +15,166 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class MessageResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    fun getChannelMessages(
+    suspend fun getChannelMessages(
         channelId: Snowflake,
         around: Snowflake? = null,
         before: Snowflake? = null,
         after: Snowflake? = null,
         limit: Int? = null
     ): CwHttpResponse<List<MessageObject>> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages") {
+            optionalQueryStringParam("around", around)
+            optionalQueryStringParam("before", before)
+            optionalQueryStringParam("after", after)
+            optionalQueryStringParam("limit", limit)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(MessageObject.serializer()))
     }
     
-    fun getChannelMessage(
+    suspend fun getChannelMessage(
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<MessageObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages/${messageId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(MessageObject.serializer())
     }
     
-    fun createMessage(
+    suspend fun createMessage(
         channelId: Snowflake,
         request: CreateMessageRequestParameters
     ): CwHttpResponse<MessageObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages") {
+            jsonParams(request, CreateMessageRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(MessageObject.serializer())
     }
     
-    fun crossPostMessage(
+    suspend fun crossPostMessage(
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<MessageObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages/${messageId}/crosspost")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(MessageObject.serializer())
     }
     
-    fun createReaction(
+    suspend fun createReaction(
         channelId: Snowflake,
         messageId: Snowflake,
-        emojiId: Snowflake
+        emoji: String
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun deleteOwnReaction(
+    suspend fun deleteOwnReaction(
         channelId: Snowflake,
         messageId: Snowflake,
-        emojiId: Snowflake
+        emoji: String
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun deleteUserReaction(
+    suspend fun deleteUserReaction(
         channelId: Snowflake,
         messageId: Snowflake,
-        emojiId: Snowflake,
+        emoji: String,
         userId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun getReactions(
+    suspend fun getReactions(
         channelId: Snowflake,
         messageId: Snowflake,
-        emojiId: Snowflake
+        emoji: String,
+        type: Int? = null,
+        after: Snowflake? = null,
+        limit: Int? = null
     ): CwHttpResponse<List<UserObject>> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}") {
+            optionalQueryStringParam("type", type)
+            optionalQueryStringParam("after", after)
+            optionalQueryStringParam("limit", limit)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(UserObject.serializer()))
     }
     
-    fun deleteAllReactions(
+    suspend fun deleteAllReactions(
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun deleteAllReactionsForEmoji(
+    suspend fun deleteAllReactionsForEmoji(
         channelId: Snowflake,
         messageId: Snowflake,
-        emojiId: Snowflake
+        emoji: String
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun editMessage(
+    suspend fun editMessage(
         channelId: Snowflake,
         messageId: Snowflake,
         request: EditMessageRequestParameters
     ): CwHttpResponse<MessageObject> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/channels/${channelId}/messages/${messageId}") {
+            jsonParams(request, EditMessageRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(MessageObject.serializer())
     }
     
-    fun deleteMessage(
+    suspend fun deleteMessage(
         channelId: Snowflake,
-        messageId: Snowflake
+        messageId: Snowflake,
+        auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
     
-    fun bulkDeleteMessages(channelId: Snowflake): CwHttpResponse<Unit> {
-        TODO("To be implemented")
+    suspend fun bulkDeleteMessages(
+        channelId: Snowflake,
+        request: BulkDeleteMessagesRequestParameters,
+        auditLogReason: String? = null
+    ): CwHttpResponse<Unit> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages/bulk-delete") {
+            jsonParams(request, BulkDeleteMessagesRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 }

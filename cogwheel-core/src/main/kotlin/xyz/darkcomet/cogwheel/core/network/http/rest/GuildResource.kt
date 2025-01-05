@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
@@ -11,7 +12,9 @@ import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBeginPruneRespo
 import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBulkBanResponseObject
 import xyz.darkcomet.cogwheel.core.network.objects.response.GuildGetPruneCountResponseObject
 import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildActiveThreadsResponseObject
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import java.util.stream.Collectors
 
 class GuildResource
 internal constructor(private val httpClient: CwHttpClient) {
@@ -54,274 +57,476 @@ internal constructor(private val httpClient: CwHttpClient) {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}")
         val response = httpClient.submit(httpRequest)
         
-        return response.withData(Unit.serializer())
+        return response.withNoData()
     }
 
-    fun getGuildChannels(guildId: Snowflake): CwHttpResponse<ChannelObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildChannels(guildId: Snowflake): CwHttpResponse<List<ChannelObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/channels")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(ChannelObject.serializer()))
     }
 
-    fun createGuildChannel(
+    suspend fun createGuildChannel(
         guildId: Snowflake,
         request: CreateGuildChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/channels") {
+            jsonParams(request, CreateGuildChannelRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ChannelObject.serializer())
     }
 
-    fun modifyGuildChannelPositions(
+    suspend fun modifyGuildChannelPositions(
         guildId: Snowflake, 
-        request: ModifyGuildChannelPositionsRequestParameters
+        request: List<ModifyGuildChannelPositionsRequestParameters>
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/channels") {
+            jsonParams(request, ListSerializer(ModifyGuildChannelPositionsRequestParameters.serializer()))
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListGuildActiveThreadsResponseObject> {
-        TODO("Not implemented yet")
+    suspend fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListGuildActiveThreadsResponseObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/threads/active")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListGuildActiveThreadsResponseObject.serializer())
     }
 
-    fun getGuildMember(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildMemberObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildMember(
+        guildId: Snowflake, 
+        userId: Snowflake
+    ): CwHttpResponse<GuildMemberObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/member/${userId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildMemberObject.serializer())
     }
 
-    fun listGuildMembers(
+    suspend fun listGuildMembers(
         guildId: Snowflake, 
         limit: Int? = null, 
         after: Snowflake? = null
     ): CwHttpResponse<List<GuildMemberObject>> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/members") {
+            optionalQueryStringParam("limit", limit)
+            optionalQueryStringParam("after", after)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildMemberObject.serializer()))
     }
 
-    fun searchGuildMembers(
+    suspend fun searchGuildMembers(
         guildId: Snowflake, 
         query: String,
         limit: Int = 1
     ): CwHttpResponse<List<GuildMemberObject>> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/members/search") {
+            queryStringParam("query", query)
+            optionalQueryStringParam("limit", limit)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildMemberObject.serializer()))
     }
 
-    fun addGuildMember(
+    suspend fun addGuildMember(
         guildId: Snowflake, 
         userId: Snowflake,
         request: AddGuildMemberRequestParameters
     ): CwHttpResponse<GuildMemberObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/guilds/${guildId}/members/${userId}") {
+            jsonParams(request, AddGuildMemberRequestParameters.serializer())
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildMemberObject.serializer())
     }
 
-    fun modifyGuildMember(
+    suspend fun modifyGuildMember(
         guildId: Snowflake,
         userId: Snowflake,
         request: ModifyGuildMemberRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildMemberObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/members/${userId}") {
+            jsonParams(request, ModifyGuildMemberRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildMemberObject.serializer())
     }
 
-    fun modifyCurrentMember(
-        guildId: Snowflake, 
+    suspend fun modifyCurrentMember(
+        guildId: Snowflake,
+        request: ModifyGuildCurrentMemberRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildMemberObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/members/@me") {
+            jsonParams(request, ModifyGuildCurrentMemberRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildMemberObject.serializer())
     }
 
-    fun addGuildMemberRole(
+    suspend fun addGuildMemberRole(
         guildId: Snowflake, 
         userId: Snowflake, 
         roleId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/guilds/${guildId}/members/${userId}/roles/${roleId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun removeGuildMemberRole(
+    suspend fun removeGuildMemberRole(
         guildId: Snowflake, 
         userId: Snowflake, 
         roleId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/members/${userId}/roles/${roleId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun removeGuildMember(
+    suspend fun removeGuildMember(
         guildId: Snowflake, 
         userId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/guilds/${guildId}/members/${userId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun getGuildBans(
+    suspend fun getGuildBans(
         guildId: Snowflake, 
         limit: Int? = null, 
         before: Snowflake? = null, 
         after: Snowflake? = null
     ): CwHttpResponse<List<GuildBanObject>> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/bans") {
+            optionalQueryStringParam("limit", limit)
+            optionalQueryStringParam("before", before)
+            optionalQueryStringParam("after", after)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildBanObject.serializer()))
     }
 
-    fun getBan(guildId: Snowflake, userId: Snowflake): CwHttpResponse<GuildBanObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildBan(
+        guildId: Snowflake, 
+        userId: Snowflake
+    ): CwHttpResponse<GuildBanObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/bans/${userId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildBanObject.serializer())
     }
 
-    fun createGuildBan(
+    suspend fun createGuildBan(
         guildId: Snowflake,
         userId: Snowflake,
         request: CreateGuildBanRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/guilds/${guildId}/bans/${userId}") {
+            jsonParams(request, CreateGuildBanRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun removeGuildBan(
+    suspend fun removeGuildBan(
         guildId: Snowflake, 
         userId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/bans/${userId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun bulkGuildBan(
+    suspend fun bulkGuildBan(
         guildId: Snowflake,
         request: BulkGuildBanRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildBulkBanResponseObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/bulk-ban") {
+            jsonParams(request, BulkGuildBanRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildBulkBanResponseObject.serializer())
     }
 
-    fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<GuildRoleObject>> {
-        TODO("Not implemented yet")
+    suspend fun getGuildRoles(guildId: Snowflake): CwHttpResponse<List<GuildRoleObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/roles")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildRoleObject.serializer()))
     }
 
-    fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<GuildRoleObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildRole(guildId: Snowflake, roleId: Snowflake): CwHttpResponse<GuildRoleObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/roles/${roleId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildRoleObject.serializer())
     }
 
-    fun createGuildRole(
+    suspend fun createGuildRole(
         guildId: Snowflake,
         request: CreateGuildRoleRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildRoleObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/roles") {
+            jsonParams(request, CreateGuildRoleRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildRoleObject.serializer())
     }
 
-    fun modifyGuildRolePositions(
+    suspend fun modifyGuildRolePositions(
         guildId: Snowflake,
         request: List<ModifyGuildRolePositionRequestParameters>,
         auditLogReason: String? = null
     ): CwHttpResponse<List<GuildRoleObject>> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/roles") {
+            jsonParams(request, ListSerializer(ModifyGuildRolePositionRequestParameters.serializer()))
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildRoleObject.serializer()))
     }
 
-    fun modifyGuildRole(
+    suspend fun modifyGuildRole(
         guildId: Snowflake,
         roleId: Snowflake,
         request: ModifyGuildRoleRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildRoleObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/roles/${roleId}") {
+            jsonParams(request, ModifyGuildRoleRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildRoleObject.serializer())
     }
 
-    fun modifyGuildMfaLevel(
+    suspend fun modifyGuildMfaLevel(
         guildId: Snowflake,
         request: ModifyGuildMfaLevelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Int> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/mfa") {
+            jsonParams(request, ModifyGuildMfaLevelRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(Int.serializer())
     }
 
-    fun deleteGuildRole(
+    suspend fun deleteGuildRole(
         guildId: Snowflake, 
         roleId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/roles/${roleId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
     }
 
-    fun getGuildPruneCount(
+    suspend fun getGuildPruneCount(
         guildId: Snowflake, 
         days: Int? = null, 
         includeRoleIds: List<Snowflake>? = null
     ): CwHttpResponse<GuildGetPruneCountResponseObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/prune") {
+            optionalQueryStringParam("days", days)
+            
+            if (includeRoleIds != null) {
+                val includeRolesValue = includeRoleIds.stream()
+                    .map { roleId -> roleId.toString() }
+                    .collect(Collectors.joining(","))
+                
+                queryStringParam("include_roles", includeRolesValue)
+            }
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildGetPruneCountResponseObject.serializer())
     }
 
-    fun beginGuildPrune(
+    suspend fun beginGuildPrune(
         guildId: Snowflake,
         request: BeginGuildPruneRequestParameters,
         auditLogReason: String?
     ): CwHttpResponse<GuildBeginPruneResponseObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/prune") {
+            jsonParams(request, BeginGuildPruneRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildBeginPruneResponseObject.serializer())
     }
 
-    fun getGuildVoiceRegions(guildId: Snowflake): CwHttpResponse<List<VoiceRegionObject>> {
-        TODO("Not implemented yet")
+    suspend fun getGuildVoiceRegions(guildId: Snowflake): CwHttpResponse<List<VoiceRegionObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/regions")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(VoiceRegionObject.serializer()))
     }
 
-    fun getGuildInvites(guildId: Snowflake): CwHttpResponse<List<InviteObject>> {
-        TODO("Not implemented yet")
+    suspend fun getGuildInvites(guildId: Snowflake): CwHttpResponse<List<InviteObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/invites")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(InviteObject.serializer()))
     }
 
-    fun getGuildIntegrations(guildId: Snowflake): CwHttpResponse<List<GuildIntegrationObject>> {
-        TODO("Not implemented yet")
+    suspend fun getGuildIntegrations(guildId: Snowflake): CwHttpResponse<List<GuildIntegrationObject>> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/integrations")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(GuildIntegrationObject.serializer()))
     }
 
-    fun deleteGuildIntegration(
+    suspend fun deleteGuildIntegration(
         guildId: Snowflake, 
         integrationId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<GuildIntegrationObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/integrations/${integrationId}")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildIntegrationObject.serializer())
     }
 
-    fun getGuildWidgetSettings(guildId: Snowflake): CwHttpResponse<GuildWidgetSettingsObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildWidgetSettings(guildId: Snowflake): CwHttpResponse<GuildWidgetSettingsObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/widget")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildWidgetSettingsObject.serializer())
     }
 
-    fun modifyGuildWidgetSettings(
+    suspend fun modifyGuildWidgetSettings(
         guildId: Snowflake,
-        request: ModifyGuildWidgetRequestParameters,
+        request: ModifyGuildWidgetSettingsRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildWidgetSettingsObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/widget") {
+            jsonParams(request, ModifyGuildWidgetSettingsRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildWidgetSettingsObject.serializer())
     }
 
-    fun getGuildWidget(guildId: Snowflake): CwHttpResponse<GuildWidgetObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildWidget(guildId: Snowflake): CwHttpResponse<GuildWidgetObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/widget.json")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildWidgetObject.serializer())
     }
 
-    fun getGuildVanityUrl(guildId: Snowflake): CwHttpResponse<InviteObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildVanityUrl(guildId: Snowflake): CwHttpResponse<InviteObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/vanity-url")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(InviteObject.serializer())
     }
     
-    fun getGuildWidgetImage(
+    suspend fun getGuildWidgetImage(
         guildId: Snowflake, 
         style: String? = null
-    ): CwHttpResponse<String> {
-        TODO("Not implemented yet")
+    ): CwHttpResponse<ImageData> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/widget.png") {
+            optionalQueryStringParam("style", style)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ImageData.serializer())
     }
 
-    fun getGuildWelcomeScreen(guildId: Snowflake): CwHttpResponse<GuildWelcomeScreenObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildWelcomeScreen(guildId: Snowflake): CwHttpResponse<GuildWelcomeScreenObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/welcome-screen")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildWelcomeScreenObject.serializer())
     }
 
-    fun modifyGuildWelcomeScreen(
+    suspend fun modifyGuildWelcomeScreen(
         guildId: Snowflake,
         request: ModifyGuildWelcomeScreenRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildWelcomeScreenObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/welcome-screen") {
+            jsonParams(request, ModifyGuildWelcomeScreenRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildWelcomeScreenObject.serializer())
     }
 
-    fun getGuildOnboarding(guildId: Snowflake): CwHttpResponse<GuildOnboardingObject> {
-        TODO("Not implemented yet")
+    suspend fun getGuildOnboarding(guildId: Snowflake): CwHttpResponse<GuildOnboardingObject> {
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/onboarding")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildOnboardingObject.serializer())
     }
 
-    fun modifyGuildOnboarding(
+    suspend fun modifyGuildOnboarding(
         guildId: Snowflake,
         request: ModifyGuildOnboardingRequestParameters,
         auditLogReason: String?
     ): CwHttpResponse<GuildOnboardingObject> {
-        TODO("Not implemented yet")
+        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/guilds/${guildId}/onboarding") {
+            jsonParams(request, ModifyGuildOnboardingRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(GuildOnboardingObject.serializer())
     }
     
 }

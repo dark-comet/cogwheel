@@ -1,4 +1,8 @@
 package xyz.darkcomet.cogwheel.core.network.objects.request
 
-class ModifyGuildMfaLevelRequestParameters {
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ModifyGuildMfaLevelRequestParameters(
+    val level: Int
+)

@@ -2,6 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.objects.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
@@ -13,11 +14,11 @@ data class ModifyGuildRequestParameters(
     @SerialName("explicit_content_filter") val explicitContentFilter: Int? = null,
     @SerialName("afk_channel_id") val afkChannelId: Snowflake? = null,
     @SerialName("afk_timeout") val afkTimeout: Int? = null,
-    val icon: String? = null,
+    val icon: ImageData? = null,
     @SerialName("owner_id") val ownerId: Snowflake? = null,
-    val splash: String? = null,
-    @SerialName("discovery_splash") val discoverySplash: String? = null,
-    val banner: String? = null,
+    val splash: ImageData? = null,
+    @SerialName("discovery_splash") val discoverySplash: ImageData? = null,
+    val banner: ImageData? = null,
     @SerialName("system_channel_id") val systemChannelId: Snowflake? = null,
     @SerialName("system_channel_flags") val systemChannelFlags: Int? = null,
     @SerialName("rules_channel_id") val rulesChannelId: Snowflake? = null,

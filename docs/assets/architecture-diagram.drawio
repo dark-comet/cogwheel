@@ -1,0 +1,63 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="25.0.1">
+  <diagram name="Page-1" id="vqfNVjQVBSTviqzoxdaE">
+    <mxGraphModel dx="848" dy="1144" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="86FvvRYKLb15TXeiCkW7-1" value="DiscordClient" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-3" value="Gateway Client" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="243" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-4" value="REST Client" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="243" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-5" value="Events" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="243" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-6" value="&lt;div&gt;&lt;b&gt;Low-level API Bindings &amp;amp; Data Models&lt;/b&gt;&lt;/div&gt;&lt;font style=&quot;&quot; color=&quot;#808080&quot;&gt;Primitives, Objects, RequestParameters&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="303" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0.25;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="86FvvRYKLb15TXeiCkW7-7" target="86FvvRYKLb15TXeiCkW7-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-7" value="ktor HTTP Client" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry y="363" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.625;exitY=0.2;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="86FvvRYKLb15TXeiCkW7-8" target="86FvvRYKLb15TXeiCkW7-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-8" value="Discord API" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="91" y="493" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.667;entryY=0.005;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="86FvvRYKLb15TXeiCkW7-9" target="86FvvRYKLb15TXeiCkW7-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-9" value="&lt;div&gt;&lt;b&gt;High-level API Bindings&lt;/b&gt;&lt;/div&gt;&lt;font style=&quot;&quot; color=&quot;#808080&quot;&gt;Primitives, Domain Models, Builders&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="60" width="240" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-13" value="" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=1;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="86FvvRYKLb15TXeiCkW7-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint y="150" as="sourcePoint" />
+            <mxPoint x="480" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.167;exitY=0.017;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="86FvvRYKLb15TXeiCkW7-17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-17" value="CwDiscordClient" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="183" width="360" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-20" value="framework" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="120" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="86FvvRYKLb15TXeiCkW7-21" value="core" style="text;html=1;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="330" y="153" width="110" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

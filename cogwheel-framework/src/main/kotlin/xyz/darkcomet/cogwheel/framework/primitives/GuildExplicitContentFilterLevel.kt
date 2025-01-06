@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.dsl.primitives
+package xyz.darkcomet.cogwheel.framework.primitives
 
 enum class GuildExplicitContentFilterLevel(val value: Int) {
     DISABLED(0),

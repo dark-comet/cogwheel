@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.dsl.primitives
+package xyz.darkcomet.cogwheel.framework.primitives
 
 enum class ApplicationIntegrationType(val value: Int) {
     GUILD_INSTALL(0),

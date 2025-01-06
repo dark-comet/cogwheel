@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.dsl.primitives
+package xyz.darkcomet.cogwheel.framework.primitives
 
 enum class EntryPointCommandHandlerType(val value: Int) {
     APP_HANDLER(1),

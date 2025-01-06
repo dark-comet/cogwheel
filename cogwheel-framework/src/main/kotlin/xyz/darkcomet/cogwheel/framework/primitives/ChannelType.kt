@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.dsl.primitives
+package xyz.darkcomet.cogwheel.framework.primitives
 
 enum class ChannelType(val value: Int) {
     GUILD_TEXT(0),

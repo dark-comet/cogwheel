@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.dsl.primitives
+package xyz.darkcomet.cogwheel.framework.primitives
 
 enum class ApplicationCommandOptionType(val value: Int) {
     SUB_COMMAND(1),

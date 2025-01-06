@@ -6,4 +6,4 @@ plugins {
 rootProject.name = "Cogwheel"
 
 include(":cogwheel-core")
-include(":cogwheel-dsl")
+include(":cogwheel-framework")

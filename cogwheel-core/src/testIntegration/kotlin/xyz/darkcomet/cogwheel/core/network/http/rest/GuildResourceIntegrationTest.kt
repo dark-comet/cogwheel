@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
-import xyz.darkcomet.cogwheel.core.TestDiscordClient
+import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
 import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
 import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 class GuildResourceIntegrationTest : IntegrationTestFixture() {
     
     private val client =
-        TestDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
+        TestCwDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
     private val guildApi = client.restApi().guild
 
     @Test

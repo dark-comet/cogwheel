@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.gateway.impl
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
-import xyz.darkcomet.cogwheel.core.TestDiscordClient
+import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GatewayHelloEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayInvalidSessionEvent
 import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
@@ -18,7 +18,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
     
     @Test
     fun testConnectionWorks() {
-        val client = TestDiscordClient.fromEnvBotToken {
+        val client = TestCwDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
         }
         
@@ -46,7 +46,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
      */
     @Test
     fun testSessionInvalid_noHeartbeat_resumeWorks() {
-        val client = TestDiscordClient.fromEnvBotToken {
+        val client = TestCwDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
             testDisableGatewayHeartbeats = true
         }
@@ -90,7 +90,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         val receiveHelloLatch = CountDownLatch(1)
         val receiveReadyLatch = CountDownLatch(1)
         
-        val client = TestDiscordClient.fromEnvBotToken {
+        val client = TestCwDiscordClient.fromEnvBotToken {
             useGateway(Intents.none())
             testDisableGatewayHeartbeats = true
 

@@ -4,22 +4,22 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdateVoiceStateSendEvent
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayPresenceUpdateRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayRequestGuildMembersRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
 
-interface DiscordClient {
+interface CwDiscordClient {
     
-    fun restApi(): ClientRestApi
-    fun gatewayApi(): ClientGatewayApi
-    fun events(): ClientEventManager
+    fun restApi(): RestApi
+    fun gatewayApi(): GatewayApi
+    fun events(): EventManager
     
     suspend fun startGatewayConnection()
+    
     fun stop()
 
-    interface ClientRestApi {
+    interface RestApi {
         val application: ApplicationResource
         val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataResource
         val auditLog: AuditLogResource
@@ -44,28 +44,28 @@ interface DiscordClient {
         val webhook: WebhookResource
     }
     
-    interface ClientGatewayApi {
+    interface GatewayApi {
         fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters)
         fun updateVoiceState(request: GatewayVoiceStateUpdateRequestParameters)
         fun updatePresence(request: GatewayPresenceUpdateRequestParameters)
     }
     
-    interface ClientEventManager {
+    interface EventManager {
         fun <T : Event<*>> subscribe(eventType: Class<T>, listener: (T) -> Unit)
         fun <T : Event<*>> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
     }
     
     companion object {
-        fun fromBotToken(token: String, init: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
+        fun fromBotToken(token: String, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
             return build(BotToken(token), init)
         }
 
-        fun fromOAuth2Token(token: String, init: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
+        fun fromOAuth2Token(token: String, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
             return build(OAuth2Token(token), init)
         }
 
-        private fun build(token: Token, init: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
-            val builder = DiscordClientBuilder(token)
+        private fun build(token: Token, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
+            val builder = CwDiscordClientBuilder(token)
             init?.invoke(builder)
 
             return builder.build()

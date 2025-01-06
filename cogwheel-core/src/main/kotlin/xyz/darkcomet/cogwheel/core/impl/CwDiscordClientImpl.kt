@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.core.impl
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import xyz.darkcomet.cogwheel.core.DiscordClient
+import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
@@ -18,19 +18,19 @@ import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpda
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-internal open class DiscordClientImpl 
-internal constructor(settings: DiscordClientSettings) : DiscordClient {
+internal open class CwDiscordClientImpl 
+internal constructor(settings: DiscordClientSettings) : CwDiscordClient {
     
     private val config: CwConfiguration = CwConfiguration.load()
     private val cancellationToken = CancellationTokenSource()
-    private val logger: Logger = LoggerFactory.getLogger(DiscordClientImpl::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(CwDiscordClientImpl::class.java)
 
     private val restClient: CwHttpClient
     private val gatewayClient: CwGatewayClient?
     
-    private val restApi: DiscordClient.ClientRestApi
-    private val gatewayApi: DiscordClient.ClientGatewayApi
-    private val clientEventManager: DiscordClient.ClientEventManager
+    private val restApi: CwDiscordClient.RestApi
+    private val gatewayApi: CwDiscordClient.GatewayApi
+    private val eventManager: CwDiscordClient.EventManager
     
     init {
         logger.info("{} v{} initializing...", config.clientName, config.clientVersion)
@@ -54,9 +54,9 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             )
         } else null
         
-        restApi = ClientRestApiImpl(restClient)
-        gatewayApi = ClientGatewayApiImpl(gatewayClient)
-        clientEventManager = ClientEventManagerImpl(gatewayClient)
+        restApi = RestApiImpl(restClient)
+        gatewayApi = GatewayApiImpl(gatewayClient)
+        eventManager = EventManagerImpl(gatewayClient)
         logger.info("DiscordClient initialized")
     }
 
@@ -75,11 +75,11 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         cancellationToken.cancel()
     }
 
-    override fun restApi(): DiscordClient.ClientRestApi = restApi
-    override fun gatewayApi(): DiscordClient.ClientGatewayApi = gatewayApi
-    override fun events(): DiscordClient.ClientEventManager = clientEventManager
+    override fun restApi(): CwDiscordClient.RestApi = restApi
+    override fun gatewayApi(): CwDiscordClient.GatewayApi = gatewayApi
+    override fun events(): CwDiscordClient.EventManager = eventManager
     
-    internal class ClientRestApiImpl(client: CwHttpClient) : DiscordClient.ClientRestApi {
+    internal class RestApiImpl(client: CwHttpClient) : CwDiscordClient.RestApi {
         override val application = ApplicationResource(client)
         override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataResource(client)
         override val auditLog = AuditLogResource(client)
@@ -104,7 +104,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         override val webhook = WebhookResource(client)
     }
     
-    internal class ClientGatewayApiImpl(private val client: CwGatewayClient?) : DiscordClient.ClientGatewayApi {
+    internal class GatewayApiImpl(private val client: CwGatewayClient?) : CwDiscordClient.GatewayApi {
         
         override fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters) {
             assertClientInitialized()
@@ -135,7 +135,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
         
     }
     
-    internal class ClientEventManagerImpl(client: CwGatewayClient?) : DiscordClient.ClientEventManager {
+    internal class EventManagerImpl(client: CwGatewayClient?) : CwDiscordClient.EventManager {
         
         private val listeners: MutableMap<Class<out Any>, ArrayList<(Event<*>) -> Unit>> = HashMap()
         

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class IntegrationTestFixture {
     companion object {
-        fun withGateway(client: DiscordClient, testCode: suspend () -> Unit) {
+        fun withGateway(client: CwDiscordClient, testCode: suspend () -> Unit) {
             val gatewayAwaiter = CountDownLatch(1)
             val gatewayShutdownOk = AtomicBoolean(false)
 

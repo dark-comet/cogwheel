@@ -32,7 +32,7 @@ data class MessageObject(
     val messageSnapshots: MessageSnapshotObject? = null,
     val referencedMessage: MessageReferenceObject? = null,
     val interactionMetadata: MessageInteractionMetadataObject? = null,
-    val interaction: MessageInteractionObject? = null,
+    val interaction: InteractionObject? = null,
     val thread: ChannelObject? = null,
     val components: List<MessageComponentObject>? = null,
     val stickerItems: List<StickerObject>? = null,
@@ -41,5 +41,7 @@ data class MessageObject(
     val roleSubscriptionData: RoleSubscriptionDataObject? = null,
     val resolved: ResolvedDataObject? = null,
     val poll: PollObject? = null,
-    val call: MessageCallObject? = null
+    val call: MessageCallObject? = null,
+    val guildId: Snowflake? = null,
+    val member: GuildMemberObject? = null
 )

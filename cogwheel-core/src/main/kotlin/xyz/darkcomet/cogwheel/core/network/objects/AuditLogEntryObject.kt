@@ -12,5 +12,6 @@ data class AuditLogEntryObject(
     val id: Snowflake,
     @SerialName("action_type") val actionType: Int,
     val options: AuditLogOptionalAuditEntryInfoObject? = null,
-    val reason: String? = null
+    val reason: String? = null,
+    @SerialName("guild_id") val guildId: Snowflake? = null
 )

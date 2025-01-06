@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
-data class MessageInteractionObject(
+data class InteractionObject(
     val id: Snowflake,
     @SerialName("application_id") val applicationId: Snowflake,
     val type: Int,

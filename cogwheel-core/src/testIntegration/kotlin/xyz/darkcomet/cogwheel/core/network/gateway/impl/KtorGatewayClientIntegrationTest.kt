@@ -72,7 +72,7 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
             assertTrue(receiveInvalidSession, "Failed to receive INVALID_SESSION event after 5 minutes!")
 
             assertNotNull(invalidSessionEvent.get())
-            assertFalse(invalidSessionEvent.get().shouldTryResume)
+            assertFalse(invalidSessionEvent.get().isResumeRecommended)
 
             val receivedReady = receiveReadyLatch.await(10, TimeUnit.SECONDS)
             assertTrue(receivedReady, "Failed to receive 2 READY events after 10 seconds!")

@@ -2,12 +2,8 @@ package xyz.darkcomet.cogwheel.core.network.gateway.codes
 
 // NOTE: Enum values correspond to Discord receive event mappings
 enum class GatewayReceivePayloadName {
-    __UNKNOWN__,
-    HELLO,
     READY,
     RESUMED,
-    RECONNECT,
-    INVALID_SESSION,
     APPLICATION_COMMAND_PERMISSIONS_UPDATE,
     AUTO_MODERATION_RULE_CREATE,
     AUTO_MODERATION_RULE_UPDATE,

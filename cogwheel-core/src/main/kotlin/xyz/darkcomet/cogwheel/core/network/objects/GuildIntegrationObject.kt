@@ -22,5 +22,6 @@ data class GuildIntegrationObject(
     @SerialName("subscriber_count") val subscriberCount: Int? = null,
     val revoked: Boolean? = null,
     val application: IntegrationApplicationObject? = null,
-    val scopes: List<String>
+    val scopes: List<String>,
+    @SerialName("guild_id") val guildId: Snowflake? = null
 )

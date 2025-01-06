@@ -137,12 +137,12 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
     
     internal class ClientEventManagerImpl(client: CwGatewayClient?) : DiscordClient.ClientEventManager {
         
-        private val listeners: MutableMap<Class<out Any>, ArrayList<(Event) -> Unit>> = HashMap()
+        private val listeners: MutableMap<Class<out Any>, ArrayList<(Event<*>) -> Unit>> = HashMap()
         
         // TODO: Hacky -- is there a cleaner solution?
         //       Want listener to be of type "(T) -> Unit" rather than "(Event) -> Unit" for cleaner client code
         //       But JVM type-erasure makes this information hard to store.
-        private val mapping: MutableMap<Any, (Event) -> Unit> = HashMap()
+        private val mapping: MutableMap<Any, (Event<*>) -> Unit> = HashMap()
         
         init {
             client?.onEventReceived { event ->
@@ -152,8 +152,8 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             }
         }
         
-        override fun <T : Event> subscribe(eventType: Class<T>, listener: (T) -> Unit) {
-            val delegate: (Event) -> Unit = {
+        override fun <T : Event<*>> subscribe(eventType: Class<T>, listener: (T) -> Unit) {
+            val delegate: (Event<*>) -> Unit = {
                 @Suppress("UNCHECKED_CAST")
                 listener.invoke(it as T)
             }
@@ -163,7 +163,7 @@ internal constructor(settings: DiscordClientSettings) : DiscordClient {
             listeners[eventType]!!.add(delegate)
         }
 
-        override fun <T : Event> unsubscribe(eventType: Class<T>, listener: (T) -> Unit) {
+        override fun <T : Event<*>> unsubscribe(eventType: Class<T>, listener: (T) -> Unit) {
             val delegateListener = mapping[listener]
             
             if (delegateListener != null) {

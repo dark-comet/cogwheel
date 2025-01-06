@@ -16,7 +16,7 @@ internal interface CwGatewayClient {
     
     fun sendEventAsync(event: GatewaySendEvent)
     
-    fun onEventReceived(listener: (Event) -> Unit)
+    fun onEventReceived(listener: (Event<*>) -> Unit)
 
     @FunctionalInterface
     interface Factory {

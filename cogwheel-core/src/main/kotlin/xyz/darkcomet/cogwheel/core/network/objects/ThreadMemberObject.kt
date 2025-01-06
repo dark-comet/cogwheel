@@ -11,5 +11,6 @@ data class ThreadMemberObject(
     @SerialName("user_id") val userId: Snowflake? = null,
     @SerialName("join_timestamp") val joinTimestamp: ISO8601Timestamp,
     val flags: Int,
-    val member: GuildMemberObject? = null
+    val member: GuildMemberObject? = null,
+    @SerialName("guild_id") val guildId: Snowflake? = null
 )

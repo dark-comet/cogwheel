@@ -22,5 +22,6 @@ data class GuildMemberObject(
     val pending: Boolean? = null,
     val permissions: Permissions? = null,
     @SerialName("communication_disabled_until") val communicationDisabledUntil: ISO8601Timestamp? = null,
-    @SerialName("avatar_decoration_data") val avatarDecorationData: AvatarDecorationDataObject? = null
+    @SerialName("avatar_decoration_data") val avatarDecorationData: AvatarDecorationDataObject? = null,
+    @SerialName("guild_id") val guildId: Snowflake? = null
 )

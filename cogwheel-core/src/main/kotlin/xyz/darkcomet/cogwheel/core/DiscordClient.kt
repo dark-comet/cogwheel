@@ -51,8 +51,8 @@ interface DiscordClient {
     }
     
     interface ClientEventManager {
-        fun <T : Event> subscribe(eventType: Class<T>, listener: (T) -> Unit)
-        fun <T : Event> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
+        fun <T : Event<*>> subscribe(eventType: Class<T>, listener: (T) -> Unit)
+        fun <T : Event<*>> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
     }
     
     companion object {

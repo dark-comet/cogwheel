@@ -2,6 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.objects
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 /**
@@ -54,5 +55,17 @@ data class GuildObject(
     val stickers: List<StickerObject>? = null,
     @SerialName("premium_progress_bar_enabled") val premiumProgressBarEnabled: Boolean? = null,
     @SerialName("safety_alerts_channel_id") val safetyAlertsChannelId: Snowflake? = null,
-    val unavailable: Boolean? = null
+    val unavailable: Boolean? = null,
+    // From Gateway Guild Create Event
+    @SerialName("joined_at") val joinedAt: ISO8601Timestamp? = null,
+    @SerialName("large") val large: Boolean? = null,
+    @SerialName("member_count") val memberCount: Int? = null,
+    @SerialName("voice_states") val voiceStates: List<VoiceStateObject>? = null,
+    @SerialName("members") val members: List<GuildMemberObject>? = null,
+    @SerialName("channels") val channels: List<ChannelObject>? = null,
+    @SerialName("threads") val threads: List<ChannelObject>? = null,
+    @SerialName("presences") val presences: List<UpdatePresenceObject>? = null,
+    @SerialName("stage_instances") val stageInstances: List<StageInstanceObject>? = null,
+    @SerialName("guild_scheduled_events") val guildScheduledEvents: List<GuildScheduledEventObject>? = null,
+    @SerialName("soundboard_sounds") val soundboardSounds: List<SoundboardSoundObject>? = null,
 )

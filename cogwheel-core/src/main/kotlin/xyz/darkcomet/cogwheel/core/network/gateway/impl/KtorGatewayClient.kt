@@ -62,7 +62,7 @@ private constructor(
     private var lastFetchedGatewayUrl: String? = null
     
     private val eventSendQueue: Queue<GatewaySendEvent> = ConcurrentLinkedQueue()
-    private var onEventReceived: ((Event) -> Unit)? = null
+    private var onEventReceived: ((Event<*>) -> Unit)? = null
     private var gatewaySession: KtorGatewaySession? = null
     
     private val started = AtomicBoolean(false)
@@ -202,7 +202,7 @@ private constructor(
         }
     }
 
-    override fun onEventReceived(listener: (Event) -> Unit) {
+    override fun onEventReceived(listener: (Event<*>) -> Unit) {
         onEventReceived = listener
     }
 
@@ -296,6 +296,11 @@ private constructor(
         
         val helloEvent = receiveHelloEvent(wssSession, gatewaySession, shouldResumeNextAttempt)
         
+        if (helloEvent == null) {
+            this.gatewaySession = null
+            return false
+        }
+        
         if (isResume) {
             resumeGatewaySession(wssSession, gatewaySession)
         } else {
@@ -327,10 +332,19 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayHelloEvent {
+    ): GatewayHelloEvent? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
-
+        
         if (event !is GatewayHelloEvent) {
+            if (event is GatewayReconnectEvent) {
+                // per API spec: The reconnect event is dispatched when a client should reconnect to 
+                // the gateway (and resume their existing session, if they have one). This can occur 
+                // at any point in the gateway connection lifecycle, even before/in place of 
+                // receiving a Hello event. A few seconds after the reconnect event is dispatched, 
+                // the connection may be closed by the server.
+                return null // -- Give up here & try re-connect soon
+            }
+            
             val description = if (event == null) "null" else event::class.simpleName
             throw IllegalStateException("Invalid first event during handshake: $description")
         }
@@ -395,9 +409,9 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         shouldResumeNextAttempt: AtomicBoolean
-    ): Event? {
+    ): Event<*>? {
         val payload = wssSession.receiveDeserialized<GatewayPayload>()
-        var event: Event? = null
+        var event: Event<*>? = null
         
         try {
             event = GatewayEventDecoder.decode(payload)
@@ -435,7 +449,7 @@ private constructor(
     }
 
     private suspend fun performSpecialEventHandling(
-        event: Event,
+        event: Event<*>,
         wssSession: DefaultClientWebSocketSession,
         shouldResumeNextAttempt: AtomicBoolean
     ) {
@@ -443,7 +457,7 @@ private constructor(
             shouldResumeNextAttempt.set(true)
 
             if (event is GatewayInvalidSessionEvent) {
-                shouldResumeNextAttempt.set(event.shouldTryResume)
+                shouldResumeNextAttempt.set(event.isResumeRecommended)
             }
 
             wssSession.close()
@@ -466,7 +480,7 @@ private constructor(
         sendEvent(event, wssSession)
     }
 
-    private fun fireEventReceived(event: Event) {
+    private fun fireEventReceived(event: Event<*>) {
         onEventReceived?.invoke(event)
     }
     

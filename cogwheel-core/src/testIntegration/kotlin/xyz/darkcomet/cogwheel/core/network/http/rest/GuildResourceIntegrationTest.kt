@@ -17,8 +17,7 @@ import java.util.concurrent.TimeUnit
 
 class GuildResourceIntegrationTest : IntegrationTestFixture() {
     
-    private val client =
-        TestCwDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
+    private val client = TestCwDiscordClient.fromEnvBotToken() { useGateway(Intents.of(Intents.GUILDS)) }
     private val guildApi = client.restApi().guild
 
     @Test

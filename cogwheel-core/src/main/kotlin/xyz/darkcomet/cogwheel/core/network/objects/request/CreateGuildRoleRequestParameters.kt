@@ -8,7 +8,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Permissions
 @Serializable
 data class CreateGuildRoleRequestParameters(
     val name: String,
-    val permissions: Permissions,
+    val permissions: String,
     val color: Int,
     val hoist: Boolean,
     val icon: ImageData?,

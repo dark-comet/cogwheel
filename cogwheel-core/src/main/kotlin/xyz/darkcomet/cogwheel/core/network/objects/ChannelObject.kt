@@ -37,7 +37,7 @@ data class ChannelObject(
     val flags: Int? = null,
     @SerialName("total_message_sent") val totalMessageSent: Int? = null,
     @SerialName("available_tags") val availableTags: List<ForumTagObject>? = null,
-    @SerialName("applied_tags") val appliedTags: List<Snowflake>,
+    @SerialName("applied_tags") val appliedTags: List<Snowflake>? = null,
     @SerialName("default_reaction_emoji") val defaultReactionEmoji: ChannelDefaultReactionObject? = null,
     @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: Int? = null,
     @SerialName("default_sort_order") val defaultSortOrder: Int? = null,

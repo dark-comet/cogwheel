@@ -6,8 +6,8 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.GuildAutoModerationRuleObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildAutoModerationRuleRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildAutoModerationRuleRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildAutoModerationRuleRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildAutoModerationRuleRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class AutoModerationResource 

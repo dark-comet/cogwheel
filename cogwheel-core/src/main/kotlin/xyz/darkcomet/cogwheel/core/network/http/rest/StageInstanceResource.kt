@@ -5,8 +5,8 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.StageInstanceObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateStageInstanceRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyStageInstanceRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateStageInstanceRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyStageInstanceRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class StageInstanceResource 
@@ -33,7 +33,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun modifyStageInstance(
-        channelId: Snowflake, 
+        channelId: Snowflake,
         request: ModifyStageInstanceRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<StageInstanceObject> {

@@ -7,9 +7,9 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.GuildObject
 import xyz.darkcomet.cogwheel.core.network.objects.GuildTemplateObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildFromGuildTemplateRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildTemplateRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildTemplateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildFromGuildTemplateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildTemplateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildTemplateRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class GuildTemplateResource 

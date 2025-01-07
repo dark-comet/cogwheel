@@ -12,9 +12,9 @@ import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayRequestGuildMem
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdatePresenceSendEvent
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayUpdateVoiceStateSendEvent
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayPresenceUpdateRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayRequestGuildMembersRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayPresenceUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayRequestGuildMembersRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayVoiceStateUpdateRequestParameters
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 

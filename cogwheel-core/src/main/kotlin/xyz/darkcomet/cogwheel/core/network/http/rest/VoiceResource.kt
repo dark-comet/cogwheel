@@ -7,9 +7,8 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.UserObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentUserVoiceStateRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyUserVoiceStateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyCurrentUserVoiceStateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyUserVoiceStateRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class VoiceResource 

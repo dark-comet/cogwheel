@@ -6,10 +6,10 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGroupDmRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateUserDmRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentUserRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.UpdateCurrentUserApplicationRoleConnectionRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGroupDmRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateUserDmRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyCurrentUserRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.UpdateCurrentUserApplicationRoleConnectionRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class UserResource 

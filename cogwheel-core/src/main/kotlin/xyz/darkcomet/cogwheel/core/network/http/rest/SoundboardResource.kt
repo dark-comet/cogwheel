@@ -6,10 +6,10 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.SoundboardSoundObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.SendSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildSoundboardSoundsResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildSoundboardSoundRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildSoundboardSoundRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.SendSoundboardSoundRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ListGuildSoundboardSoundsResponseObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class SoundboardResource 
@@ -66,7 +66,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun modifyGuildSoundboardSound(
-        guildId: Snowflake, 
+        guildId: Snowflake,
         soundId: Snowflake,
         request: ModifyGuildSoundboardSoundRequestParameters,
         auditLogReason: String? = null

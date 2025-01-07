@@ -7,8 +7,8 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventObject
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildScheduledEventRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildScheduledEventRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildScheduledEventRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class GuildScheduledEventResource 

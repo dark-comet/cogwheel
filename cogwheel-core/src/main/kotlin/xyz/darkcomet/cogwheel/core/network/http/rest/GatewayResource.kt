@@ -4,7 +4,7 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.response.GetGatewayUrlResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.GetGatewayUrlResponseObject
 
 class GatewayResource
 internal constructor(private val httpClient: CwHttpClient) {

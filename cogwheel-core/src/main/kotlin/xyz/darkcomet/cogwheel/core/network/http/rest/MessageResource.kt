@@ -7,9 +7,9 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.MessageObject
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.BulkDeleteMessagesRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateMessageRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.EditMessageRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.BulkDeleteMessagesRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateMessageRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.EditMessageRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class MessageResource 

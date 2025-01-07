@@ -8,8 +8,8 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.StickerObject
 import xyz.darkcomet.cogwheel.core.network.objects.StickerPackObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildStickerRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildStickerRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildStickerRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildStickerRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class StickerResource 

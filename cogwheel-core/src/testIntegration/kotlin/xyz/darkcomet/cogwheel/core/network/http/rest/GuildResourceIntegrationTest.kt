@@ -7,8 +7,8 @@ import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
 import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
 import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.util.*

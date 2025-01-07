@@ -5,9 +5,9 @@ import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
 import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayPresenceUpdateRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayRequestGuildMembersRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.GatewayVoiceStateUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayPresenceUpdateRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayRequestGuildMembersRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.GatewayVoiceStateUpdateRequestParameters
 
 interface CwDiscordClient {
     

@@ -7,10 +7,10 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateWebhookRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.EditWebhookMessageRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ExecuteWebhookRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyWebhookRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateWebhookRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.EditWebhookMessageRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ExecuteWebhookRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyWebhookRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class WebhookResource 

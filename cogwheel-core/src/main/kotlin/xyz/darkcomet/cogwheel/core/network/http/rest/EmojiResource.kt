@@ -6,11 +6,11 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.EmojiObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateApplicationEmojiRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateGuildEmojiRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyApplicationEmojiRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyGuildEmojiRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.response.ListApplicationEmojisResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.CreateApplicationEmojiRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildEmojiRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyApplicationEmojiRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildEmojiRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ListApplicationEmojisResponseObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class EmojiResource 

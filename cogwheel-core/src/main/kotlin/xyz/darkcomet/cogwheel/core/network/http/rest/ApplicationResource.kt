@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.request.ModifyCurrentApplicationRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.ModifyCurrentApplicationRequestParameters
 
 class ApplicationResource
 internal constructor(private val httpClient: CwHttpClient) {

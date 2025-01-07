@@ -6,8 +6,7 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.GuildTemplateObject
-import xyz.darkcomet.cogwheel.core.network.objects.request.CreateTestEntitlementRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.CreateTestEntitlementRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.util.stream.Collectors
 

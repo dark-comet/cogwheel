@@ -7,11 +7,10 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.*
-import xyz.darkcomet.cogwheel.core.network.objects.request.*
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBeginPruneResponseObject
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildBulkBanResponseObject
-import xyz.darkcomet.cogwheel.core.network.objects.response.GuildGetPruneCountResponseObject
-import xyz.darkcomet.cogwheel.core.network.objects.response.ListGuildActiveThreadsResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.GuildBeginPruneResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.GuildBulkBanResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.GuildGetPruneCountResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.ListGuildActiveThreadsResponseObject
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.util.stream.Collectors

@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
+import xyz.darkcomet.cogwheel.core.primitives.PermissionSet
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
@@ -129,7 +130,7 @@ data class CreateGuildRequestParameters(
 @Serializable
 data class CreateGuildRoleRequestParameters(
     val name: String,
-    val permissions: String,
+    val permissions: PermissionSet,
     val color: Int,
     val hoist: Boolean,
     val icon: ImageData?,
@@ -222,8 +223,8 @@ data class CreateWebhookRequestParameters(
 
 @Serializable
 data class EditChannelPermissionsParameters(
-    val allow: String? = null,
-    val deny: String? = null,
+    val allow: PermissionSet? = null,
+    val deny: PermissionSet? = null,
     val type: Int
 )
 
@@ -462,7 +463,7 @@ data class ModifyGuildRolePositionRequestParameters(
 @Serializable
 data class ModifyGuildRoleRequestParameters(
     val name: String? = null,
-    val permissions: String? = null,
+    val permissions: PermissionSet? = null,
     val color: Int? = null,
     val hoist: Boolean? = null,
     val icon: ImageData? = null,

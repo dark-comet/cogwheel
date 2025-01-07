@@ -12,7 +12,8 @@ internal class KtorHttpResponse<T>(
 ) : CwHttpResponse<T> {
 
     internal class Raw(
-        private val httpResponse: HttpResponse, 
+        private val httpResponse: HttpResponse,
+        private val jsonSerializer: Json,
         override val bodyContent: String
     ) : CwHttpResponse.Raw {
         
@@ -40,16 +41,12 @@ internal class KtorHttpResponse<T>(
             }
 
             if (success) {
-                val data = JSON_DESERIALIZER.decodeFromString(strategy, bodyContent)
+                val data = jsonSerializer.decodeFromString(strategy, bodyContent)
                 return KtorHttpResponse(this, data)
             } else {
                 return KtorHttpResponse(this, data = null)
             }
         }
         
-    }
-
-    companion object {
-        private val JSON_DESERIALIZER = Json { ignoreUnknownKeys = true }
     }
 }

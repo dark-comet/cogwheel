@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
+import xyz.darkcomet.cogwheel.core.primitives.PermissionSet
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
@@ -130,7 +131,7 @@ data class ApplicationCommandObject(
     val description: String,
     @SerialName("description_localizations") val descriptionLocalizations: Map<String, String>? = null,
     val options: List<ApplicationCommandOptionObject>? = null,
-    @SerialName("default_member_permissions") val defaultMemberPermissions: String? = null,
+    @SerialName("default_member_permissions") val defaultMemberPermissions: PermissionSet? = null,
     @SerialName("dm_permission") val dmPermission: Boolean? = null,
     @SerialName("default_permission") val defaultPermission: Boolean? = null,
     val nsfw: Boolean? = null,
@@ -384,7 +385,7 @@ data class ChannelObject(
     @SerialName("thread_metadata") val threadMetadata: ThreadMetadataObject? = null,
     @SerialName("thread_member") val member: ThreadMemberObject? = null,
     @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Int? = null,
-    @SerialName("permissions") val permissions: String? = null,
+    @SerialName("permissions") val permissions: PermissionSet? = null,
     val flags: Int? = null,
     @SerialName("total_message_sent") val totalMessageSent: Int? = null,
     @SerialName("available_tags") val availableTags: List<ForumTagObject>? = null,
@@ -400,8 +401,8 @@ data class ChannelObject(
 data class ChannelPermissionOverwriteObject(
     val id: Snowflake,
     val type: Int,
-    val allow: String,
-    val deny: String
+    val allow: PermissionSet,
+    val deny: PermissionSet
 )
 
 @Serializable
@@ -607,7 +608,7 @@ data class GuildMemberObject(
     val mute: Boolean,
     val flags: Int,
     val pending: Boolean? = null,
-    val permissions: Long? = null,
+    val permissions: PermissionSet? = null,
     @SerialName("communication_disabled_until") val communicationDisabledUntil: ISO8601Timestamp? = null,
     @SerialName("avatar_decoration_data") val avatarDecorationData: AvatarDecorationDataObject? = null,
     @SerialName("guild_id") val guildId: Snowflake? = null
@@ -628,7 +629,7 @@ data class GuildObject(
     @SerialName("discovery_splash") val discoverySplash: String? = null,
     val owner: String? = null, //Only set when using the GET Current User Guilds endpoint, and are relative to the requested user
     @SerialName("owner_id") val ownerId: Snowflake? = null,
-    val permissions: Long? = null,
+    val permissions: PermissionSet? = null,
     @Deprecated("replaced by channel.rtc_region") val region: String? = null,
     @SerialName("afk_channel_id") val afkChannelId: Snowflake? = null,
     @SerialName("afk_timeout") val afkTimeout: Int? = null,
@@ -1084,7 +1085,7 @@ data class RoleObject(
     val icon: String? = null,
     @SerialName("unicode_emoji") val unicodeEmoji: String? = null,
     val position: Int,
-    val permissions: Long,
+    val permissions: PermissionSet,
     val managed: Boolean,
     val mentionable: Boolean,
     val tags: RoleTagsObject? = null,

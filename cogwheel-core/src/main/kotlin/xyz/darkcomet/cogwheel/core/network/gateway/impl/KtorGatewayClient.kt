@@ -8,7 +8,6 @@ import io.ktor.serialization.kotlinx.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okio.IOException
 import org.slf4j.Logger
@@ -18,8 +17,6 @@ import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.Connecti
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.FetchGatewayUrlCompleteArgs
 import xyz.darkcomet.cogwheel.core.events.*
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.primitives.Intents
-import xyz.darkcomet.cogwheel.core.primitives.ShardId
 import xyz.darkcomet.cogwheel.core.network.CancellationToken
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
@@ -30,6 +27,8 @@ import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayHeartbeatSendEv
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayIdentifySendEvent
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewayResumeSendEvent
 import xyz.darkcomet.cogwheel.core.network.gateway.events.GatewaySendEvent
+import xyz.darkcomet.cogwheel.core.primitives.Intents
+import xyz.darkcomet.cogwheel.core.primitives.ShardId
 import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -51,7 +50,7 @@ private constructor(
     
     private val httpClient: HttpClient = HttpClient(OkHttp) {
         install(WebSockets) {
-            contentConverter = KotlinxWebsocketSerializationConverter(Json)
+            contentConverter = KotlinxWebsocketSerializationConverter(settings.jsonSerializer)
         }
         
         engine {
@@ -414,7 +413,7 @@ private constructor(
         var event: Event<*>? = null
         
         try {
-            event = GatewayEventDecoder.decode(payload)
+            event = GatewayEventDecoder.decode(payload, settings.jsonSerializer)
         } catch (exception: Exception) {
             logger.error("An error occurred while decoding payload: {}", payload, exception)
         } finally {

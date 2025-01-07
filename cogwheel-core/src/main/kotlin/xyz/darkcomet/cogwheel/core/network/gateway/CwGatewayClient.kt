@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel.core.network.gateway
 
+import kotlinx.serialization.json.Json
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
@@ -30,6 +31,7 @@ internal interface CwGatewayClient {
     }
     
     data class Settings(
+        val jsonSerializer: Json,
         val disableHeartbeats: Boolean,
         val fetchUrlMaxAttempts: Int?,
         val reconnectMaxAttempts: Int?,

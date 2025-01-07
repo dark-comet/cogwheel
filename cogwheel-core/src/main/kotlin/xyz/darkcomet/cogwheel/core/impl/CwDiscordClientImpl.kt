@@ -40,6 +40,7 @@ internal constructor(settings: DiscordClientSettings) : CwDiscordClient {
 
         gatewayClient = if (settings.gatewayEnabled) {
             val gatewayClientSettings = CwGatewayClient.Settings(
+                settings.jsonSerializer,
                 settings.testDisableGatewayHeartbeats,
                 settings.gatewayFetchUrlMaxAttempts,
                 settings.gatewaySessionReconnectMaxAttempts

@@ -1,5 +1,6 @@
 package xyz.darkcomet.cogwheel.core.impl
 
+import kotlinx.serialization.json.Json
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
 import xyz.darkcomet.cogwheel.core.primitives.Intents
@@ -18,6 +19,7 @@ internal data class DiscordClientSettings(
     var gatewayIntents: Intents = Intents.none(),
     var gatewayFetchUrlMaxAttempts: Int? = null,
     var gatewaySessionReconnectMaxAttempts: Int? = null,
+    var jsonSerializer: Json = Json { isLenient = true; ignoreUnknownKeys = true },
     val aspects: DiscordClientAspects = DiscordClientAspects(),
     // Test-use settings
     var testDisableGatewayHeartbeats: Boolean = false

@@ -88,7 +88,7 @@ internal class KtorHttpClient(
 
         logger.trace("Received HttpResponse for id={}, {}, bodyContent={}", requestId, httpResponse.toString(), responseBody)
 
-        return KtorHttpResponse.Raw(httpResponse, responseBody)
+        return KtorHttpResponse.Raw(httpResponse, settings.jsonSerializer, responseBody)
     }
     
     private fun getEndpointUrl(endpointUrl: String): String {

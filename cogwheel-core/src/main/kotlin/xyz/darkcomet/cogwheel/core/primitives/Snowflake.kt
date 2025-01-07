@@ -7,23 +7,18 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.math.BigInteger
 
 @Serializable(with = Snowflake.Serializer::class)
-class Snowflake(val value: Long) : Comparable<Snowflake> {
+class Snowflake(val value: BigInteger) : Comparable<Snowflake> {
 
-    constructor(value: String) : this(asLong(value))
+    constructor(value: String) : this(BigInteger(value))
+    constructor(value: Long) : this(BigInteger.valueOf(value))
 
-    val timestampMs: Long
-        get() = (value shr 22) + DISCORD_EPOCH_TIME_MS
-    
-    val workerId: Long
-        get() = (value and 0x3E0000) shr 17
-    
-    val processId: Long
-        get() = (value and 0x1F000) shr 12
-    
-    val increment: Long
-        get() = value and 0xFFF
+    val timestampMs: Long = (value shr 22).toLong() + DISCORD_EPOCH_TIME_MS
+    val workerId: Long = ((value and BigInteger("3E0000", 16)) shr 17).toLong()
+    val processId: Long = ((value and BigInteger("1F000", 16)) shr 12).toLong()
+    val increment: Long = (value and BigInteger("FFF", 16)).toLong()
 
     override fun equals(other: Any?): Boolean {
         if (other !is Snowflake) {
@@ -47,10 +42,6 @@ class Snowflake(val value: Long) : Comparable<Snowflake> {
 
     companion object {
         private const val DISCORD_EPOCH_TIME_MS = 1_420_070_400_000L
-        
-        private fun asLong(value: String): Long {
-            return value.toLongOrNull() ?: throw IllegalArgumentException("Invalid Snowflake ID: '$value'")
-        }
     }
 
     class Serializer : KSerializer<Snowflake> {

@@ -2,14 +2,10 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.*
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.SoundboardSoundObject
-import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.SendSoundboardSoundRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.ListGuildSoundboardSoundsResponseObject
+import xyz.darkcomet.cogwheel.core.network.objects.*
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class SoundboardResource 
@@ -19,7 +15,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake, 
         request: SendSoundboardSoundRequestParameters
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/send-soundboard-sound") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/send-soundboard-sound") {
             jsonParams(request, SendSoundboardSoundRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
@@ -28,14 +25,14 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun listDefaultSoundboardSounds(): CwHttpResponse<List<SoundboardSoundObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/soundboard-default-sounds")
+        val httpRequest = CwHttpRequest.create(GET, "/soundboard-default-sounds")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListSerializer(SoundboardSoundObject.serializer()))
     }
     
     suspend fun listGuildSoundboardSounds(guildId: Snowflake): CwHttpResponse<ListGuildSoundboardSoundsResponseObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guild/${guildId}/soundboard-sounds")
+        val httpRequest = CwHttpRequest.create(GET, "/guild/${guildId}/soundboard-sounds")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListGuildSoundboardSoundsResponseObject.serializer())
@@ -45,7 +42,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         soundId: Snowflake
     ): CwHttpResponse<SoundboardSoundObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guild/${guildId}/soundboard-sounds/${soundId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/guild/${guildId}/soundboard-sounds/${soundId}",
+            rateLimitRouteIdentifier = "/guild/${guildId}/soundboard-sounds/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withData(SoundboardSoundObject.serializer())
@@ -56,7 +57,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: CreateGuildSoundboardSoundRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<SoundboardSoundObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guild/${guildId}/soundboard-sounds") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/guild/${guildId}/soundboard-sounds") {
             jsonParams(request, CreateGuildSoundboardSoundRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -71,7 +73,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: ModifyGuildSoundboardSoundRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<SoundboardSoundObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guild/${guildId}/soundboard-sounds/${soundId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PATCH, "/guild/${guildId}/soundboard-sounds/${soundId}",
+            rateLimitRouteIdentifier = "/guild/${guildId}/soundboard-sounds/*"
+        ) {
             jsonParams(request, ModifyGuildSoundboardSoundRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -85,7 +91,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         soundId: Snowflake,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guild/${guildId}/soundboard-sounds/${soundId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/guild/${guildId}/soundboard-sounds/${soundId}",
+            rateLimitRouteIdentifier = "/guild/${guildId}/soundboard-sounds/*"
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)

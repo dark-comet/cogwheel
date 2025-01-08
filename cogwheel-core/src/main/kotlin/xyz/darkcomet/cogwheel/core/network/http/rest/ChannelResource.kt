@@ -2,13 +2,10 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.*
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.*
-import xyz.darkcomet.cogwheel.core.network.objects.ListJoinedPrivateArchivedThreadsResponseObject
-import xyz.darkcomet.cogwheel.core.network.objects.ListPrivateArchivedThreadsResponseObject
-import xyz.darkcomet.cogwheel.core.network.objects.ListPublicArchivedThreadsResponseObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
@@ -16,7 +13,7 @@ class ChannelResource
 internal constructor(private val httpClient: CwHttpClient) {
     
     suspend fun getChannel(channelId: Snowflake): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}")
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ChannelObject.serializer())
@@ -27,7 +24,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: ModifyDmChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/channels/${channelId}") {
+        
+        val httpRequest = CwHttpRequest.create(PATCH, "/channels/${channelId}") {
             jsonParams(request, ModifyDmChannelRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -41,7 +39,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: ModifyGuildChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/channels/${channelId}") {
+        
+        val httpRequest = CwHttpRequest.create(PATCH, "/channels/${channelId}") {
             jsonParams(request, ModifyGuildChannelRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -55,7 +54,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: ModifyThreadChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/channels/${channelId}") {
+        
+        val httpRequest = CwHttpRequest.create(PATCH, "/channels/${channelId}") {
             jsonParams(request, ModifyThreadChannelRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -68,7 +68,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}")
+        
+        val httpRequest = CwHttpRequest.create(DELETE, "/channels/${channelId}")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ChannelObject.serializer())
@@ -80,7 +81,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: EditChannelPermissionsParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/permissions/${overwriteId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/permissions/${overwriteId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/permissions/*"
+        ) {
             jsonParams(request, EditChannelPermissionsParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -90,7 +95,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun getChannelInvites(channelId: Snowflake) : CwHttpResponse<List<InviteObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/invites")
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/invites")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListSerializer(InviteObject.serializer()))
@@ -101,7 +106,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: CreateChannelInviteRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<InviteObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/invites") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/invites") {
             jsonParams(request, CreateChannelInviteRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -115,7 +121,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         overwriteId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/permissions/${overwriteId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/permissions/${overwriteId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/permissions/*"
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
@@ -128,7 +138,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: FollowAnnouncementChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<FollowedChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/followers") {
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/followers") {
             jsonParams(request, FollowAnnouncementChannelRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -138,14 +148,14 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun triggerTypingIndicator(channelId: Snowflake): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/typing")
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/typing")
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
     }
     
     suspend fun getPinnedMessages(channelId: Snowflake): CwHttpResponse<List<MessageObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/pins")
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/pins")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListSerializer(MessageObject.serializer()))
@@ -156,7 +166,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/pins/${messageId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/pins/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*" 
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
@@ -169,7 +183,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake, 
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/pins/${messageId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/pins/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*"
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
@@ -182,7 +200,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         userId: Snowflake, 
         request: GroupDmAddRecipientRequestParameters
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/recipients/${userId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/recipients/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/recipients/*"
+        ) {
             jsonParams(request, GroupDmAddRecipientRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
@@ -194,7 +216,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake, 
         userId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/recipients/${userId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/recipients/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/recipients/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -206,7 +232,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: StartThreadFromMessageRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages/${messageId}/threads") {
+        
+        val httpRequest = CwHttpRequest.create(
+            POST, "/channels/${channelId}/messages/${messageId}/threads",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/threads"
+        ) {
             jsonParams(request, StartThreadFromMessageRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -220,7 +250,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: StartThreadWithoutMessageRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/threads") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/threads") {
             jsonParams(request, StartThreadWithoutMessageRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -234,7 +265,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: StartThreadInForumOrMediaChannelRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/threads") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/threads") {
             jsonParams(request, StartThreadInForumOrMediaChannelRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -244,7 +276,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     }
     
     suspend fun joinThread(channelId: Snowflake): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/thread-members/@me")
+        val httpRequest = CwHttpRequest.create(PUT, "/channels/${channelId}/thread-members/@me")
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -254,14 +286,18 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake, 
         userId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/thread-members/${userId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/thread-members/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/thread-members/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
     }
     
     suspend fun leaveThread(channelId: Snowflake): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/thread-members/@me")
+        val httpRequest = CwHttpRequest.create(DELETE, "/channels/${channelId}/thread-members/@me")
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -271,7 +307,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake, 
         userId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/thread-members/${userId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/thread-members/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/thread-members/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -282,7 +322,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         userId: Snowflake, 
         withMember: Boolean? = null
     ): CwHttpResponse<ThreadMemberObject?> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/thread-members/${userId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/channels/${channelId}/thread-members/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/thread-members/*"
+        ) {
             optionalQueryStringParam("with_member", withMember)
         }
         val response = httpClient.submit(httpRequest)
@@ -296,7 +340,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         after: Snowflake? = null, 
         limit: Int? = null
     ): CwHttpResponse<List<ThreadMemberObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/thread-members") {
+        
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/thread-members") {
             optionalQueryStringParam("with_member", withMember)
             optionalQueryStringParam("after", after)
             optionalQueryStringParam("limit", limit)
@@ -311,7 +356,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         before: ISO8601Timestamp? = null,
         limit: Int? = null
     ): CwHttpResponse<ListPublicArchivedThreadsResponseObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/threads/archived/public") {
+        
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/threads/archived/public") {
             optionalQueryStringParam("before", before)
             optionalQueryStringParam("limit", limit)
         }
@@ -325,7 +371,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         before: ISO8601Timestamp? = null,
         limit: Int? = null
     ): CwHttpResponse<ListPrivateArchivedThreadsResponseObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/threads/archived/private") {
+        
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/threads/archived/private") {
             optionalQueryStringParam("before", before)
             optionalQueryStringParam("limit", limit)
         }
@@ -339,7 +386,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         before: ISO8601Timestamp? = null,
         limit: Int? = null
     ): CwHttpResponse<ListJoinedPrivateArchivedThreadsResponseObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/users/@me/threads/archived/private") {
+        
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/users/@me/threads/archived/private") {
             optionalQueryStringParam("before", before)
             optionalQueryStringParam("limit", limit)
         }

@@ -2,12 +2,12 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.*
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventObject
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventUserObject
-import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildScheduledEventRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
@@ -15,7 +15,7 @@ class GuildScheduledEventResource
 internal constructor(private val httpClient: CwHttpClient) {
     
     suspend fun listScheduledEventsForGuild(guildId: Snowflake): CwHttpResponse<List<GuildScheduledEventObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events")
+        val httpRequest = CwHttpRequest.create(GET, "/guilds/${guildId}/scheduled-events")
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListSerializer(GuildScheduledEventObject.serializer()))
@@ -26,7 +26,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: CreateGuildScheduledEventRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/guilds/${guildId}/scheduled-events") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/guilds/${guildId}/scheduled-events") {
             jsonParams(request, CreateGuildScheduledEventRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -40,7 +41,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         eventId: Snowflake,
         withUserCount: Boolean? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events/${eventId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/guilds/${guildId}/scheduled-events/${eventId}",
+            rateLimitRouteIdentifier = "/guilds/${guildId}/scheduled-events/*"
+        ) {
             optionalQueryStringParam("with_user_count", withUserCount)
         }
         val response = httpClient.submit(httpRequest)
@@ -54,7 +59,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: ModifyGuildScheduledEventRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<GuildScheduledEventObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/guilds/${guildId}/scheduled-events/${eventId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PATCH, "/guilds/${guildId}/scheduled-events/${eventId}",
+            rateLimitRouteIdentifier = "/guilds/${guildId}/scheduled-events/*"
+        ) {
             jsonParams(request, ModifyGuildScheduledEventRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }
@@ -67,7 +76,10 @@ internal constructor(private val httpClient: CwHttpClient) {
         guildId: Snowflake, 
         eventId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/guilds/${guildId}/scheduled-events/${eventId}")
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/guilds/${guildId}/scheduled-events/${eventId}",
+            rateLimitRouteIdentifier = "/guilds/${guildId}/scheduled-events/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -81,7 +93,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         before: Snowflake? = null,
         after: Snowflake? = null,
     ): CwHttpResponse<List<GuildScheduledEventUserObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/guilds/${guildId}/scheduled-events/${eventId}/users") {
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/guilds/${guildId}/scheduled-events/${eventId}/users",
+            rateLimitRouteIdentifier = "/guilds/${guildId}/scheduled-events/*/users"
+        ) {
             optionalQueryStringParam("limit", limit)
             optionalQueryStringParam("with_member", withMember)
             optionalQueryStringParam("before", before)

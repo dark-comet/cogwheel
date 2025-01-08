@@ -1,6 +1,6 @@
 package xyz.darkcomet.cogwheel.core.network.http
 
-import xyz.darkcomet.cogwheel.core.impl.DiscordClientSettings
+import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientSettings
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 
 internal interface CwHttpClient {
@@ -9,6 +9,6 @@ internal interface CwHttpClient {
 
     @FunctionalInterface
     interface Factory {
-        fun create(settings: DiscordClientSettings, config: CwConfiguration): CwHttpClient
+        fun create(settings: CwDiscordClientSettings, config: CwConfiguration): CwHttpClient
     }
 }

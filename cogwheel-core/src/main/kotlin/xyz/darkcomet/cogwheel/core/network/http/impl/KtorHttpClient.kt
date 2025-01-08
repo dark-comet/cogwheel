@@ -8,7 +8,7 @@ import io.ktor.http.*
 import okhttp3.OkHttpClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import xyz.darkcomet.cogwheel.core.impl.DiscordClientSettings
+import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientSettings
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
@@ -18,7 +18,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 internal class KtorHttpClient(
-    private val settings: DiscordClientSettings,
+    private val settings: CwDiscordClientSettings,
     private val config: CwConfiguration
 ) : CwHttpClient {
     
@@ -26,6 +26,7 @@ internal class KtorHttpClient(
     
     private val httpClient: HttpClient
     private val httpClientUserAgentHeaderValue: String
+    private val rateLimitStrategy = settings.rateLimitStrategy
     
     init {
         httpClient = HttpClient(OkHttp) {
@@ -55,42 +56,95 @@ internal class KtorHttpClient(
     }
 
     override suspend fun submit(request: CwHttpRequest): CwHttpResponse.Raw {
-        val endpointUrl = getEndpointUrl(request.endpointPath)
-        
+        val endpointUrl = getEndpointUrl(request.route)
         val contentType = if (request.bodyContent != null) ContentType.Application.Json else ContentType.Any
         val requestBody = request.bodyContent ?: ""
         
-        val requestId = UUID.randomUUID()
+        val traceId = UUID.randomUUID()
         
-        logger.trace("Submitting HttpRequest: id={}, {} {}, bodyContent={}", requestId, request.method, endpointUrl, requestBody)
+        logger.trace("Submitting HttpRequest: traceId={}, {} {}, bodyContent={}", traceId, request.method, endpointUrl, requestBody)
         
-        val httpResponse = httpClient.request(endpointUrl) {
+        val response: HttpResponse?
+        
+        if (rateLimitStrategy == null || rateLimitStrategy.prepareRequestSubmit(request)) {
+            response = submitRequestWithRetry(request, endpointUrl, contentType, requestBody)
+            val responseBody = response.bodyAsText()
+            logger.trace("Received HttpResponse for id={}, {}, bodyContent={}", traceId, response.toString(), responseBody)
+            
+            return KtorHttpResponse.Raw(response, settings.jsonSerializer, responseBody)
+        } else {
+            response = null
+            logger.trace("Skipped submitting HttpRequest for id={}: aborted by local rate limiter", traceId)
+            return KtorHttpResponse.Raw(response, settings.jsonSerializer, "")
+        }
+    }
+    
+    private suspend fun submitRequestWithRetry(
+        request: CwHttpRequest,
+        endpointUrl: String,
+        contentType: ContentType,
+        requestBody: String
+    ): HttpResponse {
+        
+        var finalResponse: HttpResponse? = null
+        var submitAttemptCount = 0
+        
+        do {
+            submitAttemptCount++
+
+            val response = submitRequest(request, endpointUrl, contentType, requestBody)
+
+            rateLimitStrategy?.record(request, response)
+
+            if (response.status.isSuccess()) {
+                finalResponse = response
+            } else {
+                // TODO: Tachometer, record failure rate
+                if (response.status == HttpStatusCode.TooManyRequests) {
+                    if (rateLimitStrategy?.isRetryable(request, response, submitAttemptCount) == true) {
+                        rateLimitStrategy.prepareForRetry(request, response, submitAttemptCount)
+                        continue
+                    } else {
+                        finalResponse = response
+                    }
+                } else {
+                    // No retry for other kinds of errors
+                    finalResponse = response
+                }
+            }
+        } while (finalResponse == null)
+        
+        return finalResponse
+    }
+
+    private suspend fun submitRequest(
+        request: CwHttpRequest,
+        endpointUrl: String,
+        contentType: ContentType,
+        requestBody: String
+    ): HttpResponse {
+        
+        return httpClient.request(endpointUrl) {
             method = getHttpMethod(request.method)
             
             request.queryParameters.entries.forEach {
                 parameter(it.key, it.value)
             }
-            
+
             headers {
                 append(HttpHeaders.Authorization, settings.token.getAuthorizationHeaderValue())
                 append(HttpHeaders.UserAgent, httpClientUserAgentHeaderValue)
-                
-                request.headers.entries.forEach { 
+
+                request.headers.entries.forEach {
                     append(it.key, it.value)
                 }
             }
-            
+
             contentType(contentType)
             setBody(requestBody)
         }
-        
-        val responseBody = httpResponse.bodyAsText()
-
-        logger.trace("Received HttpResponse for id={}, {}, bodyContent={}", requestId, httpResponse.toString(), responseBody)
-
-        return KtorHttpResponse.Raw(httpResponse, settings.jsonSerializer, responseBody)
     }
-    
+
     private fun getEndpointUrl(endpointUrl: String): String {
         var url = config.discordApiUrl
         
@@ -114,7 +168,7 @@ internal class KtorHttpClient(
     }
 
     internal class Factory : CwHttpClient.Factory {
-        override fun create(settings: DiscordClientSettings, config: CwConfiguration): CwHttpClient {
+        override fun create(settings: CwDiscordClientSettings, config: CwConfiguration): CwHttpClient {
             return KtorHttpClient(settings, config)
         }
     }

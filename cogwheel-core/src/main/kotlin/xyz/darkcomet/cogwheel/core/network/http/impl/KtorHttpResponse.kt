@@ -12,19 +12,20 @@ internal class KtorHttpResponse<T>(
 ) : CwHttpResponse<T> {
 
     internal class Raw(
-        private val httpResponse: HttpResponse,
+        private val httpResponse: HttpResponse?,
         private val jsonSerializer: Json,
         override val bodyContent: String
     ) : CwHttpResponse.Raw {
         
         override val success: Boolean
-            get() = httpResponse.status.isSuccess()
+            get() = httpResponse?.status?.isSuccess() ?: false
         
         override val statusCode: Int
-            get() = httpResponse.status.value
+            get() = httpResponse?.status?.value ?: HttpStatusCode.TooManyRequests.value
         
         override val statusMessage: String
-            get() = httpResponse.status.description
+            get() = httpResponse?.status?.description ?: "Request aborted: rate limited"
+        
 
         override fun withNoData(): CwHttpResponse<Unit> {
             return KtorHttpResponse(this, data = null)
@@ -36,7 +37,7 @@ internal class KtorHttpResponse<T>(
         }
 
         override fun <T> withData(strategy: DeserializationStrategy<T>): CwHttpResponse<T> {
-            if (bodyContent.isBlank() || ContentType.Application.Json != httpResponse.contentType()) {
+            if (bodyContent.isBlank() || ContentType.Application.Json != httpResponse?.contentType()) {
                 return KtorHttpResponse(this, data = null)
             }
 

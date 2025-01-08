@@ -2,14 +2,10 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.*
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.MessageObject
-import xyz.darkcomet.cogwheel.core.network.objects.UserObject
-import xyz.darkcomet.cogwheel.core.network.objects.BulkDeleteMessagesRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.CreateMessageRequestParameters
-import xyz.darkcomet.cogwheel.core.network.objects.EditMessageRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.*
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class MessageResource 
@@ -22,7 +18,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         after: Snowflake? = null,
         limit: Int? = null
     ): CwHttpResponse<List<MessageObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages") {
+        
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/messages") {
             optionalQueryStringParam("around", around)
             optionalQueryStringParam("before", before)
             optionalQueryStringParam("after", after)
@@ -37,7 +34,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<MessageObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages/${messageId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/channels/${channelId}/messages/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withData(MessageObject.serializer())
@@ -47,7 +48,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake,
         request: CreateMessageRequestParameters
     ): CwHttpResponse<MessageObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/messages") {
             jsonParams(request, CreateMessageRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
@@ -59,7 +61,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<MessageObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages/${messageId}/crosspost")
+        
+        val httpRequest = CwHttpRequest.create(
+            POST, "/channels/${channelId}/messages/${messageId}/crosspost",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/crosspost"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withData(MessageObject.serializer())
@@ -70,7 +76,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake,
         emoji: String
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PUT, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me")
+        
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions/*/@me"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -81,7 +91,10 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake,
         emoji: String
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me")
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/@me",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions/*/@me"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -93,7 +106,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         emoji: String,
         userId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}")
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}/${userId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions/*/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -107,7 +124,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         after: Snowflake? = null,
         limit: Int? = null
     ): CwHttpResponse<List<UserObject>> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            GET, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions/*"
+        ) {
             optionalQueryStringParam("type", type)
             optionalQueryStringParam("after", after)
             optionalQueryStringParam("limit", limit)
@@ -121,7 +142,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         channelId: Snowflake,
         messageId: Snowflake
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions")
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/messages/${messageId}/reactions",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -132,7 +157,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake,
         emoji: String
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}")
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/messages/${messageId}/reactions/${emoji}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*/reactions/*"
+        )
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
@@ -143,7 +172,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake,
         request: EditMessageRequestParameters
     ): CwHttpResponse<MessageObject> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/channels/${channelId}/messages/${messageId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            PATCH, "/channels/${channelId}/messages/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*"
+        ) {
             jsonParams(request, EditMessageRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
@@ -156,7 +189,11 @@ internal constructor(private val httpClient: CwHttpClient) {
         messageId: Snowflake,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.DELETE, "/channels/${channelId}/messages/${messageId}") {
+        
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/messages/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/messages/*"
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)
@@ -169,7 +206,8 @@ internal constructor(private val httpClient: CwHttpClient) {
         request: BulkDeleteMessagesRequestParameters,
         auditLogReason: String? = null
     ): CwHttpResponse<Unit> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.POST, "/channels/${channelId}/messages/bulk-delete") {
+        
+        val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/messages/bulk-delete") {
             jsonParams(request, BulkDeleteMessagesRequestParameters.serializer())
             optionalAuditLogReason(auditLogReason)
         }

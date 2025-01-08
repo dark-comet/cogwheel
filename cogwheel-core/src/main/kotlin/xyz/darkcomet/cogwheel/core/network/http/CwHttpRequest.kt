@@ -8,12 +8,17 @@ import kotlin.collections.HashMap
 data class CwHttpRequest 
 internal constructor(
     val method: CwHttpMethod,
-    val endpointPath: String,
+    val route: String,
     val queryParameters: Map<String, String>,
     val headers: Map<String, String>,
-    val bodyContent: String?
+    val bodyContent: String?,
+    val rateLimitRouteIdentifier: String 
 ) {
-    internal class Builder(private val method: CwHttpMethod, private val urlPath: String) {
+    internal class Builder(
+        private val method: CwHttpMethod, 
+        private val urlPath: String,
+        private val rateLimitRouteIdentifier: String = urlPath
+    ) {
         
         private val headers = HashMap<String, String>()
         private val queryParameters = HashMap<String, String>()
@@ -43,7 +48,7 @@ internal constructor(
         
         internal fun build() : CwHttpRequest {
             val queryParamsCopy = Collections.unmodifiableMap(HashMap(queryParameters))
-            return CwHttpRequest(method, urlPath, queryParamsCopy, headers, bodyContent)
+            return CwHttpRequest(method, urlPath, queryParamsCopy, headers, bodyContent, rateLimitRouteIdentifier)
         }
     }
     
@@ -51,7 +56,12 @@ internal constructor(
         
         private val JSON_SERIALIZER = Json { encodeDefaults = false }
         
-        internal fun create(method: CwHttpMethod, urlPath: String, init: (Builder.() -> Unit)? = null): CwHttpRequest {
+        internal fun create(
+            method: CwHttpMethod,
+            urlPath: String,
+            rateLimitRouteIdentifier: String = urlPath,
+            init: (Builder.() -> Unit)? = null
+        ): CwHttpRequest {
             val builder = Builder(method, urlPath)
             init?.invoke(builder)
             

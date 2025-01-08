@@ -2,10 +2,11 @@ package xyz.darkcomet.cogwheel.core
 
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientImpl
-import xyz.darkcomet.cogwheel.core.impl.DiscordClientSettings
+import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientSettings
 import xyz.darkcomet.cogwheel.core.impl.authentication.Token
-import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.ratelimit.RateLimitStrategy
+import xyz.darkcomet.cogwheel.core.primitives.Intents
 
 class CwDiscordClientBuilder 
 internal constructor(token: Token) {
@@ -37,7 +38,11 @@ internal constructor(token: Token) {
         get() = settings.testDisableGatewayHeartbeats
         set(value) { settings.testDisableGatewayHeartbeats = value }
     
-    private val settings = DiscordClientSettings(token)
+    internal var rateLimitStrategy: RateLimitStrategy?
+        get() = settings.rateLimitStrategy
+        set(value) { settings.rateLimitStrategy = value }
+    
+    private val settings = CwDiscordClientSettings(token)
     
     fun useGateway(intents: Intents) {
         settings.gatewayEnabled = true

@@ -1,26 +1,27 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
-import xyz.darkcomet.cogwheel.core.network.objects.ApplicationActivityInstanceObject
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
-import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.GET
+import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.PATCH
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.ApplicationActivityInstanceObject
+import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 class ApplicationResource
 internal constructor(private val httpClient: CwHttpClient) {
     
     suspend fun getCurrentApplication(): CwHttpResponse<ApplicationObject?> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
+        val httpRequest = CwHttpRequest.create(GET, "/applications/@me")
         val response = httpClient.submit(httpRequest)
         
         return response.withData(ApplicationObject.serializer())
     }
     
     suspend fun editCurrentApplication(request: EditCurrentApplicationRequestParameters): CwHttpResponse<ApplicationObject?> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/applications/@me") {
+        val httpRequest = CwHttpRequest.create(PATCH, "/applications/@me") {
             jsonParams(request, EditCurrentApplicationRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
@@ -33,7 +34,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         applicationId: Snowflake, 
         instanceId: String
     ): CwHttpResponse<ApplicationActivityInstanceObject?> {
-        val httpRequest = CwHttpRequest.create(CwHttpMethod.GET, "/applications/@me")
+        val httpRequest = CwHttpRequest.create(GET, "/applications/@me")
         val response = httpClient.submit(httpRequest)
         
         return response.withData(ApplicationActivityInstanceObject.serializer())

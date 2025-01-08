@@ -8,8 +8,10 @@ import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
 import xyz.darkcomet.cogwheel.core.network.gateway.impl.KtorGatewayClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.impl.KtorHttpClient
+import xyz.darkcomet.cogwheel.core.network.http.ratelimit.CwRateLimitStrategy
+import xyz.darkcomet.cogwheel.core.network.http.ratelimit.RateLimitStrategy
 
-internal data class DiscordClientSettings(
+internal data class CwDiscordClientSettings(
     val token: Token,
     var cwHttpClientFactory: CwHttpClient.Factory = KtorHttpClient.Factory(),
     var cwGatewayClientFactory: CwGatewayClient.Factory = KtorGatewayClient.Factory(),
@@ -20,6 +22,7 @@ internal data class DiscordClientSettings(
     var gatewayFetchUrlMaxAttempts: Int? = null,
     var gatewaySessionReconnectMaxAttempts: Int? = null,
     var jsonSerializer: Json = Json { isLenient = true; ignoreUnknownKeys = true },
+    var rateLimitStrategy: RateLimitStrategy? = null,
     val aspects: DiscordClientAspects = DiscordClientAspects(),
     // Test-use settings
     var testDisableGatewayHeartbeats: Boolean = false

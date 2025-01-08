@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 internal open class CwDiscordClientImpl 
-internal constructor(settings: DiscordClientSettings) : CwDiscordClient {
+internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
     
     private val config: CwConfiguration = CwConfiguration.load()
     private val cancellationToken = CancellationTokenSource()

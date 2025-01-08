@@ -318,15 +318,15 @@ data class ModifyApplicationEmojiRequestParameters(
 )
 
 @Serializable
-data class ModifyCurrentApplicationRequestParameters(
+data class EditCurrentApplicationRequestParameters(
     @SerialName("custom_install_url") var customInstallUrl: String? = null,
     var description: String? = null,
     @SerialName("role_connection_verification_url") var roleConnectionVerificationUrl: String? = null,
     @SerialName("install_params") var installParams: ApplicationInstallParamsObject? = null,
     @SerialName("integration_types_config") var integrationTypesConfig: Map<String, ApplicationIntegrationTypeConfigurationObject>? = null,
     var flags: Int? = null,
-    var icon: ImageData? = null, // image data
-    @SerialName("cover_image") var coverImage: ImageData? = null, // image data
+    var icon: ImageData? = null,
+    @SerialName("cover_image") var coverImage: ImageData? = null,
     @SerialName("interactions_endpoint_url") var interactionsEndpointUrl: String? = null,
     var tags: List<String>? = null
 )

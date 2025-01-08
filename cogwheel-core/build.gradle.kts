@@ -73,6 +73,10 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
+tasks.withType<Copy> { 
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 val testIntegration = task<Test>("testIntegration") {
     description = "Run integration tests"
     group = "verification"

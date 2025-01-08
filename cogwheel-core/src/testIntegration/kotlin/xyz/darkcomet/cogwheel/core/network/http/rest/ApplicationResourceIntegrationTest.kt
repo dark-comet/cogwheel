@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
-import xyz.darkcomet.cogwheel.core.network.objects.ModifyCurrentApplicationRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import java.util.UUID
 
 class ApplicationResourceIntegrationTest {
@@ -23,8 +24,14 @@ class ApplicationResourceIntegrationTest {
     
     @Test
     fun testEditCurrentApplication() {
-        runBlocking { 
-            val request = ModifyCurrentApplicationRequestParameters(description = "test description: ${UUID.randomUUID()}")
+        runBlocking {
+            val newIconImageData = this::class.java.getResourceAsStream("/fuzzy_bread.png")!!.readBytes()
+            val iconImageData = ImageData.fromBytes(ImageData.FileExtension.PNG, newIconImageData)
+            
+            val request = EditCurrentApplicationRequestParameters(
+                description = "test description: ${UUID.randomUUID()}",
+                icon = iconImageData
+            )
             val response = api.application.editCurrentApplication(request)
             
             assertEquals(true, response.raw.success)

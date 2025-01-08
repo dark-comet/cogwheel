@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
-import xyz.darkcomet.cogwheel.core.network.objects.ModifyCurrentApplicationRequestParameters
+import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 
 class ApplicationResource
 internal constructor(private val httpClient: CwHttpClient) {
@@ -19,9 +19,9 @@ internal constructor(private val httpClient: CwHttpClient) {
         return response.withData(ApplicationObject.serializer())
     }
     
-    suspend fun editCurrentApplication(request: ModifyCurrentApplicationRequestParameters): CwHttpResponse<ApplicationObject?> {
+    suspend fun editCurrentApplication(request: EditCurrentApplicationRequestParameters): CwHttpResponse<ApplicationObject?> {
         val httpRequest = CwHttpRequest.create(CwHttpMethod.PATCH, "/applications/@me") {
-            jsonParams(request, ModifyCurrentApplicationRequestParameters.serializer())
+            jsonParams(request, EditCurrentApplicationRequestParameters.serializer())
         }
         val response = httpClient.submit(httpRequest)
         

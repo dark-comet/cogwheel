@@ -1,25 +1,18 @@
 package xyz.darkcomet.cogwheel.core.network.http.ratelimit
 
-import com.google.common.collect.BiMap
-import com.google.common.collect.HashBiMap
 import io.ktor.client.statement.*
 import kotlinx.coroutines.delay
 import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 
-// TODO: Handle /emoji/* endpoints returning inaccurate rate limit data (per API doc) -- need a route name exclusion system?
-// TODO: Handle a route switching from having a bucket -> no bucket and vice versa
+internal class CwRateLimitStrategy(private val maxWaitSeconds: Int) : RateLimitStrategy {
 
-internal class CwRateLimitStrategy(
-    private val maxRetryCount: Int,
-    private val maxWaitSeconds: Int
-) : RateLimitStrategy {
+    private var perUserOrGlobalRateLimit: RateLimitData? = null
+    private val rateLimitDataByBucket = LinkedHashMap<String, RateLimitData>()
+    private val rateLimitDataByRoute = LinkedHashMap<String, RateLimitData>()
     
-    private val rateLimitDataByBucket = mutableMapOf<String, RateLimitData>()
-    private val rateLimitDataByRoute = mutableMapOf<String, RateLimitData>()
-    
-    private val routeMappingDataByKey: BiMap<String, RouteMappingInfo> = HashBiMap.create()
+    private val routeMappingDataByKey = LinkedHashMap<String, RouteMappingInfo>() 
 
     private val logger = LoggerFactory.getLogger(CwRateLimitStrategy::class.java)
     
@@ -35,6 +28,8 @@ internal class CwRateLimitStrategy(
         val bucket: String? = newData.bucket
 
         synchronized(this) {
+            handleMappingTypePossiblyChanged(routeKey, newData)
+            
             val recordedData = getRecordedRateLimitData(routeKey, bucket)
 
             if (recordedData != null && isNewDataStale(newData, recordedData)) {
@@ -42,9 +37,23 @@ internal class CwRateLimitStrategy(
                 return
             }
 
-            // TODO: Enforce size constraints: no more than... 20k entries per map? evict least recently used
-            
             recordDo(routeKey, bucket, newData, recordedData)
+        }
+    }
+
+    private fun handleMappingTypePossiblyChanged(routeKey: String, newData: RateLimitData) {
+        val lastKnownRouteMappingData = routeMappingDataByKey[routeKey]
+
+        if (lastKnownRouteMappingData != null) {
+            val lastKnownMappingType = lastKnownRouteMappingData.type
+
+            if (newData.bucket == null && lastKnownMappingType == RouteMappingType.BUCKET) {
+                rateLimitDataByBucket.remove(lastKnownRouteMappingData.lastKnownBucketId)
+                routeMappingDataByKey.remove(routeKey)
+            } else if (newData.bucket != null && lastKnownMappingType == RouteMappingType.PER_ROUTE) {
+                rateLimitDataByRoute.remove(lastKnownRouteMappingData.routeKey)
+                routeMappingDataByKey.remove(routeKey)
+            }
         }
     }
 
@@ -59,25 +68,21 @@ internal class CwRateLimitStrategy(
     }
     
     private fun getLocallyCachedRateLimitData(routeKey: String): RateLimitData? {
-        val mappingData = routeMappingDataByKey[routeKey]
-
-        return when (mappingData?.type) {
-            RouteMappingType.BUCKET -> rateLimitDataByBucket[mappingData.lastKnownBucketId]
-            RouteMappingType.PER_ROUTE -> rateLimitDataByRoute[routeKey]
-            null -> null
+        if (perUserOrGlobalRateLimit != null) {
+            return perUserOrGlobalRateLimit
         }
+        
+        val mappingData = routeMappingDataByKey[routeKey]
+        return getRecordedRateLimitData(routeKey, mappingData?.lastKnownBucketId)
     }
 
     // Prevent stale rate limit response data overwrite current ones
-    // Do this by comparing X-RateLimit-Reset timestamp first. If they are identical,
-    // accept the copy with the lowest X-RateLimit-Remaining since rate limit quota can
-    // only decrease.
     //
     // NOTE: A timestamp-based check will never work since it's impossible to know 
     //       whether the time taken is due to routing delays.
     private fun isNewDataStale(newData: RateLimitData, recordedData: RateLimitData): Boolean {
-        val currentDataResetsEarlier = recordedData.resetOnUtc > newData.resetOnUtc
-        val currentDataResetsAtSameTime = recordedData.resetOnUtc == newData.resetOnUtc
+        val currentDataResetsEarlier = recordedData.resetOnUtcSeconds > newData.resetOnUtcSeconds
+        val currentDataResetsAtSameTime = recordedData.resetOnUtcSeconds == newData.resetOnUtcSeconds
         val lastRecordedDataHasFewerCallsRemaining = recordedData.remaining < newData.remaining
         
         return currentDataResetsEarlier || (currentDataResetsAtSameTime && lastRecordedDataHasFewerCallsRemaining)
@@ -89,65 +94,98 @@ internal class CwRateLimitStrategy(
         newData: RateLimitData,
         recordedData: RateLimitData?
     ) {
-        if (recordedData == null) {
-            if (canonicalBucketId != null) {
-                routeMappingDataByKey[routeKey] = RouteMappingInfo(RouteMappingType.BUCKET, canonicalBucketId)
-                rateLimitDataByBucket[canonicalBucketId] = newData
-            } else {
-                routeMappingDataByKey[routeKey] = RouteMappingInfo(RouteMappingType.PER_ROUTE, lastKnownBucketId = null)
-                rateLimitDataByRoute[routeKey] = newData
-            }
+        if (newData.scope == SCOPE_GLOBAL || newData.scope == SCOPE_USER) {
+            perUserOrGlobalRateLimit = newData
         } else {
-            recordedData.replaceValues(newData)
+            if (recordedData == null) {
+                if (canonicalBucketId != null) {
+                    routeMappingDataByKey[routeKey] = RouteMappingInfo(routeKey, RouteMappingType.BUCKET, canonicalBucketId)
+                    rateLimitDataByBucket[canonicalBucketId] = newData
+                } else {
+                    routeMappingDataByKey[routeKey] = RouteMappingInfo(routeKey, RouteMappingType.PER_ROUTE, lastKnownBucketId = null)
+                    rateLimitDataByRoute[routeKey] = newData
+                }
+            } else {
+                recordedData.replaceValues(newData)
+            }
+        }
+        
+        if (perUserOrGlobalRateLimit != null 
+            && perUserOrGlobalRateLimit!!.remaining <= 0 
+            && getSecondsToWait(perUserOrGlobalRateLimit!!) <= 0) {
+            
+            logger.trace("perUserOrGlobalRateLimit expired")
+            perUserOrGlobalRateLimit = null
+        }
+        
+        pruneEntryCounts()
+    }
+
+    private fun pruneEntryCounts() {
+        // TODO: Can be optimized to remove the last frequently accessed entry (or oldest accessed)
+        //       The first item returned by iterator may be the most frequently used.
+        
+        while (routeMappingDataByKey.size > MAX_MAPPING_DATA_ENTRIES) {
+            val removedEntry = routeMappingDataByKey.iterator().next()
+
+            val routeKey = removedEntry.key
+            val routeMappingInfo = removedEntry.value
+            
+            when (routeMappingInfo.type) {
+                RouteMappingType.BUCKET -> {
+                    rateLimitDataByBucket.remove(routeMappingInfo.lastKnownBucketId!!)
+                }
+                RouteMappingType.PER_ROUTE -> {
+                    rateLimitDataByRoute.remove(routeKey)
+                }
+            }
         }
     }
 
     private fun parseRateLimitData(response: HttpResponse): RateLimitData? {
         val limit = response.headers[HEADER_RATE_LIMIT_LIMIT]?.toInt() ?: return null
         val remaining = response.headers[HEADER_RATE_LIMIT_REMAINING]?.toInt() ?: return null
-        val resetOnUtc = response.headers[HEADER_RATE_LIMIT_RESET]?.toLong() ?: return null
+        val resetOnUtc = response.headers[HEADER_RATE_LIMIT_RESET]?.toDouble() ?: return null
         val resetAfterSeconds = response.headers[HEADER_RATE_LIMIT_RESET_AFTER]?.toDouble() ?: return null
         val bucket = response.headers[HEADER_RATE_LIMIT_BUCKET] ?: return null
+        val scope = response.headers[HEADER_RATE_LIMIT_SCOPE]
         
-        return RateLimitData(System.nanoTime(), limit, remaining, resetOnUtc, resetAfterSeconds, bucket)
+        return RateLimitData(System.nanoTime(), limit, remaining, resetOnUtc, resetAfterSeconds, bucket, scope)
     }
 
     override fun isRetryable(request: CwHttpRequest, response: HttpResponse, submitAttemptCount: Int): Boolean {
-        val rateLimitData: RateLimitData? = parseRateLimitData(response)
+        return isRetryableImpl(request.method, request.rateLimitRouteIdentifier)
+    }
+
+    internal fun isRetryableImpl(requestMethod: CwHttpMethod, routeIdentifier: String): Boolean {
+        val routeKey = getRouteKey(requestMethod, routeIdentifier)
         
-        if (rateLimitData != null) {
-            val routeKey = getRouteKey(request.method, request.rateLimitRouteIdentifier)
-            val bucket = rateLimitData.bucket
-            
-            synchronized(this) {
-                val recordedData = getRecordedRateLimitData(routeKey, bucket)
-                
-                if (recordedData != null && getSecondsToWait(recordedData) > maxWaitSeconds) {
-                    return false
-                }
+        synchronized(this) {
+            val recordedData = getLocallyCachedRateLimitData(routeKey)
+
+            if (recordedData != null && getSecondsToWait(recordedData) > maxWaitSeconds) {
+                return false
             }
         }
         
-        return submitAttemptCount >= maxRetryCount
+        return true
     }
 
     override suspend fun prepareForRetry(request: CwHttpRequest, response: HttpResponse, currentSubmitAttemptCount: Int) {
-        val routeKey = getRouteKey(request.method, request.rateLimitRouteIdentifier)
-        
-        val rateLimitData = parseRateLimitData(response)
-            ?: throw IllegalStateException("prepareRetry() has no rate limit data for: $routeKey")
-        
-        val bucket = rateLimitData.bucket
+    }
+    
+    internal fun computeDelaySeconds(requestMethod: CwHttpMethod, routeIdentifier: String): Double {
+        val routeKey = getRouteKey(requestMethod, routeIdentifier)
         val delaySeconds: Double
-        
+
         synchronized(this) {
-            val recordedData = getRecordedRateLimitData(routeKey, bucket)
+            val recordedData = getLocallyCachedRateLimitData(routeKey)
                 ?: throw IllegalStateException("prepareRetry() has not recorded rate limit data for: $routeKey")
-            
-            delaySeconds = recordedData.resetAfterSeconds
+
+            delaySeconds = if (recordedData.remaining == 0) getSecondsToWait(recordedData) else 0.0
         }
         
-        steppedDelay(delaySeconds)
+        return delaySeconds
     }
 
     private suspend fun steppedDelay(seconds: Double) {
@@ -161,43 +199,47 @@ internal class CwRateLimitStrategy(
     }
 
     override suspend fun prepareRequestSubmit(request: CwHttpRequest): Boolean {
-        val routeKey = getRouteKey(request.method, request.rateLimitRouteIdentifier)
-        
+        return prepareRequestSubmitImpl(request.method, request.rateLimitRouteIdentifier, delay = true)
+    }
+
+    internal suspend fun prepareRequestSubmitImpl(requestMethod: CwHttpMethod, routeId: String, delay: Boolean = true): Boolean {
+        val routeKey = getRouteKey(requestMethod, routeId)
+
         getLocallyCachedRateLimitData(routeKey)?.let { localData ->
             if (localData.remaining <= 0) {
                 val secondsToWait = getSecondsToWait(localData)
-                
+
                 if (secondsToWait > maxWaitSeconds) {
-                    logger.trace(
-                        "Skipped a request submit due to rate limit reached. routeKey: {}, resetsAfterSeconds: {}", 
-                        routeKey, 
-                        localData.resetAfterSeconds
-                    )
-                    return false
+                    return false // Unacceptable wait time, abort request
                 }
-                
-                steppedDelay(secondsToWait)
+
+                if (delay) {
+                    steppedDelay(secondsToWait)
+                }
             }
         }
         
-        return false
+        return true
     }
-    
-    private fun getSecondsToWait(rateLimitData: RateLimitData): Double {
-        // Figure out how much time elapsed since last recorded rate limit time accurately
-        // Problem: System.nanoTime() can't be meaningfully converted back to wall clock time (or can it?)
-        // Need a way to measure time, that can be translated to seconds, but does not experience clock drift
-        
-        TODO("Implement me")
+
+    internal fun getSecondsToWait(rateLimitData: RateLimitData): Double {
+        return (rateLimitData.resetOnUtcSeconds - (System.currentTimeMillis() / 1000.0)).coerceAtLeast(0.0)
     }
 
     companion object {
+
+        private const val HEADER_RATE_LIMIT_LIMIT = "X-RateLimit-Limit"
+        private const val HEADER_RATE_LIMIT_REMAINING = "X-RateLimit-Remaining"
+        private const val HEADER_RATE_LIMIT_RESET = "X-RateLimit-Reset"
+        private const val HEADER_RATE_LIMIT_RESET_AFTER = "X-RateLimit-Reset-After"
+        private const val HEADER_RATE_LIMIT_BUCKET = "X-RateLimit-Bucket"
+        private const val HEADER_RATE_LIMIT_SCOPE = "X-RateLimit-Scope"
+
+        internal const val SCOPE_USER = "user"
+        internal const val SCOPE_SHARED = "shared"
+        internal const val SCOPE_GLOBAL = "global"
         
-        const val HEADER_RATE_LIMIT_LIMIT = "X-RateLimit-Limit"
-        const val HEADER_RATE_LIMIT_REMAINING = "X-RateLimit-Remaining"
-        const val HEADER_RATE_LIMIT_RESET = "X-RateLimit-Reset"
-        const val HEADER_RATE_LIMIT_RESET_AFTER = "X-RateLimit-Reset-After"
-        const val HEADER_RATE_LIMIT_BUCKET = "X-RateLimit-Bucket"
+        internal const val MAX_MAPPING_DATA_ENTRIES = 10_000
         
         fun getRouteKey(method: CwHttpMethod, routeName: String): String {
             return "${method}:${routeName}"
@@ -209,17 +251,19 @@ internal class CwRateLimitStrategy(
         var lastUpdateNanoTime: Long,
         var limit: Int,
         var remaining: Int,
-        var resetOnUtc: Long,
+        var resetOnUtcSeconds: Double,
         var resetAfterSeconds: Double,
-        var bucket: String?
+        var bucket: String?,
+        var scope: String?
     ) {
         fun replaceValues(newData: RateLimitData) {
             lastUpdateNanoTime = System.nanoTime()
             limit = newData.limit
             remaining = newData.remaining
-            resetOnUtc = newData.resetOnUtc
+            resetOnUtcSeconds = newData.resetOnUtcSeconds
             resetAfterSeconds = newData.resetAfterSeconds
             bucket = newData.bucket
+            scope = newData.scope
         }
     }
 
@@ -228,7 +272,8 @@ internal class CwRateLimitStrategy(
         PER_ROUTE
     }
     
-    private data class RouteMappingInfo(
+    private class RouteMappingInfo(
+        val routeKey: String,
         var type: RouteMappingType,
         var lastKnownBucketId: String? = null
     )

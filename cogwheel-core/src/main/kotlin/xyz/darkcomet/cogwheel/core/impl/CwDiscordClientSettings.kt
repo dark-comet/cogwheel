@@ -22,7 +22,7 @@ internal data class CwDiscordClientSettings(
     var gatewayFetchUrlMaxAttempts: Int? = null,
     var gatewaySessionReconnectMaxAttempts: Int? = null,
     var jsonSerializer: Json = Json { isLenient = true; ignoreUnknownKeys = true },
-    var rateLimitStrategy: RateLimitStrategy? = null,
+    var rateLimitStrategy: RateLimitStrategy? = CwRateLimitStrategy(maxWaitSeconds = 65),
     val aspects: DiscordClientAspects = DiscordClientAspects(),
     // Test-use settings
     var testDisableGatewayHeartbeats: Boolean = false

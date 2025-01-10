@@ -9,7 +9,8 @@ data class CwConfiguration(
     val clientVersion: String,
     val clientUrl: String,
     val discordApiUrl: String,
-    val discordApiVersion: Int
+    val discordApiVersion: Int,
+    val discordAssetBaseUrl: String,
 ) {
     companion object {
         fun load(): CwConfiguration {

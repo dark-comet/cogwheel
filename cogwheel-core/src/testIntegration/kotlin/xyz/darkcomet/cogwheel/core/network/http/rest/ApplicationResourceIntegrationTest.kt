@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
-import xyz.darkcomet.cogwheel.core.primitives.NullableValue
-import xyz.darkcomet.cogwheel.core.primitives.Value
+import xyz.darkcomet.cogwheel.core.primitives.Optional
 import java.util.*
 
 class ApplicationResourceIntegrationTest {
@@ -30,8 +29,8 @@ class ApplicationResourceIntegrationTest {
             val iconImageData = ImageData.fromBytes(ImageData.FileExtension.PNG, newIconImageData)
             
             var request = EditCurrentApplicationRequestParameters(
-                description = Value("test description: ${UUID.randomUUID()}"),
-                icon = NullableValue(iconImageData)
+                description = Optional("test description: ${UUID.randomUUID()}"),
+                icon = Optional(iconImageData)
             )
             var response = api.application.editCurrentApplication(request)
             
@@ -40,7 +39,7 @@ class ApplicationResourceIntegrationTest {
             assertEquals(request.description!!, response.data!!.description)
 
             request = EditCurrentApplicationRequestParameters(
-                icon = NullableValue(null)
+                icon = Optional(null)
             )
             response = api.application.editCurrentApplication(request)
             

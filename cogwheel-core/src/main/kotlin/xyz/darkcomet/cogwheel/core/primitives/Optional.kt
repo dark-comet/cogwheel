@@ -7,13 +7,13 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializable(with = NullableValue.Serializer::class)
-open class NullableValue<T>(val value: T?) {
+@Serializable(with = Optional.Serializer::class)
+open class Optional<T>(val value: T?) {
     
     val isNull: Boolean = value == null
 
     override fun equals(other: Any?): Boolean {
-        if (other !is NullableValue<*>) {
+        if (other !is Optional<*>) {
             return false
         }
         
@@ -30,17 +30,17 @@ open class NullableValue<T>(val value: T?) {
 
     
     @OptIn(ExperimentalSerializationApi::class)
-    internal class Serializer<T>(private val valueSerializer: KSerializer<T>) : KSerializer<NullableValue<T>> {
+    internal class Serializer<T>(private val valueSerializer: KSerializer<T>) : KSerializer<Optional<T>> {
         
         override val descriptor: SerialDescriptor
             get() = valueSerializer.descriptor
 
-        override fun deserialize(decoder: Decoder): NullableValue<T> {
+        override fun deserialize(decoder: Decoder): Optional<T> {
             val value = decoder.decodeNullableSerializableValue(valueSerializer)
-            return NullableValue(value)
+            return Optional(value)
         }
 
-        override fun serialize(encoder: Encoder, value: NullableValue<T>) {
+        override fun serialize(encoder: Encoder, value: Optional<T>) {
             encoder.encodeNullableSerializableValue(valueSerializer, value.value)
         }
 

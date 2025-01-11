@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class NullableValueTest {
+class OptionalTest {
     
     @Test
     fun testSerialize_nullValueWrapper_nothingSerialized() {
@@ -24,53 +24,53 @@ class NullableValueTest {
     
     @Test
     fun testSerialize_nonNullValueWrapper_nullValue_valueSerializedAsNull() {
-        val obj = TestDataObject<Int>(property = NullableValue(null))
+        val obj = TestDataObject<Int>(property = Optional(null))
 
         assertEquals("""{"property":null}""", Json.encodeToString(TestDataObject.serializer(Int.serializer()), obj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_nonNullValue_primitive_valueSerialized() {
-        val byteObj = TestDataObject(property = NullableValue(1.toByte()))
+        val byteObj = TestDataObject(property = Optional(1.toByte()))
         assertEquals("""{"property":1}""", Json.encodeToString(TestDataObject.serializer(Byte.serializer()), byteObj))
 
-        val shortObj = TestDataObject(property = NullableValue(2.toShort()))
+        val shortObj = TestDataObject(property = Optional(2.toShort()))
         assertEquals("""{"property":2}""", Json.encodeToString(TestDataObject.serializer(Short.serializer()), shortObj))
 
-        val intObj = TestDataObject(property = NullableValue(3))
+        val intObj = TestDataObject(property = Optional(3))
         assertEquals("""{"property":3}""", Json.encodeToString(TestDataObject.serializer(Int.serializer()), intObj))
 
-        val longObj = TestDataObject(property = NullableValue(4.toLong()))
+        val longObj = TestDataObject(property = Optional(4.toLong()))
         assertEquals("""{"property":4}""", Json.encodeToString(TestDataObject.serializer(Long.serializer()), longObj))
 
-        val booleanObj = TestDataObject(property = NullableValue(true))
+        val booleanObj = TestDataObject(property = Optional(true))
         assertEquals("""{"property":true}""", Json.encodeToString(TestDataObject.serializer(Boolean.serializer()), booleanObj))
 
-        val stringObj = TestDataObject(property = NullableValue("test"))
+        val stringObj = TestDataObject(property = Optional("test"))
         assertEquals("""{"property":"test"}""", Json.encodeToString(TestDataObject.serializer(String.serializer()), stringObj))
 
-        val floatObj = TestDataObject(property = NullableValue(1.5f))
+        val floatObj = TestDataObject(property = Optional(1.5f))
         assertEquals("""{"property":1.5}""", Json.encodeToString(TestDataObject.serializer(Float.serializer()), floatObj))
 
-        val doubleObj = TestDataObject(property = NullableValue(2.5))
+        val doubleObj = TestDataObject(property = Optional(2.5))
         assertEquals("""{"property":2.5}""", Json.encodeToString(TestDataObject.serializer(Double.serializer()), doubleObj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_nonNullValue_objectValue_objectSerialized() {
-        val fooObj = TestDataObject(property = NullableValue(Foo("test")))
+        val fooObj = TestDataObject(property = Optional(Foo("test")))
         assertEquals("""{"property":{"bar":"test"}}""", Json.encodeToString(TestDataObject.serializer(Foo.serializer()), fooObj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_notNullValue_objectValueWithCustomSerializer_objectSerialized() {
-        val fooWithCustomSerializerObj = TestDataObject(property = NullableValue(FooWithCustomSerializer("test2")))
+        val fooWithCustomSerializerObj = TestDataObject(property = Optional(FooWithCustomSerializer("test2")))
         assertEquals("""{"property":":test2:"}""", Json.encodeToString(TestDataObject.serializer(FooWithCustomSerializer.serializer()), fooWithCustomSerializerObj))
     }
     
     @Test
     fun testSerialize_customSerialNameValueWrapper_objectSerialized() {
-        val fooObj = TestDataObjectWithSerialName(property = NullableValue(Foo("test3")))
+        val fooObj = TestDataObjectWithSerialName(property = Optional(Foo("test3")))
         assertEquals("""{"renamed_property":{"bar":"test3"}}""", Json.encodeToString(TestDataObjectWithSerialName.serializer(Foo.serializer()), fooObj))
     }
     
@@ -163,10 +163,10 @@ class NullableValueTest {
     
     
     @Serializable
-    private data class TestDataObject<T : Any>(val property: NullableValue<T>? = null)
+    private data class TestDataObject<T : Any>(val property: Optional<T>? = null)
 
     @Serializable
-    private data class TestDataObjectWithSerialName<T : Any>(@SerialName("renamed_property") val property: NullableValue<T>? = null)
+    private data class TestDataObjectWithSerialName<T : Any>(@SerialName("renamed_property") val property: Optional<T>? = null)
     
     @Serializable
     private data class Foo(val bar: String)

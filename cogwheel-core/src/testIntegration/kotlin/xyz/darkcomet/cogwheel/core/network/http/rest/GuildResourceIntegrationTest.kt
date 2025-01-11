@@ -10,6 +10,7 @@ import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
 import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Intents
+import xyz.darkcomet.cogwheel.core.primitives.Optional
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -45,8 +46,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
                 )
                 assertTrue(receivedGuildCreateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_CREATE gateway event")
                 
-                val guildId = createResponse.data!!.id
-                assertNotNull(guildId)
+                val guildId = createResponse.data!!.id!!.value!!
                 
                 testGetPreview(guildId, guildName)
                 
@@ -54,7 +54,8 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
                 assertTrue(receivedGuildUpdateEvent.await(10, TimeUnit.SECONDS), "Did not receive GUILD_UPDATE gateway event")
             } finally {
                 // DELETE
-                val guildId = createResponse.data?.id
+                val guildId = createResponse.data?.id!!.value
+                
                 if (guildId != null) {
                     val deleteResponse = guildApi.deleteGuild(guildId)
                     
@@ -83,9 +84,9 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             { assertNull(getPreviewResponse.data!!.icon) },
             { assertNull(getPreviewResponse.data!!.splash) },
             { assertNull(getPreviewResponse.data!!.discoverySplash) },
-            { assertTrue(getPreviewResponse.data!!.emojis.isEmpty()) },
+            { assertTrue(getPreviewResponse.data!!.emojis!!.value!!.isEmpty()) },
             { assertNull(getPreviewResponse.data!!.description) },
-            { assertTrue(getPreviewResponse.data!!.stickers.isEmpty()) },
+            { assertTrue(getPreviewResponse.data!!.stickers!!.value!!.isEmpty()) },
         )
     }
 
@@ -99,13 +100,13 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         val newPremiumProgressBarEnabled = true
 
         val modifyRequest = ModifyGuildRequestParameters(
-            name = newGuildName,
-            verificationLevel = newVerificationLevel,
-            defaultMessageNotifications = newDefaultMessageNotificationLevel,
-            explicitContentFilter = newExplicitContentFilterLevel,
-            afkTimeout = newAfkTimeout,
-            premiumProgressBarEnabled = newPremiumProgressBarEnabled,
-            description = newGuildDescription
+            name = Optional(newGuildName),
+            verificationLevel = Optional(newVerificationLevel),
+            defaultMessageNotifications = Optional(newDefaultMessageNotificationLevel),
+            explicitContentFilter = Optional(newExplicitContentFilterLevel),
+            afkTimeout = Optional(newAfkTimeout),
+            premiumProgressBarEnabled = Optional(newPremiumProgressBarEnabled),
+            description = Optional(newGuildDescription)
         )
         val modifyResponse = guildApi.modifyGuild(guildId, modifyRequest)
 

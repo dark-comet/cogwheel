@@ -315,7 +315,7 @@ private constructor(
                 apiVersion = readyEvent.data.v,
                 sessionId = readyEvent.data.sessionId,
                 resumeGatewayUrl = readyEvent.data.resumeGatewayUrl.replace("wss://", "").trim(),
-                shard = ShardId.from(readyEvent.data.shard),
+                shard = ShardId.from(readyEvent.data.shard?.value),
                 heartbeatIntervalMs = helloEvent.data.heartbeatInterval
             )
             

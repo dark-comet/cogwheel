@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.network.objects.*
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
+import xyz.darkcomet.cogwheel.core.primitives.Optional
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 interface Event<TData> {
@@ -29,12 +30,12 @@ internal constructor(
         @SerialName("rule_id") val ruleId: Snowflake,
         @SerialName("rule_trigger_type") val ruleTriggerType: Int,
         @SerialName("user_id") val userId: Snowflake,
-        @SerialName("channel_id") val channelId: Snowflake? = null,
-        @SerialName("message_id") val messageId: Snowflake? = null,
-        @SerialName("alert_system_message_id") val alertSystemMessageId: Snowflake? = null,
+        @SerialName("channel_id") val channelId: Optional<Snowflake>? = null,
+        @SerialName("message_id") val messageId: Optional<Snowflake>? = null,
+        @SerialName("alert_system_message_id") val alertSystemMessageId: Optional<Snowflake>? = null,
         val content: String,
-        @SerialName("matched_keyword") val matchedKeyword: String? = null,
-        @SerialName("matched_content") val matchedContent: String? = null,
+        @SerialName("matched_keyword") val matchedKeyword: Optional<String>? = null,
+        @SerialName("matched_content") val matchedContent: Optional<String>? = null,
     )
 
 }
@@ -67,7 +68,7 @@ internal constructor(override val data: DataObject) : Event<ChannelPinsUpdateEve
     data class DataObject(
         @SerialName("guild_id") val guildId: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("last_pin_timestamp") val lastPinTimestamp: ISO8601Timestamp? = null,
+        @SerialName("last_pin_timestamp") val lastPinTimestamp: Optional<ISO8601Timestamp>? = null,
     )
 
 }
@@ -125,7 +126,7 @@ internal constructor(override val data: DataObject) : Event<GatewayReadyEvent.Da
         val guilds: List<GuildObject>,
         @SerialName("session_id") val sessionId: String,
         @SerialName("resume_gateway_url") val resumeGatewayUrl: String,
-        val shard: List<Int>? = null,
+        val shard: Optional<List<Int>>? = null,
         val application: ApplicationObject,
     )
 
@@ -220,9 +221,9 @@ internal constructor(override val data: DataObject) : Event<GuildMembersChunkEve
         val members: List<GuildMemberObject>,
         @SerialName("chunk_index") val chunkIndex: Int,
         @SerialName("chunk_count") val chunkCount: Int,
-        @SerialName("not_found") val notFound: List<Snowflake>? = null,
-        val presences: List<UpdatePresenceObject>? = null,
-        val nonce: String? = null,
+        @SerialName("not_found") val notFound: Optional<List<Snowflake>>? = null,
+        val presences: Optional<List<UpdatePresenceObject>>? = null,
+        val nonce: Optional<String>? = null,
     )
 
 }
@@ -235,17 +236,17 @@ internal constructor(override val data: DataObject) : Event<GuildMemberUpdateEve
         @SerialName("guild_id") val guildId: Snowflake,
         val roles: List<Snowflake>,
         val user: UserObject,
-        val nick: String? = null,
-        val avatar: String? = null,
-        val banner: String? = null,
-        @SerialName("joined_at") val joinedAt: ISO8601Timestamp? = null,
-        @SerialName("premium_since") val premiumSince: ISO8601Timestamp? = null,
-        val deaf: Boolean? = null,
-        val mute: Boolean? = null,
-        val pending: Boolean? = null,
-        @SerialName("communication_disabled_until") val communicationDisabledUntil: ISO8601Timestamp? = null,
-        val flags: Int? = null,
-        @SerialName("avatar_decoration_data") val avatarDecorationData: AvatarDecorationDataObject? = null
+        val nick: Optional<String>? = null,
+        val avatar: Optional<String>? = null,
+        val banner: Optional<String>? = null,
+        @SerialName("joined_at") val joinedAt: Optional<ISO8601Timestamp>? = null,
+        @SerialName("premium_since") val premiumSince: Optional<ISO8601Timestamp>? = null,
+        val deaf: Optional<Boolean>? = null,
+        val mute: Optional<Boolean>? = null,
+        val pending: Optional<Boolean>? = null,
+        @SerialName("communication_disabled_until") val communicationDisabledUntil: Optional<ISO8601Timestamp>? = null,
+        val flags: Optional<Int>? = null,
+        @SerialName("avatar_decoration_data") val avatarDecorationData: Optional<AvatarDecorationDataObject>? = null
     )
 
 }
@@ -368,7 +369,7 @@ internal constructor(override val data: DataObject) : Event<IntegrationDeleteEve
     data class DataObject(
         val id: Snowflake,
         @SerialName("guild_id") val guildId: Snowflake,
-        @SerialName("application_id") val applicationId: Snowflake? = null
+        @SerialName("application_id") val applicationId: Optional<Snowflake>? = null
     )
 
 }
@@ -387,13 +388,13 @@ internal constructor(override val data: DataObject) : Event<InviteCreateEvent.Da
         @SerialName("channel_id") val channelId: Snowflake,
         val code: String,
         @SerialName("created_at") val createdAt: ISO8601Timestamp,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
-        val inviter: UserObject? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
+        val inviter: Optional<UserObject>? = null,
         @SerialName("max_age") val maxAge: Int,
         @SerialName("max_uses") val maxUses: Int,
-        @SerialName("target_type") val targetType: Int? = null,
-        @SerialName("target_user") val targetUser: UserObject? = null,
-        @SerialName("target_application") val targetApplication: ApplicationObject? = null,
+        @SerialName("target_type") val targetType: Optional<Int>? = null,
+        @SerialName("target_user") val targetUser: Optional<UserObject>? = null,
+        @SerialName("target_application") val targetApplication: Optional<ApplicationObject>? = null,
         val temporary: Boolean,
         val uses: Int,
     )
@@ -406,7 +407,7 @@ internal constructor(override val data: DataObject) : Event<InviteDeleteEvent.Da
     @Serializable
     data class DataObject(
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         val code: String,
     )
 
@@ -422,7 +423,7 @@ internal constructor(override val data: DataObject) : Event<MessageDeleteBulkEve
     data class DataObject(
         val ids: List<Snowflake>,
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null
     )
 
 }
@@ -434,7 +435,7 @@ internal constructor(override val data: DataObject) : Event<MessageDeleteEvent.D
     data class DataObject(
         val id: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null
     )
 
 }
@@ -447,7 +448,7 @@ internal constructor(override val data: DataObject) : Event<MessagePollVoteAddEv
         @SerialName("user_id") val userId: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
         @SerialName("message_id") val messageId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("answer_id") val answerId: Int,
     )
 
@@ -461,7 +462,7 @@ internal constructor(override val data: DataObject) : Event<MessagePollVoteRemov
         @SerialName("user_id") val userId: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
         @SerialName("message_id") val messageId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("answer_id") val answerId: Int,
     )
 
@@ -475,10 +476,10 @@ internal constructor(override val data: DataObject) : Event<MessageReactionAddEv
         @SerialName("user_id") val userId: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
         @SerialName("message_id") val messageId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
-        val member: GuildMemberObject? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
+        val member: Optional<GuildMemberObject>? = null,
         val emoji: EmojiObject,
-        @SerialName("message_author_id") val messageAuthorId: Snowflake? = null,
+        @SerialName("message_author_id") val messageAuthorId: Optional<Snowflake>? = null,
         val burst: Boolean,
         @SerialName("burst_colors") val burstColors: List<String>,
         val type: Int
@@ -493,7 +494,7 @@ internal constructor(override val data: DataObject) : Event<MessageReactionRemov
     data class DataObject(
         @SerialName("channel_id") val channelId: Snowflake,
         @SerialName("message_id") val messageId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
     )
 
 }
@@ -504,7 +505,7 @@ internal constructor(override val data: DataObject) : Event<MessageReactionRemov
     @Serializable
     data class DataObject(
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("message_id") val messageId: Snowflake,
         val emoji: EmojiObject
     )
@@ -519,7 +520,7 @@ internal constructor(override val data: DataObject) : Event<MessageReactionRemov
         @SerialName("user_id") val userId: Snowflake,
         @SerialName("channel_id") val channelId: Snowflake,
         @SerialName("message_id") val messageId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         val emoji: EmojiObject,
         val burst: Boolean,
         val type: Int
@@ -585,7 +586,7 @@ internal constructor(override val data: DataObject): Event<ThreadListSyncEvent.D
     @Serializable
     data class DataObject(
         val guildId: Snowflake,
-        val channelIds: List<Snowflake>? = null,
+        val channelIds: Optional<List<Snowflake>>? = null,
         val threads: List<ChannelObject>,
         val members: List<ThreadMemberObject>
     )
@@ -600,8 +601,8 @@ internal constructor(override val data: DataObject): Event<ThreadMembersUpdateEv
         val id: Snowflake,
         @SerialName("guild_id") val guildId: Snowflake,
         @SerialName("member_count") val memberCount: Int,
-        @SerialName("added_members") val addedMembers: List<ThreadMemberObject>? = null,
-        @SerialName("removed_member_ids") val removedMemberIds: List<Snowflake>? = null
+        @SerialName("added_members") val addedMembers: Optional<List<ThreadMemberObject>>? = null,
+        @SerialName("removed_member_ids") val removedMemberIds: Optional<List<Snowflake>>? = null
     )
 
 }
@@ -618,10 +619,10 @@ internal constructor(override val data: DataObject) : Event<TypingStartEvent.Dat
     @Serializable
     data class DataObject(
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("user_id") val userId: Snowflake,
         val timestamp: Long,
-        val member: GuildMemberObject? = null,
+        val member: Optional<GuildMemberObject>? = null,
     )
 
 }
@@ -635,11 +636,11 @@ internal constructor(override val data: DataObject) : Event<VoiceChannelEffectSe
     @Serializable
     data class DataObject(
         @SerialName("channel_id") val channelId: Snowflake,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("user_id") val userId: Snowflake,
-        val emoji: EmojiObject? = null,
-        @SerialName("animation_type") val animationType: Int? = null,
-        @SerialName("animation_id") val animationId: Int? = null,
+        val emoji: Optional<EmojiObject>? = null,
+        @SerialName("animation_type") val animationType: Optional<Int>? = null,
+        @SerialName("animation_id") val animationId: Optional<Int>? = null,
         @SerialName("sound_id") val soundId: Snowflake,
         @SerialName("sound_volume") val soundVolume: Double
     )
@@ -652,7 +653,7 @@ internal constructor(override val data: DataObject) : Event<VoiceServerUpdateEve
     @Serializable
     data class DataObject(
         val token: String,
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         val endpoint: String?
     )
 
@@ -666,7 +667,7 @@ internal constructor(override val data: DataObject) : Event<WebhooksUpdateEvent.
 
     @Serializable
     data class DataObject(
-        @SerialName("guild_id") val guildId: Snowflake? = null,
+        @SerialName("guild_id") val guildId: Optional<Snowflake>? = null,
         @SerialName("channel_id") val channelId: Snowflake,
     )
 

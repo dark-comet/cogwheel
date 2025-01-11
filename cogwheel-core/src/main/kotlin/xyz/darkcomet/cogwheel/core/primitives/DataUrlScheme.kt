@@ -19,7 +19,7 @@ sealed class DataUrlScheme {
     abstract val isBase64: Boolean
     abstract val data: String
     
-    class Serializer : KSerializer<DataUrlScheme> {
+    internal object Serializer : KSerializer<DataUrlScheme> {
         
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)

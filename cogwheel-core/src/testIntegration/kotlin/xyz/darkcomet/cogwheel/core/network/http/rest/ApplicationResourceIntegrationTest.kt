@@ -1,13 +1,14 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
-import java.util.UUID
+import xyz.darkcomet.cogwheel.core.primitives.NullableValue
+import xyz.darkcomet.cogwheel.core.primitives.Value
+import java.util.*
 
 class ApplicationResourceIntegrationTest {
     
@@ -28,15 +29,23 @@ class ApplicationResourceIntegrationTest {
             val newIconImageData = this::class.java.getResourceAsStream("/fuzzy_bread.png")!!.readBytes()
             val iconImageData = ImageData.fromBytes(ImageData.FileExtension.PNG, newIconImageData)
             
-            val request = EditCurrentApplicationRequestParameters(
-                description = "test description: ${UUID.randomUUID()}",
-                icon = iconImageData
+            var request = EditCurrentApplicationRequestParameters(
+                description = Value("test description: ${UUID.randomUUID()}"),
+                icon = NullableValue(iconImageData)
             )
-            val response = api.application.editCurrentApplication(request)
+            var response = api.application.editCurrentApplication(request)
             
             assertEquals(true, response.raw.success)
             assertNotNull(response.data)
-            assertEquals(request.description, response.data!!.description)
+            assertEquals(request.description!!, response.data!!.description)
+
+            request = EditCurrentApplicationRequestParameters(
+                icon = NullableValue(null)
+            )
+            response = api.application.editCurrentApplication(request)
+            
+            assertEquals(true, response.raw.success, response.raw.statusMessage)
+            assertNull(response.data!!.icon)
         }
     }
 }

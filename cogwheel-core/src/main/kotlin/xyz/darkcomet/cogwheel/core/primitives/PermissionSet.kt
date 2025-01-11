@@ -51,7 +51,8 @@ internal constructor(private val value: BigInteger) {
         }
     }
 
-    class Serializer : KSerializer<PermissionSet> {
+    internal object Serializer : KSerializer<PermissionSet> {
+        
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
 

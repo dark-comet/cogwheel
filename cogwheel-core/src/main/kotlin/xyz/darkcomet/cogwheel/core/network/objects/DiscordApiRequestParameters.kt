@@ -2,10 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.objects
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
-import xyz.darkcomet.cogwheel.core.primitives.ImageData
-import xyz.darkcomet.cogwheel.core.primitives.PermissionSet
-import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.*
 
 @Serializable
 data class AddGuildMemberRequestParameters(
@@ -319,16 +316,19 @@ data class ModifyApplicationEmojiRequestParameters(
 
 @Serializable
 data class EditCurrentApplicationRequestParameters(
-    @SerialName("custom_install_url") var customInstallUrl: String? = null,
-    var description: String? = null,
-    @SerialName("role_connection_verification_url") var roleConnectionVerificationUrl: String? = null,
-    @SerialName("install_params") var installParams: ApplicationInstallParamsObject? = null,
-    @SerialName("integration_types_config") var integrationTypesConfig: Map<String, ApplicationIntegrationTypeConfigurationObject>? = null,
-    var flags: Int? = null,
-    var icon: ImageData? = null,
-    @SerialName("cover_image") var coverImage: ImageData? = null,
-    @SerialName("interactions_endpoint_url") var interactionsEndpointUrl: String? = null,
-    var tags: List<String>? = null
+    @SerialName("custom_install_url") val customInstallUrl: Value<String>? = null,
+    val description: Value<String>? = null,
+    @SerialName("role_connection_verification_url") val roleConnectionVerificationUrl: Value<String>? = null,
+    @SerialName("install_params") val installParams: Value<ApplicationInstallParamsObject>? = null,
+    @SerialName("integration_types_config") val integrationTypesConfig: Value<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null,
+    val flags: Value<Int?>? = null,
+    val icon: NullableValue<ImageData>? = null,
+    @SerialName("cover_image") val coverImage: NullableValue<ImageData>? = null,
+    @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: Value<String>? = null,
+    val tags: Value<List<String>>? = null,
+    @SerialName("event_webhooks_url") val eventWebhooksUrl: Value<String>? = null,
+    @SerialName("event_webhooks_status") val eventWebhooksStatus: Value<Int>? = null,
+    @SerialName("event_webhook_types") val eventWebhookTypes: Value<List<String>>? = null,
 )
 
 @Serializable

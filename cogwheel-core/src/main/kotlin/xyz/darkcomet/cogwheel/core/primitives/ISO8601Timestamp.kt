@@ -15,7 +15,7 @@ class ISO8601Timestamp(private val instant: Instant) {
     val stringValue = instant.toString()
     val epochMilliseconds = instant.toEpochMilliseconds()
     
-    class Serializer : KSerializer<ISO8601Timestamp> {
+    internal object Serializer : KSerializer<ISO8601Timestamp> {
         
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor(this::class.java.name, PrimitiveKind.STRING)

@@ -44,7 +44,7 @@ class Snowflake(val value: BigInteger) : Comparable<Snowflake> {
         private const val DISCORD_EPOCH_TIME_MS = 1_420_070_400_000L
     }
 
-    class Serializer : KSerializer<Snowflake> {
+    internal object Serializer : KSerializer<Snowflake> {
         
         override val descriptor: SerialDescriptor
             get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)

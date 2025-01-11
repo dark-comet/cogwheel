@@ -6,10 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
-import xyz.darkcomet.cogwheel.core.primitives.ImageData
-import xyz.darkcomet.cogwheel.core.primitives.PermissionSet
-import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import xyz.darkcomet.cogwheel.core.primitives.*
 
 @Serializable
 data class ActivityAssetsObject(
@@ -95,7 +92,7 @@ data class ApplicationActivityInstanceObject(
     val users: List<Snowflake>,
 )
 
-@Serializable(with = ApplicationCommandInteractionDataOptionObject.Serializable::class)
+@Serializable(with = ApplicationCommandInteractionDataOptionObject.Serializer::class)
 data class ApplicationCommandInteractionDataOptionObject(
     val name: String,
     val type: Int,
@@ -103,7 +100,7 @@ data class ApplicationCommandInteractionDataOptionObject(
     val options: List<ApplicationCommandInteractionDataOptionObject>? = null,
     val focused: Boolean? = null
 ) {
-    class Serializable : KSerializer<ApplicationCommandInteractionDataOptionObject> {
+    internal object Serializer : KSerializer<ApplicationCommandInteractionDataOptionObject> {
         override val descriptor: SerialDescriptor
             get() = TODO("Not yet implemented")
 
@@ -208,34 +205,37 @@ data class ApplicationIntegrationTypeConfigurationObject(
 
 @Serializable
 data class ApplicationObject(
-    val id: Snowflake? = null,
-    val name: String? = null,
-    val icon: String? = null,
-    val description: String? = null,
-    @SerialName("rpc_origins") val rpcOrigins: List<String>? = null,
-    @SerialName("bot_public") val botPublic: Boolean? = null,
-    @SerialName("bot_require_code_grant") val botRequireCodeGrant: Boolean? = null,
-    val bot: UserObject? = null,
-    @SerialName("terms_of_service_url") val termsOfServiceUrl: String? = null,
-    @SerialName("privacy_policy_url") val privacyPolicyUrl: String? = null,
-    @SerialName("owner") val owner: UserObject? = null,
-    @SerialName("verify_key") val verifyKey: String? = null,
-    val team: TeamObject? = null,
-    @SerialName("guild_id") val guildId: Snowflake? = null,
-    val guild: GuildObject? = null,
-    @SerialName("primary_sku_id") val primarySkuId: Snowflake? = null,
-    val slug: String? = null,
-    @SerialName("cover_image") val coverImage: String? = null,
-    val flags: Int? = null,
-    @SerialName("approximate_guild_count") val approximateGuildCount: Int? = null,
-    @SerialName("approximate_user_install_count") val approximateUserInstallCount: Int? = null,
-    @SerialName("redirect_uris") val redirectUris: List<String>? = null,
-    @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: String? = null,
-    @SerialName("role_connections_verification_url") val roleConnectionsVerificationUrl: String? = null,
-    val tags: List<String>? = null,
-    @SerialName("install_params") val installParams: ApplicationInstallParamsObject? = null,
-    @SerialName("integration_types_config") val integrationTypesConfig: Map<String, ApplicationIntegrationTypeConfigurationObject>? = null,
-    @SerialName("custom_install_url") val customInstallUrl: String? = null,
+    val id: Value<Snowflake>? = null,
+    val name: Value<String>? = null,
+    val icon: NullableValue<String>? = null,
+    val description: Value<String>? = null,
+    @SerialName("rpc_origins") val rpcOrigins: Value<List<String>>? = null,
+    @SerialName("bot_public") val botPublic: Value<Boolean?>? = null,
+    @SerialName("bot_require_code_grant") val botRequireCodeGrant: Value<Boolean>? = null,
+    val bot: Value<UserObject>? = null,
+    @SerialName("terms_of_service_url") val termsOfServiceUrl: Value<String>? = null,
+    @SerialName("privacy_policy_url") val privacyPolicyUrl: Value<String>? = null,
+    @SerialName("owner") val owner: Value<UserObject>? = null,
+    @SerialName("verify_key") val verifyKey: Value<String>? = null,
+    val team: NullableValue<TeamObject>? = null,
+    @SerialName("guild_id") val guildId: Value<Snowflake>? = null,
+    val guild: Value<GuildObject>? = null,
+    @SerialName("primary_sku_id") val primarySkuId: Value<Snowflake>? = null,
+    val slug: Value<String>? = null,
+    @SerialName("cover_image") val coverImage: Value<String>? = null,
+    val flags: Value<Int>? = null,
+    @SerialName("approximate_guild_count") val approximateGuildCount: Value<Int>? = null,
+    @SerialName("approximate_user_install_count") val approximateUserInstallCount: Value<Int>? = null,
+    @SerialName("redirect_uris") val redirectUris: Value<List<String>>? = null,
+    @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: NullableValue<String>? = null,
+    @SerialName("role_connections_verification_url") val roleConnectionsVerificationUrl: NullableValue<String>? = null,
+    @SerialName("event_webhooks_url") val eventWebhooksUrl: NullableValue<String>? = null,
+    @SerialName("event_webhooks_status") val eventWebhooksStatus: Value<Int>? = null,
+    @SerialName("event_webhook_types") val eventWebhookTypes: Value<List<String>>? = null,
+    val tags: Value<List<String>>? = null,
+    @SerialName("install_params") val installParams: Value<ApplicationInstallParamsObject>? = null,
+    @SerialName("integration_types_config") val integrationTypesConfig: Value<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null,
+    @SerialName("custom_install_url") val customInstallUrl: Value<String>? = null,
 )
 
 @Serializable
@@ -272,7 +272,7 @@ data class AuditLogChangeObject(
     @SerialName("old_value") val oldValue: Any? = null,
     val key: String
 ) {
-    internal class Serializer : KSerializer<AuditLogChangeObject> {
+    internal object Serializer : KSerializer<AuditLogChangeObject> {
         override val descriptor: SerialDescriptor
             get() = TODO("Not yet implemented")
 

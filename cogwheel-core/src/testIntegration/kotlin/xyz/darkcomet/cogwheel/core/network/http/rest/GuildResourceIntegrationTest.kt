@@ -99,6 +99,8 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         val newExplicitContentFilterLevel = 1 // MEMBERS_WITHOUT_ROLES
         val newAfkTimeout = 1800
         val newPremiumProgressBarEnabled = true
+        val newIconImageData = this::class.java.getResourceAsStream("/fuzzy_bread.png")!!.readBytes()
+        val iconImageData = ImageData.fromBytes(ImageData.FileExtension.PNG, newIconImageData)
 
         val modifyRequest = ModifyGuildRequestParameters(
             name = Optional(newGuildName),
@@ -107,7 +109,8 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             explicitContentFilter = Optional(newExplicitContentFilterLevel),
             afkTimeout = Optional(newAfkTimeout),
             premiumProgressBarEnabled = Optional(newPremiumProgressBarEnabled),
-            description = Optional(newGuildDescription)
+            description = Optional(newGuildDescription),
+            icon = Optional(iconImageData)
         )
         val modifyResponse = guildApi.modifyGuild(guildId, modifyRequest)
 
@@ -124,6 +127,8 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             { assertEquals(newExplicitContentFilterLevel, modifyResponse.data!!.explicitContentFilter!!.value) },
             { assertEquals(newAfkTimeout, modifyResponse.data!!.afkTimeout!!.value) },
             { assertEquals(newPremiumProgressBarEnabled, modifyResponse.data!!.premiumProgressBarEnabled!!.value) },
+            { assertNotNull(modifyResponse.data!!.icon) },
+            { assertNotNull(modifyResponse.data!!.icon!!.value) }
         )
         
         // Test GET

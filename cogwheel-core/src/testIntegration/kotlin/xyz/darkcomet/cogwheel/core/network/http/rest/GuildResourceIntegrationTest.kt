@@ -9,6 +9,7 @@ import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
 import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
 import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildRequestParameters
+import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 import xyz.darkcomet.cogwheel.core.primitives.Optional
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
@@ -79,8 +80,8 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             { assertNotNull(getPreviewResponse.data) }
         )
         assertAll(
-            { assertEquals(guildId, getPreviewResponse.data!!.id) },
-            { assertEquals(guildName, getPreviewResponse.data!!.name) },
+            { assertEquals(guildId, getPreviewResponse.data!!.id!!.value) },
+            { assertEquals(guildName, getPreviewResponse.data!!.name!!.value) },
             { assertNull(getPreviewResponse.data!!.icon) },
             { assertNull(getPreviewResponse.data!!.splash) },
             { assertNull(getPreviewResponse.data!!.discoverySplash) },
@@ -117,12 +118,12 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         )
         
         assertAll(
-            { assertEquals(guildId, modifyResponse.data!!.id) },
-            { assertEquals(newVerificationLevel, modifyResponse.data!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel, modifyResponse.data!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel, modifyResponse.data!!.explicitContentFilter) },
-            { assertEquals(newAfkTimeout, modifyResponse.data!!.afkTimeout) },
-            { assertEquals(newPremiumProgressBarEnabled, modifyResponse.data!!.premiumProgressBarEnabled) },
+            { assertEquals(guildId, modifyResponse.data!!.id!!.value) },
+            { assertEquals(newVerificationLevel, modifyResponse.data!!.verificationLevel!!.value) },
+            { assertEquals(newDefaultMessageNotificationLevel, modifyResponse.data!!.defaultMessageNotifications!!.value) },
+            { assertEquals(newExplicitContentFilterLevel, modifyResponse.data!!.explicitContentFilter!!.value) },
+            { assertEquals(newAfkTimeout, modifyResponse.data!!.afkTimeout!!.value) },
+            { assertEquals(newPremiumProgressBarEnabled, modifyResponse.data!!.premiumProgressBarEnabled!!.value) },
         )
         
         // Test GET
@@ -135,12 +136,12 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         )
 
         assertAll(
-            { assertEquals(guildId, getResponse.data!!.id) },
-            { assertEquals(newVerificationLevel, getResponse.data!!.verificationLevel) },
-            { assertEquals(newDefaultMessageNotificationLevel, getResponse.data!!.defaultMessageNotifications) },
-            { assertEquals(newExplicitContentFilterLevel, getResponse.data!!.explicitContentFilter) },
-            { assertEquals(newAfkTimeout, getResponse.data!!.afkTimeout) },
-            { assertEquals(newPremiumProgressBarEnabled, getResponse.data!!.premiumProgressBarEnabled) },
+            { assertEquals(guildId, getResponse.data!!.id!!.value) },
+            { assertEquals(newVerificationLevel, getResponse.data!!.verificationLevel!!.value) },
+            { assertEquals(newDefaultMessageNotificationLevel, getResponse.data!!.defaultMessageNotifications!!.value) },
+            { assertEquals(newExplicitContentFilterLevel, getResponse.data!!.explicitContentFilter!!.value) },
+            { assertEquals(newAfkTimeout, getResponse.data!!.afkTimeout!!.value) },
+            { assertEquals(newPremiumProgressBarEnabled, getResponse.data!!.premiumProgressBarEnabled!!.value) },
         )
     }
 }

@@ -7,13 +7,18 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializable(with = Optional.Serializer::class)
-open class Optional<T>(val value: T?) {
+/**
+ * Represents a value that may or may not be present in a transmitted network entity. A 'Possible'
+ * may hold 'null' as a value, which means a value is present representing 'null'. If a 'Possible'
+ * field is null, it represents the complete absence of the field.
+ */
+@Serializable(with = Possible.Serializer::class)
+open class Possible<T>(val value: T?) {
     
     val isNull: Boolean = value == null
 
     override fun equals(other: Any?): Boolean {
-        if (other !is Optional<*>) {
+        if (other !is Possible<*>) {
             return false
         }
         
@@ -30,17 +35,17 @@ open class Optional<T>(val value: T?) {
 
     
     @OptIn(ExperimentalSerializationApi::class)
-    internal class Serializer<T>(private val valueSerializer: KSerializer<T>) : KSerializer<Optional<T>> {
+    internal class Serializer<T>(private val valueSerializer: KSerializer<T>) : KSerializer<Possible<T>> {
         
         override val descriptor: SerialDescriptor
             get() = valueSerializer.descriptor
 
-        override fun deserialize(decoder: Decoder): Optional<T> {
+        override fun deserialize(decoder: Decoder): Possible<T> {
             val value = decoder.decodeNullableSerializableValue(valueSerializer)
-            return Optional(value)
+            return Possible(value)
         }
 
-        override fun serialize(encoder: Encoder, value: Optional<T>) {
+        override fun serialize(encoder: Encoder, value: Possible<T>) {
             encoder.encodeNullableSerializableValue(valueSerializer, value.value)
         }
 

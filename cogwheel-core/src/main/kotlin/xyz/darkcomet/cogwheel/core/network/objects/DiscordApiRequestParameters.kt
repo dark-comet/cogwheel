@@ -7,10 +7,10 @@ import xyz.darkcomet.cogwheel.core.primitives.*
 @Serializable
 data class AddGuildMemberRequestParameters(
     @SerialName("access_token") val accessToken: String,
-    val nick: Optional<String>? = null,
-    val roles: Optional<List<Snowflake>>? = null,
-    val mute: Optional<Boolean>? = null,
-    val deaf: Optional<Boolean>? = null
+    val nick: Possible<String>? = null,
+    val roles: Possible<List<Snowflake>>? = null,
+    val mute: Possible<Boolean>? = null,
+    val deaf: Possible<Boolean>? = null
 )
 
 @Serializable
@@ -18,7 +18,7 @@ data class BeginGuildPruneRequestParameters(
     val days: Int = 7,
     val computePruneCount: Boolean = true,
     val includeRoles: MutableList<Snowflake> = mutableListOf(),
-    val reason: Optional<String>? = null
+    val reason: Possible<String>? = null
 )
 
 @Serializable
@@ -29,7 +29,7 @@ data class BulkDeleteMessagesRequestParameters(
 @Serializable
 data class BulkGuildBanRequestParameters(
     @SerialName("user_ids") val userIds: List<Snowflake>,
-    @SerialName("delete_message_seconds") val deleteMessageSeconds: Optional<Int>? = null
+    @SerialName("delete_message_seconds") val deleteMessageSeconds: Possible<Int>? = null
 )
 
 @Serializable
@@ -60,39 +60,39 @@ data class CreateGuildAutoModerationRuleRequestParameters(
     val name: String,
     @SerialName("event_type") val eventType: Int,
     @SerialName("trigger_type") val triggerType: Int,
-    @SerialName("trigger_metadata") val triggerMetadata: Optional<AutoModerationRuleTriggerMetadataObject>? = null,
+    @SerialName("trigger_metadata") val triggerMetadata: Possible<AutoModerationRuleTriggerMetadataObject>? = null,
     val actions: List<AutoModerationActionObject>,
-    val enabled: Optional<Boolean>? = null,
-    @SerialName("exempt_roles") val exemptRoles: Optional<List<Snowflake>>? = null,
-    @SerialName("exempt_channels") val exemptChannels: Optional<List<Snowflake>>? = null,
+    val enabled: Possible<Boolean>? = null,
+    @SerialName("exempt_roles") val exemptRoles: Possible<List<Snowflake>>? = null,
+    @SerialName("exempt_channels") val exemptChannels: Possible<List<Snowflake>>? = null,
 )
 
 @Serializable
 data class CreateGuildBanRequestParameters(
-    @SerialName("delete_message_days") val deleteMessageDays: Optional<Int>? = null,
-    @SerialName("delete_message_seconds") val deleteMessageSeconds: Optional<Int>? = null,
+    @SerialName("delete_message_days") val deleteMessageDays: Possible<Int>? = null,
+    @SerialName("delete_message_seconds") val deleteMessageSeconds: Possible<Int>? = null,
 )
 
 @Serializable
 data class CreateGuildChannelRequestParameters(
     val name: String,
-    val type: Optional<Int>? = null,
-    val topic: Optional<String>? = null,
-    val bitrate: Optional<Int>? = null,
-    @SerialName("user_limit") val userLimit: Optional<Int>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: Optional<Int>? = null,
-    val position: Optional<Int>? = null,
-    @SerialName("permission_overwrites") val permissionOverwrites: Optional<List<ChannelPermissionOverwriteObject>>? = null,
-    @SerialName("parent_id") val parentId: Optional<Snowflake>? = null,
-    val nsfw: Optional<Boolean>? = null,
-    @SerialName("rtc_region") val rtcRegion: Optional<String>? = null,
-    @SerialName("video_quality_mode") val videoQualityMode: Optional<Int>? = null,
-    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Optional<Int>? = null,
-    @SerialName("default_reaction_emoji") val defaultReactionEmoji: Optional<ChannelDefaultReactionObject>? = null,
-    @SerialName("available_tags") val availableTags: Optional<List<ForumTagObject>>? = null,
-    @SerialName("default_sort_order") val defaultSortOrder: Optional<Int>? = null,
-    @SerialName("default_forum_layout") val defaultForumLayout: Optional<Int>? = null,
-    @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: Optional<Int>? = null,
+    val type: Possible<Int>? = null,
+    val topic: Possible<String>? = null,
+    val bitrate: Possible<Int>? = null,
+    @SerialName("user_limit") val userLimit: Possible<Int>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: Possible<Int>? = null,
+    val position: Possible<Int>? = null,
+    @SerialName("permission_overwrites") val permissionOverwrites: Possible<List<ChannelPermissionOverwriteObject>>? = null,
+    @SerialName("parent_id") val parentId: Possible<Snowflake>? = null,
+    val nsfw: Possible<Boolean>? = null,
+    @SerialName("rtc_region") val rtcRegion: Possible<String>? = null,
+    @SerialName("video_quality_mode") val videoQualityMode: Possible<Int>? = null,
+    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Possible<Int>? = null,
+    @SerialName("default_reaction_emoji") val defaultReactionEmoji: Possible<ChannelDefaultReactionObject>? = null,
+    @SerialName("available_tags") val availableTags: Possible<List<ForumTagObject>>? = null,
+    @SerialName("default_sort_order") val defaultSortOrder: Possible<Int>? = null,
+    @SerialName("default_forum_layout") val defaultForumLayout: Possible<Int>? = null,
+    @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: Possible<Int>? = null,
 )
 
 @Serializable
@@ -105,23 +105,23 @@ data class CreateGuildEmojiRequestParameters(
 @Serializable
 data class CreateGuildFromGuildTemplateRequestParameters(
     val name: String,
-    val icon: Optional<ImageData>? = null
+    val icon: Possible<ImageData>? = null
 )
 
 @Serializable
 data class CreateGuildRequestParameters(
     val name: String,
-    val region: Optional<String>? = null, // deprecated
-    val icon: Optional<ImageData>? = null,
-    @SerialName("verification_level") val verificationLevel: Optional<Int>? = null,
-    @SerialName("default_message_notifications") val defaultMessageNotifications: Optional<Int>? = null,
-    @SerialName("explicit_content_filter") val explicitContentFilter: Optional<Int>? = null,
-    val roles: Optional<List<RoleObject>>? = null,
-    val channels: Optional<List<ChannelObject>>? = null,
-    @SerialName("afk_channel_id") val afkChannelId: Optional<Snowflake>? = null,
-    @SerialName("afk_timeout") val afkTimeout: Optional<Int>? = null,
-    @SerialName("system_channel_id") val systemChannelId: Optional<Snowflake>? = null,
-    @SerialName("system_channel_flags") val systemChannelFlags: Optional<Int>? = null,
+    val region: Possible<String>? = null, // deprecated
+    val icon: Possible<ImageData>? = null,
+    @SerialName("verification_level") val verificationLevel: Possible<Int>? = null,
+    @SerialName("default_message_notifications") val defaultMessageNotifications: Possible<Int>? = null,
+    @SerialName("explicit_content_filter") val explicitContentFilter: Possible<Int>? = null,
+    val roles: Possible<List<RoleObject>>? = null,
+    val channels: Possible<List<ChannelObject>>? = null,
+    @SerialName("afk_channel_id") val afkChannelId: Possible<Snowflake>? = null,
+    @SerialName("afk_timeout") val afkTimeout: Possible<Int>? = null,
+    @SerialName("system_channel_id") val systemChannelId: Possible<Snowflake>? = null,
+    @SerialName("system_channel_flags") val systemChannelFlags: Possible<Int>? = null,
 )
 
 @Serializable
@@ -137,25 +137,25 @@ data class CreateGuildRoleRequestParameters(
 
 @Serializable
 data class CreateGuildScheduledEventRequestParameters(
-    val channelId: Optional<Snowflake>? = null,
-    @SerialName("entity_metadata") val entityMetadata: Optional<GuildScheduledEventEntityMetadataObject>? = null,
+    val channelId: Possible<Snowflake>? = null,
+    @SerialName("entity_metadata") val entityMetadata: Possible<GuildScheduledEventEntityMetadataObject>? = null,
     val name: String,
-    @SerialName("privacy_level") val privacyLevel: Optional<Int>? = null,
+    @SerialName("privacy_level") val privacyLevel: Possible<Int>? = null,
     @SerialName("scheduled_start_time") val scheduledStartTime: ISO8601Timestamp,
-    @SerialName("scheduled_end_time") val scheduledEndTime: Optional<ISO8601Timestamp>? = null,
-    val description: Optional<String>? = null,
+    @SerialName("scheduled_end_time") val scheduledEndTime: Possible<ISO8601Timestamp>? = null,
+    val description: Possible<String>? = null,
     @SerialName("entity_type") val entityType: Int,
-    val image: Optional<ImageData>? = null,
-    @SerialName("recurrence_rule") val recurrenceRule: Optional<GuildScheduledEventRecurrenceRuleObject>? = null
+    val image: Possible<ImageData>? = null,
+    @SerialName("recurrence_rule") val recurrenceRule: Possible<GuildScheduledEventRecurrenceRuleObject>? = null
 )
 
 @Serializable
 data class CreateGuildSoundboardSoundRequestParameters(
     val name: String,
     val sound: String,
-    val volume: Optional<Double>? = null,
-    @SerialName("emoji_id") val emojiId: Optional<Snowflake>? = null,
-    @SerialName("emoji_name") val emojiName: Optional<String>? = null
+    val volume: Possible<Double>? = null,
+    @SerialName("emoji_id") val emojiId: Possible<Snowflake>? = null,
+    @SerialName("emoji_name") val emojiName: Possible<String>? = null
 )
 
 @Serializable
@@ -169,34 +169,34 @@ data class CreateGuildStickerRequestParameters(
 @Serializable
 data class CreateGuildTemplateRequestParameters(
     val name: String,
-    val description: Optional<String>? = null
+    val description: Possible<String>? = null
 )
 
 @Serializable
 data class CreateMessageRequestParameters(
-    val content: Optional<String>? = null,
-    val nonce: Optional<String>? = null,
-    val tts: Optional<Boolean>? = null,
-    val embeds: Optional<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: Optional<AllowedMentionsObject>? = null,
-    @SerialName("message_reference") val messageReference: Optional<MessageReferenceObject>? = null,
-    val components: Optional<List<MessageComponentObject>>? = null,
-    @SerialName("sticker_ids") val stickerIds: Optional<List<Snowflake>>? = null,
+    val content: Possible<String>? = null,
+    val nonce: Possible<String>? = null,
+    val tts: Possible<Boolean>? = null,
+    val embeds: Possible<List<EmbedObject>>? = null,
+    @SerialName("allowed_mentions") val allowedMentions: Possible<AllowedMentionsObject>? = null,
+    @SerialName("message_reference") val messageReference: Possible<MessageReferenceObject>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
+    @SerialName("sticker_ids") val stickerIds: Possible<List<Snowflake>>? = null,
 //    val filesN
-    @SerialName("payload_json") val payloadJson: Optional<String>? = null,
-    val attachments: Optional<List<AttachmentObject>>? = null,
-    val flags: Optional<Int>? = null,
-    @SerialName("enforce_nonce") val enforceNonce: Optional<Boolean>? = null,
-    val poll: Optional<PollObject>? = null
+    @SerialName("payload_json") val payloadJson: Possible<String>? = null,
+    val attachments: Possible<List<AttachmentObject>>? = null,
+    val flags: Possible<Int>? = null,
+    @SerialName("enforce_nonce") val enforceNonce: Possible<Boolean>? = null,
+    val poll: Possible<PollObject>? = null
 )
 
 @Serializable
 data class CreateStageInstanceRequestParameters(
     @SerialName("channel_id") val channelId: Snowflake,
     val topic: String,
-    @SerialName("privacy_level") val privacyLevel: Optional<Int>? = null,
-    @SerialName("send_start_notification") val sendStartNotification: Optional<Boolean>? = null,
-    @SerialName("guild_scheduled_event_id") val guildScheduledEventId: Optional<Snowflake>? = null
+    @SerialName("privacy_level") val privacyLevel: Possible<Int>? = null,
+    @SerialName("send_start_notification") val sendStartNotification: Possible<Boolean>? = null,
+    @SerialName("guild_scheduled_event_id") val guildScheduledEventId: Possible<Snowflake>? = null
 )
 
 @Serializable
@@ -215,56 +215,56 @@ data class CreateUserDmRequestParameters(
 @Serializable
 data class CreateWebhookRequestParameters(
     val name: String,
-    val avatar: Optional<ImageData>? = null,
+    val avatar: Possible<ImageData>? = null,
 )
 
 @Serializable
 data class EditChannelPermissionsParameters(
-    val allow: Optional<PermissionSet>? = null,
-    val deny: Optional<PermissionSet>? = null,
+    val allow: Possible<PermissionSet>? = null,
+    val deny: Possible<PermissionSet>? = null,
     val type: Int
 )
 
 @Serializable
 data class EditMessageRequestParameters(
-    val content: Optional<String>? = null,
-    val embeds: Optional<List<EmbedObject>>? = null,
-    val flags: Optional<Int>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: Optional<AllowedMentionsObject>? = null,
-    val components: Optional<List<MessageComponentObject>>? = null,
+    val content: Possible<String>? = null,
+    val embeds: Possible<List<EmbedObject>>? = null,
+    val flags: Possible<Int>? = null,
+    @SerialName("allowed_mentions") val allowedMentions: Possible<AllowedMentionsObject>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
 //    val filesN
-    @SerialName("payload_json") val payloadJson: Optional<String>? = null,
-    val attachments: Optional<List<AttachmentObject>>? = null,
+    @SerialName("payload_json") val payloadJson: Possible<String>? = null,
+    val attachments: Possible<List<AttachmentObject>>? = null,
 )
 
 @Serializable
 data class EditWebhookMessageRequestParameters(
-    val content: Optional<String>? = null,
-    val embeds: Optional<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: Optional<AllowedMentionsObject>? = null,
-    val components: Optional<List<MessageComponentObject>>? = null,
+    val content: Possible<String>? = null,
+    val embeds: Possible<List<EmbedObject>>? = null,
+    @SerialName("allowed_mentions") val allowedMentions: Possible<AllowedMentionsObject>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
 //    val filesN
-    @SerialName("payload_json") val payloadJson: Optional<String>? = null,
-    val attachments: Optional<List<AttachmentObject>>? = null,
-    val poll: Optional<PollObject>? = null
+    @SerialName("payload_json") val payloadJson: Possible<String>? = null,
+    val attachments: Possible<List<AttachmentObject>>? = null,
+    val poll: Possible<PollObject>? = null
 )
 
 @Serializable
 data class ExecuteWebhookRequestParameters(
-    val content: Optional<String>? = null,
-    val username: Optional<String>? = null,
-    @SerialName("avatar_url") val avatarUrl: Optional<String>? = null,
-    val tts: Optional<Boolean>? = null,
-    val embeds: Optional<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: Optional<AllowedMentionsObject>? = null,
-    val components: Optional<List<MessageComponentObject>>? = null,
+    val content: Possible<String>? = null,
+    val username: Possible<String>? = null,
+    @SerialName("avatar_url") val avatarUrl: Possible<String>? = null,
+    val tts: Possible<Boolean>? = null,
+    val embeds: Possible<List<EmbedObject>>? = null,
+    @SerialName("allowed_mentions") val allowedMentions: Possible<AllowedMentionsObject>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
 //    val filesN
-    @SerialName("payload_json") val payloadJson: Optional<String>? = null,
-    val attachments: Optional<List<AttachmentObject>>? = null,
-    val flags: Optional<Int>? = null,
-    @SerialName("thread_name") val threadName: Optional<String>? = null,
-    @SerialName("applied_tags") val appliedTags: Optional<List<Snowflake>>? = null,
-    val poll: Optional<PollObject>? = null
+    @SerialName("payload_json") val payloadJson: Possible<String>? = null,
+    val attachments: Possible<List<AttachmentObject>>? = null,
+    val flags: Possible<Int>? = null,
+    @SerialName("thread_name") val threadName: Possible<String>? = null,
+    @SerialName("applied_tags") val appliedTags: Possible<List<Snowflake>>? = null,
+    val poll: Possible<PollObject>? = null
 )
 
 @Serializable
@@ -283,11 +283,11 @@ data class GatewayPresenceUpdateRequestParameters(
 @Serializable
 data class GatewayRequestGuildMembersRequestParameters(
     @SerialName("guild_id") val guildId: Snowflake,
-    val query: Optional<String>? = null,
+    val query: Possible<String>? = null,
     val limit: Int,
-    val presences: Optional<Boolean>? = null,
-    @SerialName("user_ids") val userIds: Optional<List<Snowflake>>? = null,
-    val nonce: Optional<String>? = null
+    val presences: Possible<Boolean>? = null,
+    @SerialName("user_ids") val userIds: Possible<List<Snowflake>>? = null,
+    val nonce: Possible<String>? = null
 )
 
 @Serializable
@@ -316,19 +316,19 @@ data class ModifyApplicationEmojiRequestParameters(
 
 @Serializable
 data class EditCurrentApplicationRequestParameters(
-    @SerialName("custom_install_url") val customInstallUrl: Optional<String>? = null,
-    val description: Optional<String>? = null,
-    @SerialName("role_connection_verification_url") val roleConnectionVerificationUrl: Optional<String>? = null,
-    @SerialName("install_params") val installParams: Optional<ApplicationInstallParamsObject>? = null,
-    @SerialName("integration_types_config") val integrationTypesConfig: Optional<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null,
-    val flags: Optional<Int?>? = null,
-    val icon: Optional<ImageData>? = null,
-    @SerialName("cover_image") val coverImage: Optional<ImageData>? = null,
-    @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: Optional<String>? = null,
-    val tags: Optional<List<String>>? = null,
-    @SerialName("event_webhooks_url") val eventWebhooksUrl: Optional<String>? = null,
-    @SerialName("event_webhooks_status") val eventWebhooksStatus: Optional<Int>? = null,
-    @SerialName("event_webhook_types") val eventWebhookTypes: Optional<List<String>>? = null,
+    @SerialName("custom_install_url") val customInstallUrl: Possible<String>? = null,
+    val description: Possible<String>? = null,
+    @SerialName("role_connection_verification_url") val roleConnectionVerificationUrl: Possible<String>? = null,
+    @SerialName("install_params") val installParams: Possible<ApplicationInstallParamsObject>? = null,
+    @SerialName("integration_types_config") val integrationTypesConfig: Possible<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null,
+    val flags: Possible<Int?>? = null,
+    val icon: Possible<ImageData>? = null,
+    @SerialName("cover_image") val coverImage: Possible<ImageData>? = null,
+    @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: Possible<String>? = null,
+    val tags: Possible<List<String>>? = null,
+    @SerialName("event_webhooks_url") val eventWebhooksUrl: Possible<String>? = null,
+    @SerialName("event_webhooks_status") val eventWebhooksStatus: Possible<Int>? = null,
+    @SerialName("event_webhook_types") val eventWebhookTypes: Possible<List<String>>? = null,
 )
 
 @Serializable
@@ -340,80 +340,80 @@ data class ModifyCurrentUserRequestParameters(
 
 @Serializable
 data class ModifyCurrentUserVoiceStateRequestParameters(
-    @SerialName("channel_id") val channelId: Optional<Snowflake>? = null,
-    val suppress: Optional<Boolean>? = null,
-    @SerialName("request_to_speak_timestamp") val requestToSpeakTimestamp: Optional<ISO8601Timestamp>? = null
+    @SerialName("channel_id") val channelId: Possible<Snowflake>? = null,
+    val suppress: Possible<Boolean>? = null,
+    @SerialName("request_to_speak_timestamp") val requestToSpeakTimestamp: Possible<ISO8601Timestamp>? = null
 )
 
 @Serializable
 data class ModifyDmChannelRequestParameters(
-    val name: Optional<String>? = null,
-    val icon: Optional<String>? = null
+    val name: Possible<String>? = null,
+    val icon: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildAutoModerationRuleRequestParameters(
     val name: String,
     @SerialName("event_type") val eventType: Int,
-    @SerialName("trigger_metadata") val triggerMetadata: Optional<AutoModerationRuleTriggerMetadataObject>? = null,
+    @SerialName("trigger_metadata") val triggerMetadata: Possible<AutoModerationRuleTriggerMetadataObject>? = null,
     val actions: List<AutoModerationActionObject>,
-    val enabled: Optional<Boolean>? = null,
-    @SerialName("exempt_roles") val exemptRoles: Optional<List<Snowflake>>? = null,
-    @SerialName("exempt_channels") val exemptChannels: Optional<List<Snowflake>>? = null,
+    val enabled: Possible<Boolean>? = null,
+    @SerialName("exempt_roles") val exemptRoles: Possible<List<Snowflake>>? = null,
+    @SerialName("exempt_channels") val exemptChannels: Possible<List<Snowflake>>? = null,
 )
 
 @Serializable
 data class ModifyGuildChannelPositionsRequestParameters(
     val id: Snowflake,
-    val position: Optional<Int>? = null,
-    @SerialName("lock_permissions") val lockPermissions: Optional<Boolean>? = null,
-    @SerialName("parent_id") val parentId: Optional<Snowflake>? = null
+    val position: Possible<Int>? = null,
+    @SerialName("lock_permissions") val lockPermissions: Possible<Boolean>? = null,
+    @SerialName("parent_id") val parentId: Possible<Snowflake>? = null
 )
 
 
 @Serializable
 data class ModifyGuildChannelRequestParameters(
-    val name: Optional<String>? = null,
-    val type: Optional<Int>? = null,
-    val position: Optional<Int>? = null,
-    val topic: Optional<String>? = null,
-    val nsfw: Optional<Boolean>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: Optional<Int>? = null,
-    val bitrate: Optional<Int>? = null,
-    @SerialName("user_limit") val userLimit: Optional<Int>? = null,
-    @SerialName("permission_overwrites") val permissionOverwrites: Optional<List<ChannelPermissionOverwriteObject>>? = null,
-    @SerialName("parent_id") val parentId: Optional<Snowflake>? = null,
-    @SerialName("rtc_region") val rtcRegion: Optional<String>? = null,
-    @SerialName("video_quality_mode") val videoQualityMode: Optional<Int>? = null,
-    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Optional<Int>? = null,
-    val flags: Optional<Int>? = null,
-    @SerialName("available_tags") val availableTags: Optional<List<ForumTagObject>>? = null,
-    @SerialName("default_reaction_emoji") val defaultReactionEmoji: Optional<ChannelDefaultReactionObject>? = null,
-    @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: Optional<Int>? = null,
-    @SerialName("default_sort_order") val defaultSortOrder: Optional<Int>? = null,
-    @SerialName("default_forum_layout") val defaultForumLayout: Optional<Int>? = null,
+    val name: Possible<String>? = null,
+    val type: Possible<Int>? = null,
+    val position: Possible<Int>? = null,
+    val topic: Possible<String>? = null,
+    val nsfw: Possible<Boolean>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: Possible<Int>? = null,
+    val bitrate: Possible<Int>? = null,
+    @SerialName("user_limit") val userLimit: Possible<Int>? = null,
+    @SerialName("permission_overwrites") val permissionOverwrites: Possible<List<ChannelPermissionOverwriteObject>>? = null,
+    @SerialName("parent_id") val parentId: Possible<Snowflake>? = null,
+    @SerialName("rtc_region") val rtcRegion: Possible<String>? = null,
+    @SerialName("video_quality_mode") val videoQualityMode: Possible<Int>? = null,
+    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: Possible<Int>? = null,
+    val flags: Possible<Int>? = null,
+    @SerialName("available_tags") val availableTags: Possible<List<ForumTagObject>>? = null,
+    @SerialName("default_reaction_emoji") val defaultReactionEmoji: Possible<ChannelDefaultReactionObject>? = null,
+    @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: Possible<Int>? = null,
+    @SerialName("default_sort_order") val defaultSortOrder: Possible<Int>? = null,
+    @SerialName("default_forum_layout") val defaultForumLayout: Possible<Int>? = null,
 )
 
 @Serializable
 data class ModifyGuildCurrentMemberRequestParameters(
-    val nick: Optional<String>? = null
+    val nick: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildEmojiRequestParameters(
-    val name: Optional<String>? = null,
-    val roles: Optional<List<Snowflake>>? = null,
+    val name: Possible<String>? = null,
+    val roles: Possible<List<Snowflake>>? = null,
 )
 
 @Serializable
 data class ModifyGuildMemberRequestParameters(
-    val nick: Optional<String>? = null,
-    val roles: Optional<List<Snowflake>>? = null,
-    val mute: Optional<Boolean>? = null,
-    val deaf: Optional<Boolean>? = null,
-    @SerialName("channel_id") val channelId: Optional<Snowflake>? = null,
-    @SerialName("communication_disabled_until") val communicationDisabledUntil: Optional<ISO8601Timestamp>? = null,
-    val flags: Optional<Int>? = null
+    val nick: Possible<String>? = null,
+    val roles: Possible<List<Snowflake>>? = null,
+    val mute: Possible<Boolean>? = null,
+    val deaf: Possible<Boolean>? = null,
+    @SerialName("channel_id") val channelId: Possible<Snowflake>? = null,
+    @SerialName("communication_disabled_until") val communicationDisabledUntil: Possible<ISO8601Timestamp>? = null,
+    val flags: Possible<Int>? = null
 )
 
 @Serializable
@@ -431,124 +431,124 @@ data class ModifyGuildOnboardingRequestParameters(
 
 @Serializable
 data class ModifyGuildRequestParameters(
-    val name: Optional<String>? = null,
-    val region: Optional<String>? = null,
-    @SerialName("verification_level") val verificationLevel: Optional<Int>? = null,
-    @SerialName("default_message_notifications") val defaultMessageNotifications: Optional<Int>? = null,
-    @SerialName("explicit_content_filter") val explicitContentFilter: Optional<Int>? = null,
-    @SerialName("afk_channel_id") val afkChannelId: Optional<Snowflake>? = null,
-    @SerialName("afk_timeout") val afkTimeout: Optional<Int>? = null,
-    val icon: Optional<ImageData>? = null,
-    @SerialName("owner_id") val ownerId: Optional<Snowflake>? = null,
-    val splash: Optional<ImageData>? = null,
-    @SerialName("discovery_splash") val discoverySplash: Optional<ImageData>? = null,
-    val banner: Optional<ImageData>? = null,
-    @SerialName("system_channel_id") val systemChannelId: Optional<Snowflake>? = null,
-    @SerialName("system_channel_flags") val systemChannelFlags: Optional<Int>? = null,
-    @SerialName("rules_channel_id") val rulesChannelId: Optional<Snowflake>? = null,
-    @SerialName("public_updates_channel_id") val publicUpdatesChannelId: Optional<Snowflake>? = null,
-    @SerialName("preferred_locale") val preferredLocale: Optional<String>? = null,
-    val features: Optional<List<String>>? = null,
-    val description: Optional<String>? = null,
-    @SerialName("premium_progress_bar_enabled") val premiumProgressBarEnabled: Optional<Boolean>? = null,
-    @SerialName("safety_alerts_channel_id") val safetyAlertsChannelId: Optional<Snowflake>? = null
+    val name: Possible<String>? = null,
+    val region: Possible<String>? = null,
+    @SerialName("verification_level") val verificationLevel: Possible<Int>? = null,
+    @SerialName("default_message_notifications") val defaultMessageNotifications: Possible<Int>? = null,
+    @SerialName("explicit_content_filter") val explicitContentFilter: Possible<Int>? = null,
+    @SerialName("afk_channel_id") val afkChannelId: Possible<Snowflake>? = null,
+    @SerialName("afk_timeout") val afkTimeout: Possible<Int>? = null,
+    val icon: Possible<ImageData>? = null,
+    @SerialName("owner_id") val ownerId: Possible<Snowflake>? = null,
+    val splash: Possible<ImageData>? = null,
+    @SerialName("discovery_splash") val discoverySplash: Possible<ImageData>? = null,
+    val banner: Possible<ImageData>? = null,
+    @SerialName("system_channel_id") val systemChannelId: Possible<Snowflake>? = null,
+    @SerialName("system_channel_flags") val systemChannelFlags: Possible<Int>? = null,
+    @SerialName("rules_channel_id") val rulesChannelId: Possible<Snowflake>? = null,
+    @SerialName("public_updates_channel_id") val publicUpdatesChannelId: Possible<Snowflake>? = null,
+    @SerialName("preferred_locale") val preferredLocale: Possible<String>? = null,
+    val features: Possible<List<String>>? = null,
+    val description: Possible<String>? = null,
+    @SerialName("premium_progress_bar_enabled") val premiumProgressBarEnabled: Possible<Boolean>? = null,
+    @SerialName("safety_alerts_channel_id") val safetyAlertsChannelId: Possible<Snowflake>? = null
 )
 
 @Serializable
 data class ModifyGuildRolePositionRequestParameters(
     val id: Snowflake,
-    val position: Optional<Int>? = null
+    val position: Possible<Int>? = null
 )
 
 @Serializable
 data class ModifyGuildRoleRequestParameters(
-    val name: Optional<String>? = null,
-    val permissions: Optional<PermissionSet>? = null,
-    val color: Optional<Int>? = null,
-    val hoist: Optional<Boolean>? = null,
-    val icon: Optional<ImageData>? = null,
-    @SerialName("unicode_emoji") val unicodeEmoji: Optional<String>? = null,
-    val mentionable: Optional<Boolean>? = null
+    val name: Possible<String>? = null,
+    val permissions: Possible<PermissionSet>? = null,
+    val color: Possible<Int>? = null,
+    val hoist: Possible<Boolean>? = null,
+    val icon: Possible<ImageData>? = null,
+    @SerialName("unicode_emoji") val unicodeEmoji: Possible<String>? = null,
+    val mentionable: Possible<Boolean>? = null
 )
 
 @Serializable
 data class ModifyGuildScheduledEventRequestParameters(
-    val channelId: Optional<Snowflake>? = null,
-    @SerialName("entity_metadata") val entityMetadata: Optional<GuildScheduledEventEntityMetadataObject>? = null,
-    val name: Optional<String>? = null,
-    @SerialName("privacy_level") val privacyLevel: Optional<Int>? = null,
-    @SerialName("scheduled_start_time") val scheduledStartTime: Optional<ISO8601Timestamp>? = null,
-    @SerialName("scheduled_end_time") val scheduledEndTime: Optional<ISO8601Timestamp>? = null,
-    val description: Optional<String>? = null,
-    @SerialName("entity_type") val entityType: Optional<Int>? = null,
-    val status: Optional<Int>? = null,
-    val image: Optional<ImageData>? = null,
-    @SerialName("recurrence_rule") val recurrenceRule: Optional<GuildScheduledEventRecurrenceRuleObject>? = null
+    val channelId: Possible<Snowflake>? = null,
+    @SerialName("entity_metadata") val entityMetadata: Possible<GuildScheduledEventEntityMetadataObject>? = null,
+    val name: Possible<String>? = null,
+    @SerialName("privacy_level") val privacyLevel: Possible<Int>? = null,
+    @SerialName("scheduled_start_time") val scheduledStartTime: Possible<ISO8601Timestamp>? = null,
+    @SerialName("scheduled_end_time") val scheduledEndTime: Possible<ISO8601Timestamp>? = null,
+    val description: Possible<String>? = null,
+    @SerialName("entity_type") val entityType: Possible<Int>? = null,
+    val status: Possible<Int>? = null,
+    val image: Possible<ImageData>? = null,
+    @SerialName("recurrence_rule") val recurrenceRule: Possible<GuildScheduledEventRecurrenceRuleObject>? = null
 )
 
 @Serializable
 data class ModifyGuildSoundboardSoundRequestParameters(
-    val name: Optional<String>? = null,
-    val volume: Optional<Double>? = null,
-    @SerialName("emoji_id") val emojiId: Optional<Snowflake>? = null,
-    @SerialName("emoji_name") val emojiName: Optional<String>? = null
+    val name: Possible<String>? = null,
+    val volume: Possible<Double>? = null,
+    @SerialName("emoji_id") val emojiId: Possible<Snowflake>? = null,
+    @SerialName("emoji_name") val emojiName: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildStickerRequestParameters(
-    val name: Optional<String>? = null,
-    val description: Optional<String>? = null,
-    val tags: Optional<String>? = null
+    val name: Possible<String>? = null,
+    val description: Possible<String>? = null,
+    val tags: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildTemplateRequestParameters(
-    val name: Optional<String>? = null,
-    val description: Optional<String>? = null
+    val name: Possible<String>? = null,
+    val description: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildWelcomeScreenRequestParameters(
-    val enabled: Optional<Boolean>? = null,
-    @SerialName("welcome_channels") val welcomeChannels: Optional<List<GuildWelcomeScreenChannelObject>>? = null,
-    val description: Optional<String>? = null
+    val enabled: Possible<Boolean>? = null,
+    @SerialName("welcome_channels") val welcomeChannels: Possible<List<GuildWelcomeScreenChannelObject>>? = null,
+    val description: Possible<String>? = null
 )
 
 @Serializable
 data class ModifyGuildWidgetSettingsRequestParameters(
-    val enabled: Optional<Boolean>? = null,
-    @SerialName("channel_id") val channelId: Optional<Snowflake>? = null
+    val enabled: Possible<Boolean>? = null,
+    @SerialName("channel_id") val channelId: Possible<Snowflake>? = null
 )
 
 @Serializable
 data class ModifyStageInstanceRequestParameters(
-    val topic: Optional<String>? = null,
-    @SerialName("privacy_level") val privacyLevel: Optional<Int>? = null,
+    val topic: Possible<String>? = null,
+    @SerialName("privacy_level") val privacyLevel: Possible<Int>? = null,
 )
 
 @Serializable
 data class ModifyThreadChannelRequestParameters(
-    val name: Optional<String>? = null,
-    val archived: Optional<Boolean>? = null,
-    @SerialName("auto_archive_duration") val autoArchiveDuration: Optional<Int>? = null,
-    val locked: Optional<Boolean>? = null,
-    val invitable: Optional<Boolean>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: Optional<Int>? = null,
-    val flags: Optional<Int>? = null,
-    @SerialName("applied_tags") val appliedTags: Optional<List<Snowflake>>? = null
+    val name: Possible<String>? = null,
+    val archived: Possible<Boolean>? = null,
+    @SerialName("auto_archive_duration") val autoArchiveDuration: Possible<Int>? = null,
+    val locked: Possible<Boolean>? = null,
+    val invitable: Possible<Boolean>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: Possible<Int>? = null,
+    val flags: Possible<Int>? = null,
+    @SerialName("applied_tags") val appliedTags: Possible<List<Snowflake>>? = null
 )
 
 @Serializable
 data class ModifyUserVoiceStateRequestParameters(
     @SerialName("channel_id") val channelId: Snowflake,
-    val suppress: Optional<Boolean>? = null
+    val suppress: Possible<Boolean>? = null
 )
 
 @Serializable
 data class ModifyWebhookRequestParameters(
-    val name: Optional<String>? = null,
-    val avatar: Optional<ImageData>? = null,
-    @SerialName("channel_id") val channelId: Optional<Snowflake>? = null,
+    val name: Possible<String>? = null,
+    val avatar: Possible<ImageData>? = null,
+    @SerialName("channel_id") val channelId: Possible<Snowflake>? = null,
 )
 
 @Serializable
@@ -560,33 +560,33 @@ data class SendSoundboardSoundRequestParameters(
 @Serializable
 data class StartThreadFromMessageRequestParameters(
     val name: String,
-    @SerialName("auto_archive_duration") val autoArchiveDuration: Optional<Int>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: Optional<Int>? = null,
+    @SerialName("auto_archive_duration") val autoArchiveDuration: Possible<Int>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: Possible<Int>? = null,
 )
 
 @Serializable
 data class StartThreadInForumOrMediaChannelRequestParameters(
     val name: String,
-    val autoArchiveDuration: Optional<Int>? = null,
-    val rateLimitPerUser: Optional<Int>? = null,
-    val message: Optional<ForumThreadMessageParametersObject>? = null,
-    val appliedTags: Optional<List<Snowflake>>? = null,
-    val files: Optional<List<String>>? = null,
-    val payloadJson: Optional<String>? = null
+    val autoArchiveDuration: Possible<Int>? = null,
+    val rateLimitPerUser: Possible<Int>? = null,
+    val message: Possible<ForumThreadMessageParametersObject>? = null,
+    val appliedTags: Possible<List<Snowflake>>? = null,
+    val files: Possible<List<String>>? = null,
+    val payloadJson: Possible<String>? = null
 )
 
 @Serializable
 data class StartThreadWithoutMessageRequestParameters(
     val name: String,
-    @SerialName("auto_archive_duration") val autoArchiveDuration: Optional<Int>? = null,
-    val type: Optional<Int>? = null,
+    @SerialName("auto_archive_duration") val autoArchiveDuration: Possible<Int>? = null,
+    val type: Possible<Int>? = null,
     val invitable: Boolean,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: Optional<Int>? = null
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: Possible<Int>? = null
 )
 
 @Serializable
 data class UpdateCurrentUserApplicationRoleConnectionRequestParameters(
-    @SerialName("platform_name") val platformName: Optional<String>? = null,
-    @SerialName("platform_username") val platformUsername: Optional<String>? = null,
-    val metadata: Optional<Map<String, ApplicationRoleConnectionMetadataObject>>? = null
+    @SerialName("platform_name") val platformName: Possible<String>? = null,
+    @SerialName("platform_username") val platformUsername: Possible<String>? = null,
+    val metadata: Possible<Map<String, ApplicationRoleConnectionMetadataObject>>? = null
 )

@@ -894,6 +894,186 @@ data class InviteStageInstanceObject(
     val topic: Possible<String>? = null
 )
 
+interface MessageComponentObject {
+    val type: Possible<Int>?
+    val id: Possible<Int>?
+    val customId: Possible<String>?
+}
+
+@Serializable
+data class ActionRowComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class ButtonComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val style: Possible<Int>? = null,
+    val label: Possible<String>? = null,
+    val emoji: Possible<EmojiObject>? = null,
+    @SerialName("sku_id") val skuId: Possible<Snowflake>? = null,
+    val url: Possible<String>? = null,
+    val disabled: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class StringSelectComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val options: Possible<List<SelectOptionObject>>? = null,
+    val placeholder: Possible<String>? = null,
+    @SerialName("min_values") val minValues: Possible<Int>? = null,
+    val disabled: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class SelectOptionObject(
+    val label: Possible<String>? = null,
+    val value: Possible<String>? = null,
+    val description: Possible<String>? = null,
+    val emoji: Possible<EmojiObject>? = null,
+    val default: Possible<Boolean>? = null,
+)
+
+@Serializable
+data class TextInputComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val style: Possible<Int>? = null,
+    val label: Possible<String>? = null,
+    @SerialName("min_length") val minLength: Possible<Int>? = null,
+    @SerialName("max_length") val maxLength: Possible<Int>? = null,
+    val required: Possible<Boolean>? = null,
+    val value: Possible<String>? = null,
+    val placeholder: Possible<String>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class UserSelectComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val placeholder: Possible<String>? = null,
+    @SerialName("default_values") val defaultValues: Possible<List<SelectDefaultValueObject>>? = null,
+    @SerialName("min_values") val minValues: Possible<Int>? = null,
+    @SerialName("max_values") val maxValues: Possible<Int>? = null,
+    val disabled: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class SelectDefaultValueObject(
+    val id: Possible<Snowflake>? = null,
+    val type: Possible<String>? = null
+)
+
+@Serializable
+data class RoleSelectComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val placeholder: Possible<String>? = null,
+    @SerialName("default_values") val defaultValues: Possible<List<SelectDefaultValueObject>>? = null,
+    @SerialName("min_values") val minValues: Possible<Int>? = null,
+    @SerialName("max_values") val maxValues: Possible<Int>? = null,
+    val disabled: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class MentionableSelectComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val placeholder: Possible<String>? = null,
+    @SerialName("default_values") val defaultValues: Possible<List<SelectDefaultValueObject>>? = null,
+    @SerialName("min_values") val minValues: Possible<Int>? = null,
+    @SerialName("max_values") val maxValues: Possible<Int>? = null,
+    val disabled: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class ChannelSelectComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    @SerialName("channel_types") val channelTypes: Possible<List<Int>>? = null,
+    val placeholder: Possible<String>? = null,
+    @SerialName("default_values") val defaultValues: Possible<List<SelectDefaultValueObject>>? = null,
+    @SerialName("min_values") val minValues: Possible<Int>? = null,
+    @SerialName("max_values") val maxValues: Possible<Int>? = null,
+    val disabled: Possible<Boolean>? = null
+) : MessageComponentObject
+
+@Serializable
+data class SectionComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val components: Possible<List<TextDisplayComponentObject>>? = null,
+    val accessory: Possible<MessageComponentObject>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class TextDisplayComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val content: Possible<String>? = null
+) : MessageComponentObject
+
+@Serializable
+data class ThumbnailComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val media: Possible<UnfurledMediaItemObject>? = null,
+    val description: Possible<String>? = null,
+    val spoiler: Possible<Boolean>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class UnfurledMediaItemObject(
+    val url: Possible<String>? = null,
+    @SerialName("proxy_url") val proxyUrl: Possible<String>? = null,
+    val height: Possible<Int>? = null,
+    val width: Possible<Int>? = null,
+    @SerialName("content_type") val contentType: Possible<String>? = null,
+)
+
+@Serializable
+data class FileComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val file: Possible<UnfurledMediaItemObject>? = null,
+    val spoiler: Possible<Boolean>? = null
+) : MessageComponentObject
+
+@Serializable
+data class SeparatorComponentObject(
+    override val type: Possible<Int>? = null,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val divider: Possible<Boolean>? = null,
+    val spacing: Possible<Int>? = null,
+) : MessageComponentObject
+
+@Serializable
+data class ContainerComponentObject(
+    override val type: Possible<Int>,
+    override val id: Possible<Int>? = null,
+    @SerialName("custom_id") override val customId: Possible<String>? = null,
+    val components: Possible<List<MessageComponentObject>>? = null,
+    @SerialName("accent_color") val accentColor: Possible<Int>? = null,
+    val spoiler: Possible<Boolean>? = null,
+) : MessageComponentObject
+
 @Serializable
 data class MessageActivityObject(
     val type: Possible<Int>? = null,
@@ -904,11 +1084,6 @@ data class MessageActivityObject(
 data class MessageCallObject(
     val participants: Possible<List<Snowflake>>? = null,
     val endedTimestamp: Possible<ISO8601Timestamp>? = null
-)
-
-@Serializable
-class MessageComponentObject(
-    // TODO: Value<Implement me
 )
 
 @Serializable
@@ -962,38 +1137,38 @@ data class MessageObject(
     val author: Possible<UserObject>? = null,
     val content: Possible<String>? = null,
     val timestamp: Possible<ISO8601Timestamp>? = null,
-    val editedTimestamp: Possible<ISO8601Timestamp>? = null,
+    @SerialName("edited_timestamp") val editedTimestamp: Possible<ISO8601Timestamp>? = null,
     val tts: Possible<Boolean>? = null,
-    val mentionEveryone: Possible<Boolean>? = null,
+    @SerialName("mention_everyone") val mentionEveryone: Possible<Boolean>? = null,
     val mentions: Possible<List<UserObject>>? = null,
-    val mentionRoles: Possible<List<RoleObject>>? = null,
-    val mentionChannels: Possible<List<ChannelMentionObject>>? = null,
+    @SerialName("mention_roles") val mentionRoles: Possible<List<RoleObject>>? = null,
+    @SerialName("mention_channels") val mentionChannels: Possible<List<ChannelMentionObject>>? = null,
     val attachments: Possible<List<AttachmentObject>>? = null,
     val embeds: Possible<List<EmbedObject>>? = null,
     val reactions: Possible<List<ReactionObject>>? = null,
     val nonce: Possible<String>? = null,
     val pinned: Possible<Boolean>? = null,
-    val webhookId: Possible<Snowflake>? = null,
+    @SerialName("webhook_id") val webhookId: Possible<Snowflake>? = null,
     val type: Possible<Int>? = null,
     val activity: Possible<MessageActivityObject>? = null,
     val application: Possible<ApplicationObject>? = null,
-    val applicationId: Possible<Snowflake>? = null,
+    @SerialName("application_id") val applicationId: Possible<Snowflake>? = null,
     val flags: Possible<Int>? = null,
-    val messageReference: Possible<MessageReferenceObject>? = null,
-    val messageSnapshots: Possible<MessageSnapshotObject>? = null,
-    val referencedMessage: Possible<MessageReferenceObject>? = null,
-    val interactionMetadata: Possible<MessageInteractionMetadataObject>? = null,
+    @SerialName("message_reference") val messageReference: Possible<MessageReferenceObject>? = null,
+    @SerialName("message_snapshots") val messageSnapshots: Possible<MessageSnapshotObject>? = null,
+    @SerialName("referenced_message") val referencedMessage: Possible<MessageReferenceObject>? = null,
+    @SerialName("interaction_metadata") val interactionMetadata: Possible<MessageInteractionMetadataObject>? = null,
     val interaction: Possible<InteractionObject>? = null,
     val thread: Possible<ChannelObject>? = null,
     val components: Possible<List<MessageComponentObject>>? = null,
-    val stickerItems: Possible<List<StickerObject>>? = null,
+    @SerialName("sticker_items") val stickerItems: Possible<List<StickerObject>>? = null,
     val stickers: Possible<List<StickerObject>>? = null,
     val position: Possible<Int>? = null,
-    val roleSubscriptionData: Possible<RoleSubscriptionDataObject>? = null,
+    @SerialName("role_subscription_data") val roleSubscriptionData: Possible<RoleSubscriptionDataObject>? = null,
     val resolved: Possible<ResolvedDataObject>? = null,
     val poll: Possible<PollObject>? = null,
     val call: Possible<MessageCallObject>? = null,
-    val guildId: Possible<Snowflake>? = null,
+    @SerialName("guild_id") val guildId: Possible<Snowflake>? = null,
     val member: Possible<GuildMemberObject>? = null
 )
 

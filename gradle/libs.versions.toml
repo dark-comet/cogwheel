@@ -20,5 +20,5 @@ slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
 slf4j-provider = { module = "org.slf4j:slf4j-reload4j", version.ref = "slf4j-reload4j" }
 
 [plugins]
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "1.9.23" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.2.0" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.0.0" }

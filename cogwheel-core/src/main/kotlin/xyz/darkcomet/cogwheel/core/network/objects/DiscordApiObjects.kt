@@ -340,7 +340,7 @@ data class AutoModerationRuleTriggerMetadataObject(
 )
 
 @Serializable
-data class AvatarDecorationDataObject(
+data class UserAvatarDecorationDataObject(
     val asset: Possible<String>? = null,
     @SerialName("sku_id") val skuId: Possible<Snowflake>? = null
 )
@@ -612,7 +612,7 @@ data class GuildMemberObject(
     val pending: Possible<Boolean>? = null,
     val permissions: Possible<PermissionSet>? = null,
     @SerialName("communication_disabled_until") val communicationDisabledUntil: Possible<ISO8601Timestamp>? = null,
-    @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<AvatarDecorationDataObject>? = null,
+    @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<UserAvatarDecorationDataObject>? = null,
     @SerialName("guild_id") val guildId: Possible<Snowflake>? = null
 )
 
@@ -1444,7 +1444,30 @@ data class UserObject(
     val flags: Possible<Int>? = null,
     @SerialName("premium_type") val premiumType: Possible<Int>? = null,
     @SerialName("public_flags") val publicFlags: Possible<Int>? = null,
-    @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<AvatarDecorationDataObject>? = null
+    @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<UserAvatarDecorationDataObject>? = null,
+    val collectibles: Possible<UserCollectiblesObject?>?,
+    @SerialName("primary_guild") val primaryGuild: Possible<UserPrimaryGuildObject?>?
+)
+
+@Serializable
+data class UserCollectiblesObject(
+    val nameplate: Possible<NameplateObject>?
+)
+
+@Serializable
+data class NameplateObject(
+    @SerialName("sku_id") val skuId: Snowflake,
+    val asset: String,
+    val label: String,
+    val palette: String
+)
+
+@Serializable
+data class UserPrimaryGuildObject(
+    @SerialName("identity_guild_id") val identityGuildId: Snowflake?,
+    @SerialName("identity_enabled") val identityEnabled: Boolean?,
+    val tag: String?,
+    val badge: String?
 )
 
 @Serializable

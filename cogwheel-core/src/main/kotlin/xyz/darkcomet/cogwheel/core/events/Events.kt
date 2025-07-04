@@ -246,7 +246,7 @@ internal constructor(override val data: DataObject) : Event<GuildMemberUpdateEve
         val pending: Possible<Boolean>? = null,
         @SerialName("communication_disabled_until") val communicationDisabledUntil: Possible<ISO8601Timestamp>? = null,
         val flags: Possible<Int>? = null,
-        @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<AvatarDecorationDataObject>? = null
+        @SerialName("avatar_decoration_data") val avatarDecorationData: Possible<UserAvatarDecorationDataObject>? = null
     )
 
 }

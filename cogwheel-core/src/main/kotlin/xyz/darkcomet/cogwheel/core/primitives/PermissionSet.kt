@@ -46,6 +46,10 @@ internal constructor(private val value: BigInteger) {
             return PermissionSet(permissions.fold(BigInteger.ZERO) { acc, permission -> acc or permission.value })
         }
         
+        @JvmStatic fun from(rawString: String): PermissionSet {
+            TODO()
+        }
+        
         @JvmStatic fun all(): PermissionSet {
             return PermissionSet(Permission.entries.fold(BigInteger.ZERO) { acc, permission -> acc or permission.value })
         }

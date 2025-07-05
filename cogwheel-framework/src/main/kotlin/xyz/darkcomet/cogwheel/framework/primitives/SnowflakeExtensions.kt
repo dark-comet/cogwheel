@@ -14,6 +14,14 @@ fun Snowflake.asGuildId(): GuildId {
     return GuildId(this);
 }
 
+fun Snowflake.asChannelId(): ChannelId {
+    return ChannelId(this);
+}
+
+fun Snowflake.asEmojiId(): EmojiId {
+    return EmojiId(this);
+}
+
 fun Snowflake.asTeamId(): TeamId {
     return TeamId(this);
 }

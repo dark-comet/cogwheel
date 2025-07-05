@@ -1,11 +1,21 @@
 package xyz.darkcomet.cogwheel.framework.models
 
-import xyz.darkcomet.cogwheel.framework.primitives.UserId
+import xyz.darkcomet.cogwheel.core.network.objects.UserObject
 
 open class PartialUser(
-    val id: UserId,
-    val username: String,
-    val discriminator: String,
-    val globalName: String?,
-    val avatar: String?
-)
+    val username: String?,
+    val discriminator: String?,
+) {
+    companion object {
+        internal fun from(obj: UserObject): PartialUser {
+            return obj.toPartialUserModel()
+        }
+    }
+}
+
+internal fun UserObject.toPartialUserModel(): PartialUser {
+    return PartialUser(
+        username = requireNonNullIfPresent(this, UserObject::username),
+        discriminator = requireNonNullIfPresent(this, UserObject::discriminator)
+    )
+}

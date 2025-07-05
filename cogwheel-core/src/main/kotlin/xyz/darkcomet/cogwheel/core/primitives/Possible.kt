@@ -17,6 +17,11 @@ open class Possible<T>(val value: T?) {
     
     val isNull: Boolean = value == null
 
+    fun <U> flatMap(transform: (T?) -> U): Possible<U> {
+        val mappedValue = transform.invoke(value)
+        return Possible(mappedValue)
+    }
+    
     override fun equals(other: Any?): Boolean {
         if (other !is Possible<*>) {
             return false

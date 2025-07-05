@@ -5,11 +5,11 @@ import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeCon
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Possible
-import xyz.darkcomet.cogwheel.framework.models.ApplicationInstallParameters
-import xyz.darkcomet.cogwheel.framework.models.ApplicationIntegrationTypeConfiguration
+import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationInstallParameters
+import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationIntegrationTypeConfiguration
 import xyz.darkcomet.cogwheel.framework.models.DiscordImage
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationIntegrationType
-import xyz.darkcomet.cogwheel.framework.primitives.ApplicationPublicFlags
+import xyz.darkcomet.cogwheel.framework.primitives.ApplicationFlag
 
 class EditCurrentApplicationRequestSpec 
 internal constructor() {
@@ -48,7 +48,7 @@ internal constructor() {
         val rawMap = HashMap<String, ApplicationIntegrationTypeConfigurationObject>()
         
         value.entries.forEach { 
-            val rawType = it.key.type
+            val rawType = it.key.key.toString()
             val rawConfigObj = it.value.toObject()
             rawMap.put(rawType, rawConfigObj)
         }
@@ -56,8 +56,8 @@ internal constructor() {
         this.integrationTypesConfig = Possible(rawMap)
     }
     
-    fun flags(value: ApplicationPublicFlags) {
-        this.flags = Possible(value.value)
+    fun flags(value: ApplicationFlag) {
+        this.flags = Possible(value.key)
     }
     
     fun icon(value: DiscordImage?) {

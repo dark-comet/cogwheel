@@ -356,7 +356,7 @@ internal constructor(override val data: DataObject) : Event<GuildStickersUpdateE
 
 }
 
-data class GuildUpdateEvent
+class GuildUpdateEvent
 internal constructor(override val data: GuildObject) : Event<GuildObject>
 
 class IntegrationCreateEvent

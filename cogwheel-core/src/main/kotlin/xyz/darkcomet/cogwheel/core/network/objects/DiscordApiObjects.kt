@@ -226,6 +226,7 @@ data class ApplicationObject(
     val flags: Possible<Int>? = null,
     @SerialName("approximate_guild_count") val approximateGuildCount: Possible<Int>? = null,
     @SerialName("approximate_user_install_count") val approximateUserInstallCount: Possible<Int>? = null,
+    @SerialName("approximate_user_authorization_count") val approximateUserAuthorizationCount: Possible<Int>? = null,
     @SerialName("redirect_uris") val redirectUris: Possible<List<String>>? = null,
     @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: Possible<String>? = null,
     @SerialName("role_connections_verification_url") val roleConnectionsVerificationUrl: Possible<String>? = null,
@@ -601,8 +602,8 @@ data class GuildIntegrationObject(
 data class GuildMemberObject(
     val user: Possible<UserObject>? = null,
     val nick: Possible<String>? = null,
-    val avatar: Possible<ImageData>? = null,
-    val banner: Possible<ImageData>? = null,
+    val avatar: Possible<String>? = null,
+    val banner: Possible<String>? = null,
     val roles: Possible<List<Snowflake>>? = null,
     @SerialName("joined_at") val joinedAt: Possible<ISO8601Timestamp>? = null,
     @SerialName("premium_since") val premiumSince: Possible<ISO8601Timestamp>? = null,
@@ -652,7 +653,7 @@ data class GuildObject(
     @SerialName("max_members") val maxMembers: Possible<Int>? = null,
     @SerialName("vanity_url_code") val vanityUrlCode: Possible<String>? = null,
     val description: Possible<String>? = null,
-    val banner: Possible<ImageData>? = null,
+    val banner: Possible<String>? = null,
     @SerialName("premium_tier") val premiumTier: Possible<Int>? = null,
     @SerialName("premium_subscription_count") val premiumSubscriptionCount: Possible<Int>? = null,
     @SerialName("preferred_locale") val preferredLocale: Possible<String>? = null,
@@ -750,7 +751,7 @@ data class GuildScheduledEventObject(
     @SerialName("entity_metadata") val entityMetadata: Possible<GuildScheduledEventEntityMetadataObject>? = null,
     val creator: Possible<UserObject>? = null,
     @SerialName("user_count") val userCount: Possible<Int>? = null,
-    val image: Possible<ImageData>? = null,
+    val image: Possible<String>? = null,
     @SerialName("recurrence_rule") val recurrenceRule: Possible<GuildScheduledEventRecurrenceRuleObject>? = null,
 )
 
@@ -1363,7 +1364,7 @@ data class SubscriptionObject(
 @Serializable
 data class TeamMemberObject(
     @SerialName("membership_state") val membershipState: Possible<Int>? = null,
-    @SerialName("team_id") val teamId: Possible<Int>? = null,
+    @SerialName("team_id") val teamId: Possible<Snowflake>? = null,
     val user: Possible<UserObject>? = null,
     val role: Possible<String>? = null
 )
@@ -1451,23 +1452,23 @@ data class UserObject(
 
 @Serializable
 data class UserCollectiblesObject(
-    val nameplate: Possible<NameplateObject>?
+    val nameplate: Possible<UserNameplateObject>?
 )
 
 @Serializable
-data class NameplateObject(
-    @SerialName("sku_id") val skuId: Snowflake,
-    val asset: String,
-    val label: String,
-    val palette: String
+data class UserNameplateObject(
+    @SerialName("sku_id") val skuId: Possible<Snowflake?>?,
+    val asset: Possible<String?>?,
+    val label: Possible<String?>?,
+    val palette: Possible<String?>?
 )
 
 @Serializable
 data class UserPrimaryGuildObject(
-    @SerialName("identity_guild_id") val identityGuildId: Snowflake?,
-    @SerialName("identity_enabled") val identityEnabled: Boolean?,
-    val tag: String?,
-    val badge: String?
+    @SerialName("identity_guild_id") val identityGuildId: Possible<Snowflake?>?,
+    @SerialName("identity_enabled") val identityEnabled: Possible<Boolean?>?,
+    val tag: Possible<String?>?,
+    val badge: Possible<String?>?
 )
 
 @Serializable
@@ -1512,7 +1513,7 @@ data class WebhookObject(
     @SerialName("channel_id") val channelId: Possible<Snowflake>? = null,
     val user: Possible<UserObject>? = null,
     val name: Possible<String>? = null,
-    val avatar: Possible<ImageData>? = null,
+    val avatar: Possible<String>? = null,
     val token: Possible<String>? = null,
     @SerialName("application_id") val applicationId: Possible<Snowflake>? = null,
     @SerialName("source_guild") val sourceGuild: Possible<GuildObject>? = null,

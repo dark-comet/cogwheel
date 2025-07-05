@@ -1,6 +1,6 @@
 package xyz.darkcomet.cogwheel.framework.models
 
-import xyz.darkcomet.cogwheel.core.primitives.Possible
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
 import kotlin.reflect.KProperty1
 
@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty1
 
 internal fun <TObject, TValue> require(
     obj: TObject,
-    property: KProperty1<TObject, Possible<TValue>?>
+    property: KProperty1<TObject, MaybeAbsent<TValue>?>
 ): TValue? {
     val field = property.get(obj);
     if (field == null) {
@@ -22,7 +22,7 @@ internal fun <TObject, TValue> require(
 
 internal fun <TObject, TValue> requireNonNull(
     obj: TObject,
-    property: KProperty1<TObject, Possible<TValue>?>
+    property: KProperty1<TObject, MaybeAbsent<TValue>?>
 ): TValue {
     val field = property.get(obj)
     if (field == null || field.value == null) {
@@ -33,7 +33,7 @@ internal fun <TObject, TValue> requireNonNull(
 
 internal fun <TObject, TValue> requireNonNullIfPresent(
     obj: TObject,
-    property: KProperty1<TObject, Possible<TValue>?>
+    property: KProperty1<TObject, MaybeAbsent<TValue>?>
 ): TValue? {
     val field = property.get(obj)
     if (field == null) {

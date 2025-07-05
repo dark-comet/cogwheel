@@ -11,7 +11,7 @@ import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.Intents
-import xyz.darkcomet.cogwheel.core.primitives.Possible
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.util.*
 import java.util.concurrent.CountDownLatch
@@ -103,14 +103,14 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
         val iconImageData = ImageData.fromBytes(ImageData.FileExtension.PNG, newIconImageData)
 
         val modifyRequest = ModifyGuildRequestParameters(
-            name = Possible(newGuildName),
-            verificationLevel = Possible(newVerificationLevel),
-            defaultMessageNotifications = Possible(newDefaultMessageNotificationLevel),
-            explicitContentFilter = Possible(newExplicitContentFilterLevel),
-            afkTimeout = Possible(newAfkTimeout),
-            premiumProgressBarEnabled = Possible(newPremiumProgressBarEnabled),
-            description = Possible(newGuildDescription),
-            icon = Possible(iconImageData)
+            name = MaybeAbsent(newGuildName),
+            verificationLevel = MaybeAbsent(newVerificationLevel),
+            defaultMessageNotifications = MaybeAbsent(newDefaultMessageNotificationLevel),
+            explicitContentFilter = MaybeAbsent(newExplicitContentFilterLevel),
+            afkTimeout = MaybeAbsent(newAfkTimeout),
+            premiumProgressBarEnabled = MaybeAbsent(newPremiumProgressBarEnabled),
+            description = MaybeAbsent(newGuildDescription),
+            icon = MaybeAbsent(iconImageData)
         )
         val modifyResponse = guildApi.modifyGuild(guildId, modifyRequest)
 

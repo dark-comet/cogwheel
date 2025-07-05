@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
-import xyz.darkcomet.cogwheel.core.primitives.Possible
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 
 class ApplicationIntegrationTypeConfiguration(
@@ -9,7 +9,7 @@ class ApplicationIntegrationTypeConfiguration(
 ) {
     internal fun toObject(): ApplicationIntegrationTypeConfigurationObject {
         return ApplicationIntegrationTypeConfigurationObject(
-            oauth2InstallParams = Possible(oauth2InstallParams.toObject())
+            oauth2InstallParams = MaybeAbsent(oauth2InstallParams.toObject())
         )
     }
     

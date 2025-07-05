@@ -4,7 +4,7 @@ import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObjec
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
-import xyz.darkcomet.cogwheel.core.primitives.Possible
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationInstallParameters
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationIntegrationTypeConfiguration
 import xyz.darkcomet.cogwheel.framework.models.DiscordImage
@@ -14,34 +14,34 @@ import xyz.darkcomet.cogwheel.framework.primitives.ApplicationFlag
 class EditCurrentApplicationRequestSpec 
 internal constructor() {
     
-    private var customInstallUrl: Possible<String>? = null
-    private var description: Possible<String>? = null
-    private var roleConnectionVerificationUrl: Possible<String>? = null
-    private var installParams: Possible<ApplicationInstallParamsObject>? = null
-    private var integrationTypesConfig: Possible<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null
-    private var flags: Possible<Int>? = null
-    private var icon: Possible<ImageData?>? = null
-    private var coverImage: Possible<ImageData?>? = null
-    private var interactionsEndpointUrl: Possible<String>? = null
-    private var tags: Possible<List<String>>? = null
-    private var eventWebhooksUrl: Possible<String>? = null
-    private var eventWebhooksStatus: Possible<Int>? = null
-    private var eventWebhooksTypes: Possible<List<String>>? = null
+    private var customInstallUrl: MaybeAbsent<String>? = null
+    private var description: MaybeAbsent<String>? = null
+    private var roleConnectionVerificationUrl: MaybeAbsent<String>? = null
+    private var installParams: MaybeAbsent<ApplicationInstallParamsObject>? = null
+    private var integrationTypesConfig: MaybeAbsent<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null
+    private var flags: MaybeAbsent<Int>? = null
+    private var icon: MaybeAbsent<ImageData?>? = null
+    private var coverImage: MaybeAbsent<ImageData?>? = null
+    private var interactionsEndpointUrl: MaybeAbsent<String>? = null
+    private var tags: MaybeAbsent<List<String>>? = null
+    private var eventWebhooksUrl: MaybeAbsent<String>? = null
+    private var eventWebhooksStatus: MaybeAbsent<Int>? = null
+    private var eventWebhooksTypes: MaybeAbsent<List<String>>? = null
 
     fun customInstallUrl(value: String) {
-        this.customInstallUrl = Possible(value)
+        this.customInstallUrl = MaybeAbsent(value)
     }
     
     fun description(value: String) {
-        this.description = Possible(value)
+        this.description = MaybeAbsent(value)
     }
     
     fun roleConnectionVerificationUrl(value: String) {
-        this.roleConnectionVerificationUrl = Possible(value)
+        this.roleConnectionVerificationUrl = MaybeAbsent(value)
     }
     
     fun installParams(value: ApplicationInstallParameters) {
-        this.installParams = Possible(value.toObject())
+        this.installParams = MaybeAbsent(value.toObject())
     }
     
     fun integrationTypesConfig(value: Map<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>) {
@@ -53,41 +53,41 @@ internal constructor() {
             rawMap.put(rawType, rawConfigObj)
         }
         
-        this.integrationTypesConfig = Possible(rawMap)
+        this.integrationTypesConfig = MaybeAbsent(rawMap)
     }
     
     fun flags(value: ApplicationFlag) {
-        this.flags = Possible(value.key)
+        this.flags = MaybeAbsent(value.key)
     }
     
     fun icon(value: DiscordImage?) {
-        this.icon = Possible(value?.imageData)
+        this.icon = MaybeAbsent(value?.imageData)
     }
     
     fun coverImage(value: DiscordImage) {
-        this.coverImage = Possible(value.imageData)
+        this.coverImage = MaybeAbsent(value.imageData)
     }
     
     fun interactionEndpointUrl(value: String) {
-        this.interactionsEndpointUrl = Possible(value);
+        this.interactionsEndpointUrl = MaybeAbsent(value);
     }
     
     fun tags(value: List<String>) {
         val valueCopy = ArrayList(value);
-        this.tags = Possible(valueCopy)
+        this.tags = MaybeAbsent(valueCopy)
     }
     
     fun eventWebhooksUrl(value: String) {
-        this.eventWebhooksUrl = Possible(value);
+        this.eventWebhooksUrl = MaybeAbsent(value);
     }
     
     fun eventWebhooksStatus(value: Int) {
-        this.eventWebhooksStatus = Possible(value)
+        this.eventWebhooksStatus = MaybeAbsent(value)
     }
     
     fun eventWebhooksTypes(value: List<String>) {
         val valueCopy = ArrayList(value);
-        this.eventWebhooksTypes = Possible(valueCopy);
+        this.eventWebhooksTypes = MaybeAbsent(valueCopy);
     }
     
     internal fun build(): EditCurrentApplicationRequestParameters {

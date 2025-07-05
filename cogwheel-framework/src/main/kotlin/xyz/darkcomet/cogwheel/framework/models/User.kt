@@ -1,6 +1,6 @@
 package xyz.darkcomet.cogwheel.framework.models
 
-import xyz.darkcomet.cogwheel.core.primitives.Possible
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserAvatarDecorationData
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserCollectibles
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserPrimaryGuild
@@ -12,18 +12,18 @@ class User(
     discriminator: String,
     val globalName: String?,
     val avatar: String?,
-    val bot: Possible<Boolean>?,
-    val system: Possible<Boolean>?,
-    val mfaEnabled: Possible<Boolean>?,
-    val banner: Possible<String>?,
-    val accentColor: Possible<DiscordColor?>?,
-    val locale: Possible<DiscordLocale>?,
-    val verified: Possible<Boolean>?,
-    val email: Possible<String?>?,
-    val flags: Possible<UserFlag>?,
-    val premiumType: Possible<UserPremiumType>,
-    val publicFlags: Possible<UserFlag>,
-    val avatarDecorationData: Possible<UserAvatarDecorationData?>?,
-    val collectibles: Possible<UserCollectibles?>?,
-    val primaryGuild: Possible<UserPrimaryGuild?>?
+    val bot: MaybeAbsent<Boolean>?,
+    val system: MaybeAbsent<Boolean>?,
+    val mfaEnabled: MaybeAbsent<Boolean>?,
+    val banner: MaybeAbsent<String>?,
+    val accentColor: MaybeAbsent<DiscordColor?>?,
+    val locale: MaybeAbsent<DiscordLocale>?,
+    val verified: MaybeAbsent<Boolean>?,
+    val email: MaybeAbsent<String?>?,
+    val flags: MaybeAbsent<UserFlag>?,
+    val premiumType: MaybeAbsent<UserPremiumType>,
+    val publicFlags: MaybeAbsent<UserFlag>,
+    val avatarDecorationData: MaybeAbsent<UserAvatarDecorationData?>?,
+    val collectibles: MaybeAbsent<UserCollectibles?>?,
+    val primaryGuild: MaybeAbsent<UserPrimaryGuild?>?
 ) : PartialUser(username, discriminator)

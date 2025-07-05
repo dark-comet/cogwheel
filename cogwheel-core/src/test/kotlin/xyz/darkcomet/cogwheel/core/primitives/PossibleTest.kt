@@ -24,53 +24,53 @@ class PossibleTest {
     
     @Test
     fun testSerialize_nonNullValueWrapper_nullValue_valueSerializedAsNull() {
-        val obj = TestDataObject<Int>(property = Possible(null))
+        val obj = TestDataObject<Int>(property = MaybeAbsent(null))
 
         assertEquals("""{"property":null}""", Json.encodeToString(TestDataObject.serializer(Int.serializer()), obj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_nonNullValue_primitive_valueSerialized() {
-        val byteObj = TestDataObject(property = Possible(1.toByte()))
+        val byteObj = TestDataObject(property = MaybeAbsent(1.toByte()))
         assertEquals("""{"property":1}""", Json.encodeToString(TestDataObject.serializer(Byte.serializer()), byteObj))
 
-        val shortObj = TestDataObject(property = Possible(2.toShort()))
+        val shortObj = TestDataObject(property = MaybeAbsent(2.toShort()))
         assertEquals("""{"property":2}""", Json.encodeToString(TestDataObject.serializer(Short.serializer()), shortObj))
 
-        val intObj = TestDataObject(property = Possible(3))
+        val intObj = TestDataObject(property = MaybeAbsent(3))
         assertEquals("""{"property":3}""", Json.encodeToString(TestDataObject.serializer(Int.serializer()), intObj))
 
-        val longObj = TestDataObject(property = Possible(4.toLong()))
+        val longObj = TestDataObject(property = MaybeAbsent(4.toLong()))
         assertEquals("""{"property":4}""", Json.encodeToString(TestDataObject.serializer(Long.serializer()), longObj))
 
-        val booleanObj = TestDataObject(property = Possible(true))
+        val booleanObj = TestDataObject(property = MaybeAbsent(true))
         assertEquals("""{"property":true}""", Json.encodeToString(TestDataObject.serializer(Boolean.serializer()), booleanObj))
 
-        val stringObj = TestDataObject(property = Possible("test"))
+        val stringObj = TestDataObject(property = MaybeAbsent("test"))
         assertEquals("""{"property":"test"}""", Json.encodeToString(TestDataObject.serializer(String.serializer()), stringObj))
 
-        val floatObj = TestDataObject(property = Possible(1.5f))
+        val floatObj = TestDataObject(property = MaybeAbsent(1.5f))
         assertEquals("""{"property":1.5}""", Json.encodeToString(TestDataObject.serializer(Float.serializer()), floatObj))
 
-        val doubleObj = TestDataObject(property = Possible(2.5))
+        val doubleObj = TestDataObject(property = MaybeAbsent(2.5))
         assertEquals("""{"property":2.5}""", Json.encodeToString(TestDataObject.serializer(Double.serializer()), doubleObj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_nonNullValue_objectValue_objectSerialized() {
-        val fooObj = TestDataObject(property = Possible(Foo("test")))
+        val fooObj = TestDataObject(property = MaybeAbsent(Foo("test")))
         assertEquals("""{"property":{"bar":"test"}}""", Json.encodeToString(TestDataObject.serializer(Foo.serializer()), fooObj))
     }
     
     @Test
     fun testSerialize_nonNullValueWrapper_notNullValue_objectValueWithCustomSerializer_objectSerialized() {
-        val fooWithCustomSerializerObj = TestDataObject(property = Possible(FooWithCustomSerializer("test2")))
+        val fooWithCustomSerializerObj = TestDataObject(property = MaybeAbsent(FooWithCustomSerializer("test2")))
         assertEquals("""{"property":":test2:"}""", Json.encodeToString(TestDataObject.serializer(FooWithCustomSerializer.serializer()), fooWithCustomSerializerObj))
     }
     
     @Test
     fun testSerialize_customSerialNameValueWrapper_objectSerialized() {
-        val fooObj = TestDataObjectWithSerialName(property = Possible(Foo("test3")))
+        val fooObj = TestDataObjectWithSerialName(property = MaybeAbsent(Foo("test3")))
         assertEquals("""{"renamed_property":{"bar":"test3"}}""", Json.encodeToString(TestDataObjectWithSerialName.serializer(Foo.serializer()), fooObj))
     }
     
@@ -163,10 +163,10 @@ class PossibleTest {
     
     
     @Serializable
-    private data class TestDataObject<T : Any>(val property: Possible<T>? = null)
+    private data class TestDataObject<T : Any>(val property: MaybeAbsent<T>? = null)
 
     @Serializable
-    private data class TestDataObjectWithSerialName<T : Any>(@SerialName("renamed_property") val property: Possible<T>? = null)
+    private data class TestDataObjectWithSerialName<T : Any>(@SerialName("renamed_property") val property: MaybeAbsent<T>? = null)
     
     @Serializable
     private data class Foo(val bar: String)

@@ -188,16 +188,6 @@ internal class CwRateLimitStrategy(private val maxWaitSeconds: Int) : RateLimitS
         return delaySeconds
     }
 
-    private suspend fun steppedDelay(seconds: Double) {
-        val steps = Math.ceil(seconds).toInt()
-
-        // Wait in 1s steps to respond to coroutine cancellations
-        for (step in 1..steps) {
-            val delayMillis = if (step < steps) 1000L else ((seconds * 1000) % 1000).toLong()
-            delay(delayMillis)
-        }
-    }
-
     override suspend fun prepareRequestSubmit(request: CwHttpRequest): Boolean {
         return prepareRequestSubmitImpl(request.method, request.rateLimitRouteIdentifier, delay = true)
     }
@@ -214,7 +204,7 @@ internal class CwRateLimitStrategy(private val maxWaitSeconds: Int) : RateLimitS
                 }
 
                 if (delay) {
-                    steppedDelay(secondsToWait)
+                    delay(secondsToWait.toLong() * 1000L)
                 }
             }
         }

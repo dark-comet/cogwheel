@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.events.Event
+import xyz.darkcomet.cogwheel.core.events.EventSubscription
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
@@ -62,9 +63,9 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
             )
         } else null
         
-        restApi = RestApiImpl(restClient)
-        gatewayApi = GatewayApiImpl(gatewayClient)
-        eventManager = EventManagerImpl(gatewayClient)
+        restApi = RestApiImpl()
+        gatewayApi = GatewayApiImpl()
+        eventManager = EventManagerImpl()
         assetLocator = AssetLocatorImpl(config.discordAssetBaseUrl)
         
         logger.info("DiscordClient initialized")
@@ -90,32 +91,36 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
     override fun events(): CwDiscordClient.EventManager = eventManager
     override fun locateAsset(): CwDiscordClient.AssetLocator = assetLocator
     
-    internal class RestApiImpl(client: CwHttpClient) : CwDiscordClient.RestApi {
-        override val application = ApplicationResource(client)
-        override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataResource(client)
-        override val auditLog = AuditLogResource(client)
-        override val autoModeration = AutoModerationResource(client)
-        override val channel = ChannelResource(client)
-        override val emoji = EmojiResource(client)
-        override val entitlement = EntitlementResource(client)
-        override val gateway = GatewayResource(client)
-        override val guild = GuildResource(client)
-        override val guildScheduledEvent = GuildScheduledEventResource(client)
-        override val guildTemplate = GuildTemplateResource(client)
-        override val invite = InviteResource(client)
-        override val message = MessageResource(client)
-        override val poll = PollResource(client)
-        override val sku = SkuResource(client)
-        override val soundboard = SoundboardResource(client)
-        override val stageInstance = StageInstanceResource(client)
-        override val sticker = StickerResource(client)
-        override val subscription = SubscriptionResource(client)
-        override val user = UserResource(client)
-        override val voice = VoiceResource(client)
-        override val webhook = WebhookResource(client)
+    internal inner class RestApiImpl : CwDiscordClient.RestApi {
+        private val restClient = this@CwDiscordClientImpl.restClient
+        
+        override val application = ApplicationResource(restClient)
+        override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataResource(restClient)
+        override val auditLog = AuditLogResource(restClient)
+        override val autoModeration = AutoModerationResource(restClient)
+        override val channel = ChannelResource(restClient)
+        override val emoji = EmojiResource(restClient)
+        override val entitlement = EntitlementResource(restClient)
+        override val gateway = GatewayResource(restClient)
+        override val guild = GuildResource(restClient)
+        override val guildScheduledEvent = GuildScheduledEventResource(restClient)
+        override val guildTemplate = GuildTemplateResource(restClient)
+        override val invite = InviteResource(restClient)
+        override val message = MessageResource(restClient)
+        override val poll = PollResource(restClient)
+        override val sku = SkuResource(restClient)
+        override val soundboard = SoundboardResource(restClient)
+        override val stageInstance = StageInstanceResource(restClient)
+        override val sticker = StickerResource(restClient)
+        override val subscription = SubscriptionResource(restClient)
+        override val user = UserResource(restClient)
+        override val voice = VoiceResource(restClient)
+        override val webhook = WebhookResource(restClient)
     }
     
-    internal class GatewayApiImpl(private val client: CwGatewayClient?) : CwDiscordClient.GatewayApi {
+    internal inner class GatewayApiImpl : CwDiscordClient.GatewayApi {
+        
+        private val client = this@CwDiscordClientImpl.gatewayClient
         
         override fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters) {
             assertClientInitialized()
@@ -146,31 +151,38 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         
     }
     
-    internal class EventManagerImpl(client: CwGatewayClient?) : CwDiscordClient.EventManager {
+    internal inner class EventManagerImpl : CwDiscordClient.EventManager {
         
         private val listeners: MutableMap<EventType<*>, ArrayList<(Event<*>) -> Unit>> = HashMap()
+        private val delegateListeners: MutableMap<EventSubscription<*>, (Event<*>) -> Unit> = HashMap();
         
         init {
-            client?.onEventReceived { event ->
+            this@CwDiscordClientImpl.gatewayClient?.onEventReceived { event ->
                 listeners[event.type]?.forEach {
                     it.invoke(event)
                 }
             }
         }
         
-        override fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: (T) -> Unit) {
-            listeners.putIfAbsent(eventType, ArrayList())
+        override fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: EventSubscription<T>) {
+            val delegate: (Event<*>) -> Unit = {
+                @Suppress("UNCHECKED_CAST")
+                listener.eventReceived(it as T)
+            }
             
-            @Suppress("UNCHECKED_CAST")
-            listeners[eventType]!!.add(listener as (Event<*>) -> Unit)
+            listeners.putIfAbsent(eventType, ArrayList())
+            listeners[eventType]!!.add(delegate)
         }
         
-        override fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: (T) -> Unit): Boolean {
-            return listeners[eventType]?.remove(listener) ?: false
+        override fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: EventSubscription<T>): Boolean {
+            val delegate = delegateListeners.remove(listener) 
+                ?: return false
+            
+            return listeners[eventType]?.remove(delegate) ?: false
         }
     }
     
-    internal class AssetLocatorImpl(val baseUrl: String) : CwDiscordClient.AssetLocator {
+    internal inner class AssetLocatorImpl(val baseUrl: String) : CwDiscordClient.AssetLocator {
         
         override fun customEmoji(emojiId: Snowflake, size: AssetSize): AssetLocation {
             return locate("emojis/${emojiId}.png", size)

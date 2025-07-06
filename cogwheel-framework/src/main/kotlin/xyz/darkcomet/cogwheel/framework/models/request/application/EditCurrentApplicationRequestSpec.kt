@@ -1,15 +1,14 @@
-package xyz.darkcomet.cogwheel.framework.models.request
+package xyz.darkcomet.cogwheel.framework.models.request.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
-import xyz.darkcomet.cogwheel.core.primitives.ImageData
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
+import xyz.darkcomet.cogwheel.framework.models.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationInstallParameters
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationIntegrationTypeConfiguration
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
-import xyz.darkcomet.cogwheel.framework.primitives.ApplicationIntegrationType
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationFlag
+import xyz.darkcomet.cogwheel.framework.primitives.ApplicationIntegrationType
 
 class EditCurrentApplicationRequestSpec 
 internal constructor() {

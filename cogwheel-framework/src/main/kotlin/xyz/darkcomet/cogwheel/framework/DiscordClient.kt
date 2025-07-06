@@ -1,40 +1,47 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework
 
 import xyz.darkcomet.cogwheel.core.events.Event
+import xyz.darkcomet.cogwheel.core.events.EventSubscription
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.primitives.auth.*
 import xyz.darkcomet.cogwheel.framework.modules.*
 
 interface DiscordClient {
     
-    val application: ApplicationModule
-    val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataModule
-    val auditLog: AuditLogModule
-    val autoModeration: AutoModerationModule
-    val channel: ChannelModule
-    val emoji: EmojiModule
-    val entitlement: EntitlementModule
-    val gateway: GatewayModule
-    val guild: GuildModule
-    val guildScheduledEvent: GuildScheduledEventModule
-    val guildTemplate: GuildTemplateModule
-    val invite: InviteModule
-    val message: MessageModule
-    val poll: PollModule
-    val sku: SkuModule
-    val soundboard: SoundboardModule
-    val stageInstance: StageInstanceModule
-    val sticker: StickerModule
-    val subscription: SubscriptionModule
-    val user: UserModule
-    val voice: VoiceModule
-    val webhook: WebhookModule
+    fun modules(): RestApiModules 
     
     suspend fun startGateway()
     fun stopGateway()
     
-    fun <T : Event<*>> on(eventType: EventType<T>, listener: (T) -> Unit)
-    fun <T : Event<*>> off(eventType: EventType<T>, listener: (T) -> Unit): Boolean
+    fun <T : Event<*>> on(eventType: EventType<T>, listener: EventSubscription<T>)
+    fun <T : Event<*>> off(eventType: EventType<T>, listener: EventSubscription<T>): Boolean
+    
+    interface RestApiModules {
+        val application: ApplicationModule
+        val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataModule
+        val auditLog: AuditLogModule
+        val autoModeration: AutoModerationModule
+        val channel: ChannelModule
+        val emoji: EmojiModule
+        val entitlement: EntitlementModule
+        val gateway: GatewayModule
+        val guild: GuildModule
+        val guildScheduledEvent: GuildScheduledEventModule
+        val guildTemplate: GuildTemplateModule
+        val invite: InviteModule
+        val message: MessageModule
+        val poll: PollModule
+        val sku: SkuModule
+        val soundboard: SoundboardModule
+        val stageInstance: StageInstanceModule
+        val sticker: StickerModule
+        val subscription: SubscriptionModule
+        val user: UserModule
+        val voice: VoiceModule
+        val webhook: WebhookModule
+    }
     
     companion object {
         

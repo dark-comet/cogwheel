@@ -63,9 +63,6 @@ sealed class DataUrlScheme {
     
 }
 
-// TODO: Why 'SERIALIZER_TYPE_INCOMPATIBLE'? Does the compiler assume the serializer does not support 
-//       polymorphic deserialization? Is there a better approach? 
-@Suppress("SERIALIZER_TYPE_INCOMPATIBLE", "ConvertSecondaryConstructorToPrimary")
 @Serializable(with = DataUrlScheme.Serializer::class)
 class ImageData : DataUrlScheme {
 

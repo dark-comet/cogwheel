@@ -8,6 +8,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.guild.PartialGuild
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toPartialGuildModel
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
+@Suppress("unused")
 class Application(
     val id: ApplicationId,
     val name: String,
@@ -41,7 +42,13 @@ class Application(
     val installParams: ApplicationInstallParameters?,
     val integrationTypesConfig: Map<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>?,
     val customInstallUrl: String?,
-)
+) {
+    companion object {
+        internal fun from(obj: ApplicationObject): Application {
+            return obj.toModel()
+        }
+    }
+}
 
 internal fun ApplicationObject.toModel(): Application {
     return Application(

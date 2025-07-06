@@ -1,6 +1,7 @@
 package xyz.darkcomet.cogwheel.core
 
 import xyz.darkcomet.cogwheel.core.events.Event
+import xyz.darkcomet.cogwheel.core.events.EventSubscription
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.primitives.auth.BotToken
 import xyz.darkcomet.cogwheel.core.primitives.auth.OAuth2Token
@@ -55,8 +56,8 @@ interface CwDiscordClient {
     }
     
     interface EventManager {
-        fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: (T) -> Unit)
-        fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: (T) -> Unit): Boolean
+        fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: EventSubscription<T>)
+        fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: EventSubscription<T>): Boolean
     }
     
     interface AssetLocator {

@@ -10,7 +10,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
 @Serializable(with = Snowflake.Serializer::class)
-class Snowflake(val value: BigInteger) : Comparable<Snowflake> {
+open class Snowflake(val value: BigInteger) : Comparable<Snowflake> {
 
     constructor(value: String) : this(BigInteger(value))
     constructor(value: Long) : this(BigInteger.valueOf(value))

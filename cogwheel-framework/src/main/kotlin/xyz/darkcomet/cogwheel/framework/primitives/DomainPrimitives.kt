@@ -5,19 +5,32 @@ package xyz.darkcomet.cogwheel.framework.primitives
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 
-data class ApplicationId(val id: Snowflake)
+data class ApplicationId(val snowflake: Snowflake)
 
-data class UserId(val id: Snowflake)
+data class UserId(val snowflake: Snowflake)
 
-data class GuildId(val id: Snowflake)
+data class GuildId(val snowflake: Snowflake)
 
-data class ChannelId(val id: Snowflake)
+data class ChannelId(val snowflake: Snowflake)
 
-data class EmojiId(val id: Snowflake)
+data class EmojiId(val snowflake: Snowflake)
 
-data class TeamId(val id: Snowflake)
+data class TeamId(val snowflake: Snowflake)
 
-data class SkuId(val id: Snowflake)
+data class SkuId(val snowflake: Snowflake)
+
+data class LocalizationMap(private val map: Map<String, String>) {
+    
+    fun toObject(): Map<String, String> {
+        return this.map
+    }
+    
+    companion object {
+        fun from(rawMap: Map<String, String>): LocalizationMap {
+            return LocalizationMap(rawMap)
+        }
+    }
+}
 
 @ConsistentCopyVisibility
 data class DiscordColor 
@@ -85,6 +98,27 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         override fun createValue(newKey: Int): ApplicationIntegrationType
             = ApplicationIntegrationType(newKey)
     }
+}
+
+@ConsistentCopyVisibility
+data class ApplicationRoleConnectionMetadataType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, ApplicationRoleConnectionMetadataType>() {
+        
+        @JvmField val INTEGER_LESS_THAN_OR_EQUAL = addPreset(1)
+        @JvmField val INTEGER_GREATER_THAN_OR_EQUAL = addPreset(2)
+        @JvmField val INTEGER_EQUAL = addPreset(3)
+        @JvmField val INTEGER_NOT_EQUAL = addPreset(4)
+        @JvmField val DATETIME_LESS_THAN_OR_EQUAL = addPreset(5)
+        @JvmField val DATETIME_GREATER_THAN_OR_EQUAL = addPreset(6)
+        @JvmField val BOOLEAN_EQUAL = addPreset(7)
+        @JvmField val BOOLEAN_NOT_EQUAL = addPreset(8)
+
+
+        override fun createValue(newKey: Int): ApplicationRoleConnectionMetadataType
+            = ApplicationRoleConnectionMetadataType(newKey)
+
+    } 
 }
 
 @ConsistentCopyVisibility

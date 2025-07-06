@@ -17,22 +17,22 @@ interface EventType<TEvent : Event<*>>
 /**
  * Defines the exhaustive list of events in the Discord Gateway API that the client can subscribe to.
  */
-open class GatewayEvent protected constructor() {
+open class Gateway protected constructor() {
 
     // This scoped namespace is purely for developer ergonomics
 
     class ApplicationCommandPermissionsUpdate
     internal constructor(
         override val data: ApplicationCommandPermissionObject,
-        override val type: EventType<ApplicationCommandPermissionsUpdate> = Type
+        override val type: EventType<ApplicationCommandPermissionsUpdate> = Event
     ) : Event<ApplicationCommandPermissionObject> {
-        companion object Type : EventType<ApplicationCommandPermissionsUpdate>
+        companion object Event : EventType<ApplicationCommandPermissionsUpdate>
     }
 
     class AutoModerationActionExecution
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<AutoModerationActionExecution> = Type
+        override val type: EventType<AutoModerationActionExecution> = Event
     ): Event<AutoModerationActionExecution.DataObject> {
 
         @Serializable
@@ -50,53 +50,53 @@ open class GatewayEvent protected constructor() {
             @SerialName("matched_content") val matchedContent: MaybeAbsent<String>? = null,
         )
 
-        companion object Type : EventType<AutoModerationActionExecution>
+        companion object Event : EventType<AutoModerationActionExecution>
     }
 
     class AutoModerationRuleCreate
     internal constructor(
         override val data: GuildAutoModerationRuleObject,
-        override val type: EventType<AutoModerationRuleCreate> = Type
+        override val type: EventType<AutoModerationRuleCreate> = Event
     ): Event<GuildAutoModerationRuleObject> {
-        companion object Type : EventType<AutoModerationRuleCreate>
+        companion object Event : EventType<AutoModerationRuleCreate>
     }
 
     class AutoModerationRuleDelete
     internal constructor(
         override val data: GuildAutoModerationRuleObject,
-        override val type: EventType<AutoModerationRuleDelete> = Type
+        override val type: EventType<AutoModerationRuleDelete> = Event
     ): Event<GuildAutoModerationRuleObject> {
-        companion object Type : EventType<AutoModerationRuleDelete>
+        companion object Event : EventType<AutoModerationRuleDelete>
     }
 
     class AutoModerationRuleUpdate
     internal constructor(
         override val data: GuildAutoModerationRuleObject,
-        override val type: EventType<AutoModerationRuleUpdate> = Type
+        override val type: EventType<AutoModerationRuleUpdate> = Event
     ): Event<GuildAutoModerationRuleObject> {
-        companion object Type : EventType<AutoModerationRuleUpdate>
+        companion object Event : EventType<AutoModerationRuleUpdate>
     }
 
     class ChannelCreate
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ChannelCreate> = Type
+        override val type: EventType<ChannelCreate> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ChannelCreate>
+        companion object Event : EventType<ChannelCreate>
     }
 
     class ChannelDelete
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ChannelDelete> = Type
+        override val type: EventType<ChannelDelete> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ChannelDelete>
+        companion object Event : EventType<ChannelDelete>
     }
 
     class ChannelPinsUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<ChannelPinsUpdate> = Type
+        override val type: EventType<ChannelPinsUpdate> = Event
     ) : Event<ChannelPinsUpdate.DataObject> {
 
         @Serializable
@@ -106,66 +106,66 @@ open class GatewayEvent protected constructor() {
             @SerialName("last_pin_timestamp") val lastPinTimestamp: MaybeAbsent<ISO8601Timestamp>? = null,
         )
 
-        companion object Type : EventType<ChannelPinsUpdate>
+        companion object Event : EventType<ChannelPinsUpdate>
         
     }
 
     class ChannelUpdate
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ChannelUpdate> = Type
+        override val type: EventType<ChannelUpdate> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ChannelUpdate>
+        companion object Event : EventType<ChannelUpdate>
     }
 
     class EntitlementCreate
     internal constructor(
         override val data: EntitlementObject,
-        override val type: EventType<EntitlementCreate> = Type
+        override val type: EventType<EntitlementCreate> = Event
     ) : Event<EntitlementObject> {
-        companion object Type : EventType<EntitlementCreate>
+        companion object Event : EventType<EntitlementCreate>
     }
 
     class EntitlementDelete
     internal constructor(
         override val data: EntitlementObject,
-        override val type: EventType<EntitlementDelete> = Type
+        override val type: EventType<EntitlementDelete> = Event
     ) : Event<EntitlementObject> {
-        companion object Type : EventType<EntitlementDelete>
+        companion object Event : EventType<EntitlementDelete>
     }
 
     class EntitlementUpdate
     internal constructor(
         override val data: EntitlementObject,
-        override val type: EventType<EntitlementUpdate> = Type
+        override val type: EventType<EntitlementUpdate> = Event
     ) : Event<EntitlementObject> {
-        companion object Type : EventType<EntitlementUpdate>
+        companion object Event : EventType<EntitlementUpdate>
     }
 
     class HeartbeatAck(
-        override val type: EventType<HeartbeatAck> = Type
+        override val type: EventType<HeartbeatAck> = Event
     ) : Event<Unit> {
 
         override val data: Unit?
             get() = null
 
-        companion object Type : EventType<HeartbeatAck>
+        companion object Event : EventType<HeartbeatAck>
     }
 
     class Heartbeat(
-        override val type: EventType<Heartbeat> = Type
+        override val type: EventType<Heartbeat> = Event
     ) : Event<Unit> {
 
         override val data: Unit?
             get() = null
 
-        companion object Type : EventType<Heartbeat>
+        companion object Event : EventType<Heartbeat>
     }
 
     class Hello
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<Hello> = Type
+        override val type: EventType<Hello> = Event
     ) : Event<Hello.DataObject> {
 
         @Serializable
@@ -173,24 +173,24 @@ open class GatewayEvent protected constructor() {
             @SerialName("heartbeat_interval") val heartbeatInterval: Long,
         )
 
-        companion object Type : EventType<Hello>
+        companion object Event : EventType<Hello>
     }
 
     class InvalidSession(
         val isResumeRecommended: Boolean,
-        override val type: EventType<InvalidSession> = Type
+        override val type: EventType<InvalidSession> = Event
     ) : Event<Boolean> {
 
         override val data: Boolean
             get() = isResumeRecommended
 
-        companion object Type : EventType<InvalidSession>
+        companion object Event : EventType<InvalidSession>
     }
 
     class Ready
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<Ready> = Type
+        override val type: EventType<Ready> = Event
     ) : Event<Ready.DataObject> {
 
         @Serializable
@@ -204,40 +204,40 @@ open class GatewayEvent protected constructor() {
             val application: ApplicationObject,
         )
 
-        companion object Type : EventType<Ready>
+        companion object Event : EventType<Ready>
     }
 
     class Reconnect(
-        override val type: EventType<Reconnect> = Type
+        override val type: EventType<Reconnect> = Event
     ) : Event<Unit> {
 
         override val data: Unit?
             get() = null
 
-        companion object Type : EventType<Reconnect>
+        companion object Event : EventType<Reconnect>
     }
 
     class Resumed(
-        override val type: EventType<Resumed> = Type
+        override val type: EventType<Resumed> = Event
     ) : Event<Unit> {
         override val data: Unit?
             get() = null
 
-        companion object Type : EventType<Resumed>
+        companion object Event : EventType<Resumed>
     }
 
     class GuildAuditLogEntryCreate
     internal constructor(
         override val data: AuditLogEntryObject,
-        override val type: EventType<GuildAuditLogEntryCreate> = Type
+        override val type: EventType<GuildAuditLogEntryCreate> = Event
     ) : Event<AuditLogEntryObject> {
-        companion object Type : EventType<GuildAuditLogEntryCreate>
+        companion object Event : EventType<GuildAuditLogEntryCreate>
     }
 
     class GuildBanAdd
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildBanAdd> = Type
+        override val type: EventType<GuildBanAdd> = Event
     ) : Event<GuildBanAdd.DataObject> {
 
         @Serializable
@@ -246,13 +246,13 @@ open class GatewayEvent protected constructor() {
             val user: UserObject
         )
 
-        companion object Type : EventType<GuildBanAdd>
+        companion object Event : EventType<GuildBanAdd>
     }
 
     class GuildBanRemove
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildBanRemove> = Type
+        override val type: EventType<GuildBanRemove> = Event
     ) : Event<GuildBanRemove.DataObject> {
 
         @Serializable
@@ -261,29 +261,29 @@ open class GatewayEvent protected constructor() {
             val user: UserObject
         )
 
-        companion object Type : EventType<GuildBanRemove>
+        companion object Event : EventType<GuildBanRemove>
     }
 
     class GuildCreate
     internal constructor(
         override val data: GuildObject,
-        override val type: EventType<GuildCreate> = Type
+        override val type: EventType<GuildCreate> = Event
     ) : Event<GuildObject> {
-        companion object Type : EventType<GuildCreate>
+        companion object Event : EventType<GuildCreate>
     }
 
     class GuildDelete
     internal constructor(
         override val data: GuildObject,
-        override val type: EventType<GuildDelete> = Type
+        override val type: EventType<GuildDelete> = Event
     ) : Event<GuildObject> {
-        companion object Type : EventType<GuildDelete>
+        companion object Event : EventType<GuildDelete>
     }
 
     class GuildEmojisUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildEmojisUpdate> = Type
+        override val type: EventType<GuildEmojisUpdate> = Event
     ) : Event<GuildEmojisUpdate.DataObject> {
 
         @Serializable
@@ -292,13 +292,13 @@ open class GatewayEvent protected constructor() {
             val emojis: List<EmojiObject>
         )
 
-        companion object Type : EventType<GuildEmojisUpdate>
+        companion object Event : EventType<GuildEmojisUpdate>
     }
 
     class GuildIntegrationsUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildIntegrationsUpdate> = Type
+        override val type: EventType<GuildIntegrationsUpdate> = Event
     ) : Event<GuildIntegrationsUpdate.DataObject> {
 
         @Serializable
@@ -306,21 +306,21 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake
         )
 
-        companion object Type : EventType<GuildIntegrationsUpdate>
+        companion object Event : EventType<GuildIntegrationsUpdate>
     }
 
     class GuildMemberAdd
     internal constructor(
         override val data: GuildMemberObject,
-        override val type: EventType<GuildMemberAdd> = Type
+        override val type: EventType<GuildMemberAdd> = Event
     ) : Event<GuildMemberObject> {
-        companion object Type : EventType<GuildMemberAdd>
+        companion object Event : EventType<GuildMemberAdd>
     }
 
     class GuildMemberRemove
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildMemberRemove> = Type
+        override val type: EventType<GuildMemberRemove> = Event
     ) : Event<GuildMemberRemove.DataObject> {
 
         @Serializable
@@ -329,13 +329,13 @@ open class GatewayEvent protected constructor() {
             val user: UserObject
         )
 
-        companion object Type : EventType<GuildMemberRemove>
+        companion object Event : EventType<GuildMemberRemove>
     }
 
     class GuildMembersChunk
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildMembersChunk> = Type
+        override val type: EventType<GuildMembersChunk> = Event
     ) : Event<GuildMembersChunk.DataObject> {
 
         @Serializable
@@ -349,13 +349,13 @@ open class GatewayEvent protected constructor() {
             val nonce: MaybeAbsent<String>? = null,
         )
         
-        companion object Type : EventType<GuildMembersChunk>
+        companion object Event : EventType<GuildMembersChunk>
     }
 
     class GuildMemberUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildMemberUpdate> = Type
+        override val type: EventType<GuildMemberUpdate> = Event
     ) : Event<GuildMemberUpdate.DataObject> {
 
         @Serializable
@@ -376,13 +376,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("avatar_decoration_data") val avatarDecorationData: MaybeAbsent<UserAvatarDecorationDataObject>? = null
         )
 
-        companion object Type : EventType<GuildMemberUpdate>
+        companion object Event : EventType<GuildMemberUpdate>
     }
 
     class GuildRoleCreate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildRoleCreate> = Type
+        override val type: EventType<GuildRoleCreate> = Event
     ) : Event<GuildRoleCreate.DataObject> {
 
         @Serializable
@@ -391,13 +391,13 @@ open class GatewayEvent protected constructor() {
             val role: RoleObject
         )
 
-        companion object Type : EventType<GuildRoleCreate>
+        companion object Event : EventType<GuildRoleCreate>
     }
 
     class GuildRoleDelete
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildRoleDelete> = Type
+        override val type: EventType<GuildRoleDelete> = Event
     ) : Event<GuildRoleDelete.DataObject> {
 
         @Serializable
@@ -406,13 +406,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("role_id") val roleId: Snowflake
         )
 
-        companion object Type : EventType<GuildRoleDelete>
+        companion object Event : EventType<GuildRoleDelete>
     }
 
     class GuildRoleUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildRoleUpdate> = Type
+        override val type: EventType<GuildRoleUpdate> = Event
     ) : Event<GuildRoleUpdate.DataObject> {
 
         @Serializable
@@ -421,37 +421,37 @@ open class GatewayEvent protected constructor() {
             val role: RoleObject
         )
 
-        companion object Type : EventType<GuildRoleUpdate>
+        companion object Event : EventType<GuildRoleUpdate>
     }
 
     class GuildScheduledEventCreate
     internal constructor(
         override val data: GuildScheduledEventObject,
-        override val type: EventType<GuildScheduledEventCreate> = Type
+        override val type: EventType<GuildScheduledEventCreate> = Event
     ) : Event<GuildScheduledEventObject> {
-        companion object Type : EventType<GuildScheduledEventCreate>
+        companion object Event : EventType<GuildScheduledEventCreate>
     }
 
     class GuildScheduledEventDelete
     internal constructor(
         override val data: GuildScheduledEventObject,
-        override val type: EventType<GuildScheduledEventDelete> = Type
+        override val type: EventType<GuildScheduledEventDelete> = Event
     ) : Event<GuildScheduledEventObject> {
-        companion object Type : EventType<GuildScheduledEventDelete>
+        companion object Event : EventType<GuildScheduledEventDelete>
     }
 
     class GuildScheduledEventUpdate
     internal constructor(
         override val data: GuildScheduledEventObject,
-        override val type: EventType<GuildScheduledEventUpdate> = Type
+        override val type: EventType<GuildScheduledEventUpdate> = Event
     ) : Event<GuildScheduledEventObject> {
-        companion object Type : EventType<GuildScheduledEventUpdate>
+        companion object Event : EventType<GuildScheduledEventUpdate>
     }
 
     class GuildScheduledEventUserAdd
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildScheduledEventUserAdd> = Type
+        override val type: EventType<GuildScheduledEventUserAdd> = Event
     ) : Event<GuildScheduledEventUserAdd.DataObject> {
 
         @Serializable
@@ -461,13 +461,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake,
         )
 
-        companion object Type : EventType<GuildScheduledEventUserAdd>
+        companion object Event : EventType<GuildScheduledEventUserAdd>
     }
 
     class GuildScheduledEventUserRemove
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildScheduledEventUserRemove> = Type
+        override val type: EventType<GuildScheduledEventUserRemove> = Event
     ) : Event<GuildScheduledEventUserRemove.DataObject> {
 
         @Serializable
@@ -477,21 +477,21 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake,
         )
 
-        companion object Type : EventType<GuildScheduledEventUserRemove>
+        companion object Event : EventType<GuildScheduledEventUserRemove>
     }
 
     class GuildSoundboardSoundCreate
     internal constructor(
         override val data: SoundboardSoundObject,
-        override val type: EventType<GuildSoundboardSoundCreate> = Type
+        override val type: EventType<GuildSoundboardSoundCreate> = Event
     ) : Event<SoundboardSoundObject> {
-        companion object Type : EventType<GuildSoundboardSoundCreate>
+        companion object Event : EventType<GuildSoundboardSoundCreate>
     }
 
     class GuildSoundboardSoundDelete
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildSoundboardSoundDelete> = Type
+        override val type: EventType<GuildSoundboardSoundDelete> = Event
     ) : Event<GuildSoundboardSoundDelete.DataObject> {
 
         @Serializable
@@ -500,13 +500,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake
         )
 
-        companion object Type : EventType<GuildSoundboardSoundDelete>
+        companion object Event : EventType<GuildSoundboardSoundDelete>
     }
 
     class GuildSoundboardSoundsUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildSoundboardSoundsUpdate> = Type
+        override val type: EventType<GuildSoundboardSoundsUpdate> = Event
     ) : Event<GuildSoundboardSoundsUpdate.DataObject> {
 
         @Serializable
@@ -515,21 +515,21 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake
         )
 
-        companion object Type : EventType<GuildSoundboardSoundsUpdate>
+        companion object Event : EventType<GuildSoundboardSoundsUpdate>
     }
 
     class GuildSoundboardSoundUpdate
     internal constructor(
         override val data: SoundboardSoundObject,
-        override val type: EventType<GuildSoundboardSoundUpdate> = Type
+        override val type: EventType<GuildSoundboardSoundUpdate> = Event
     ) : Event<SoundboardSoundObject> {
-        companion object Type : EventType<GuildSoundboardSoundUpdate>
+        companion object Event : EventType<GuildSoundboardSoundUpdate>
     }
 
     class GuildStickersUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<GuildStickersUpdate> = Type
+        override val type: EventType<GuildStickersUpdate> = Event
     ) : Event<GuildStickersUpdate.DataObject> {
 
         @Serializable
@@ -538,29 +538,29 @@ open class GatewayEvent protected constructor() {
             val stickers: List<StickerObject>
         )
 
-        companion object Type : EventType<GuildStickersUpdate>
+        companion object Event : EventType<GuildStickersUpdate>
     }
 
     class GuildUpdate
     internal constructor(
         override val data: GuildObject,
-        override val type: EventType<GuildUpdate> = Type
+        override val type: EventType<GuildUpdate> = Event
     ) : Event<GuildObject> {
-        companion object Type : EventType<GuildUpdate>
+        companion object Event : EventType<GuildUpdate>
     }
 
     class IntegrationCreate
     internal constructor(
         override val data: GuildIntegrationObject,
-        override val type: EventType<IntegrationCreate> = Type
+        override val type: EventType<IntegrationCreate> = Event
     ) : Event<GuildIntegrationObject> {
-        companion object Type : EventType<IntegrationCreate>
+        companion object Event : EventType<IntegrationCreate>
     }
 
     class IntegrationDelete
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<IntegrationDelete> = Type
+        override val type: EventType<IntegrationDelete> = Event
     ) : Event<IntegrationDelete.DataObject> {
 
         @Serializable
@@ -570,29 +570,29 @@ open class GatewayEvent protected constructor() {
             @SerialName("application_id") val applicationId: MaybeAbsent<Snowflake>? = null
         )
 
-        companion object Type : EventType<IntegrationDelete>
+        companion object Event : EventType<IntegrationDelete>
     }
 
     class IntegrationUpdate
     internal constructor(
         override val data: GuildIntegrationObject,
-        override val type: EventType<IntegrationUpdate> = Type
+        override val type: EventType<IntegrationUpdate> = Event
     ) : Event<GuildIntegrationObject> {
-        companion object Type : EventType<IntegrationUpdate>
+        companion object Event : EventType<IntegrationUpdate>
     }
 
     class InteractionCreate
     internal constructor(
         override val data: InteractionObject,
-        override val type: EventType<InteractionCreate> = Type
+        override val type: EventType<InteractionCreate> = Event
     ) : Event<InteractionObject> {
-        companion object Type : EventType<InteractionCreate>
+        companion object Event : EventType<InteractionCreate>
     }
 
     class InviteCreate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<InviteCreate> = Type
+        override val type: EventType<InviteCreate> = Event
     ) : Event<InviteCreate.DataObject> {
 
         @Serializable
@@ -611,13 +611,13 @@ open class GatewayEvent protected constructor() {
             val uses: Int,
         )
 
-        companion object Type : EventType<InviteCreate>
+        companion object Event : EventType<InviteCreate>
     }
 
     class InviteDelete
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<InviteDelete> = Type
+        override val type: EventType<InviteDelete> = Event
     ) : Event<InviteDelete.DataObject> {
 
         @Serializable
@@ -627,21 +627,21 @@ open class GatewayEvent protected constructor() {
             val code: String,
         )
 
-        companion object Type : EventType<InviteDelete>
+        companion object Event : EventType<InviteDelete>
     }
 
     class MessageCreate
     internal constructor(
         override val data: MessageObject,
-        override val type: EventType<MessageCreate> = Type
+        override val type: EventType<MessageCreate> = Event
     ) : Event<MessageObject> {
-        companion object Type : EventType<MessageCreate>
+        companion object Event : EventType<MessageCreate>
     }
 
     class MessageDeleteBulk
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageDeleteBulk> = Type
+        override val type: EventType<MessageDeleteBulk> = Event
     ) : Event<MessageDeleteBulk.DataObject> {
 
         @Serializable
@@ -651,13 +651,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null
         )
 
-        companion object Type : EventType<MessageDeleteBulk>
+        companion object Event : EventType<MessageDeleteBulk>
     }
 
     class MessageDelete
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageDelete> = Type
+        override val type: EventType<MessageDelete> = Event
     ) : Event<MessageDelete.DataObject> {
 
         @Serializable
@@ -667,13 +667,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null
         )
 
-        companion object Type : EventType<MessageDelete>
+        companion object Event : EventType<MessageDelete>
     }
 
     class MessagePollVoteAdd
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessagePollVoteAdd> = Type
+        override val type: EventType<MessagePollVoteAdd> = Event
     ) : Event<MessagePollVoteAdd.DataObject> {
 
         @Serializable
@@ -685,13 +685,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("answer_id") val answerId: Int,
         )
 
-        companion object Type : EventType<MessagePollVoteAdd>
+        companion object Event : EventType<MessagePollVoteAdd>
     }
 
     class MessagePollVoteRemove
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessagePollVoteRemove> = Type
+        override val type: EventType<MessagePollVoteRemove> = Event
     ) : Event<MessagePollVoteRemove.DataObject> {
 
         @Serializable
@@ -703,13 +703,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("answer_id") val answerId: Int,
         )
         
-        companion object Type : EventType<MessagePollVoteRemove>
+        companion object Event : EventType<MessagePollVoteRemove>
     }
 
     class MessageReactionAdd
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageReactionAdd> = Type
+        override val type: EventType<MessageReactionAdd> = Event
     ) : Event<MessageReactionAdd.DataObject> {
 
         @Serializable
@@ -726,13 +726,13 @@ open class GatewayEvent protected constructor() {
             val type: Int
         )
 
-        companion object Type : EventType<MessageReactionAdd>
+        companion object Event : EventType<MessageReactionAdd>
     }
 
     class MessageReactionRemoveAll
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageReactionRemoveAll> = Type
+        override val type: EventType<MessageReactionRemoveAll> = Event
     ) : Event<MessageReactionRemoveAll.DataObject> {
 
         @Serializable
@@ -742,13 +742,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null,
         )
 
-        companion object Type : EventType<MessageReactionRemoveAll>
+        companion object Event : EventType<MessageReactionRemoveAll>
     }
 
     class MessageReactionRemoveEmoji
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageReactionRemoveEmoji> = Type
+        override val type: EventType<MessageReactionRemoveEmoji> = Event
     ) : Event<MessageReactionRemoveEmoji.DataObject> {
 
         @Serializable
@@ -759,13 +759,13 @@ open class GatewayEvent protected constructor() {
             val emoji: EmojiObject
         )
 
-        companion object Type : EventType<MessageReactionRemoveEmoji>
+        companion object Event : EventType<MessageReactionRemoveEmoji>
     }
 
     class MessageReactionRemove
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<MessageReactionRemove> = Type
+        override val type: EventType<MessageReactionRemove> = Event
     ) : Event<MessageReactionRemove.DataObject> {
 
         @Serializable
@@ -779,21 +779,21 @@ open class GatewayEvent protected constructor() {
             val type: Int
         )
 
-        companion object Type : EventType<MessageReactionRemove>
+        companion object Event : EventType<MessageReactionRemove>
     }
 
     class MessageUpdate
     internal constructor(
         override val data: MessageObject,
-        override val type: EventType<MessageUpdate> = Type
+        override val type: EventType<MessageUpdate> = Event
     ) : Event<MessageObject> {
-        companion object Type : EventType<MessageUpdate>
+        companion object Event : EventType<MessageUpdate>
     }
 
     class PresenceUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<PresenceUpdate> = Type
+        override val type: EventType<PresenceUpdate> = Event
     ) : Event<PresenceUpdate.DataObject> {
 
         @Serializable
@@ -805,13 +805,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("client_status") val clientStatus: ClientStatusObject
         )
 
-        companion object Type : EventType<PresenceUpdate>
+        companion object Event : EventType<PresenceUpdate>
     }
 
     class SoundboardSounds
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<SoundboardSounds> = Type
+        override val type: EventType<SoundboardSounds> = Event
     ) : Event<SoundboardSounds.DataObject> {
 
         @Serializable
@@ -820,77 +820,77 @@ open class GatewayEvent protected constructor() {
             @SerialName("guild_id") val guildId: Snowflake,
         )
 
-        companion object Type : EventType<SoundboardSounds>
+        companion object Event : EventType<SoundboardSounds>
     }
 
     class StageInstanceCreate
     internal constructor(
         override val data: StageInstanceObject,
-        override val type: EventType<StageInstanceCreate> = Type
+        override val type: EventType<StageInstanceCreate> = Event
     ) : Event<StageInstanceObject> {
-        companion object Type : EventType<StageInstanceCreate>
+        companion object Event : EventType<StageInstanceCreate>
     }
 
     class StageInstanceDelete
     internal constructor(
         override val data: StageInstanceObject,
-        override val type: EventType<StageInstanceDelete> = Type
+        override val type: EventType<StageInstanceDelete> = Event
     ) : Event<StageInstanceObject> {
-        companion object Type : EventType<StageInstanceDelete>
+        companion object Event : EventType<StageInstanceDelete>
     }
 
     class StageInstanceUpdate
     internal constructor(
         override val data: StageInstanceObject,
-        override val type: EventType<StageInstanceUpdate> = Type
+        override val type: EventType<StageInstanceUpdate> = Event
     ) : Event<StageInstanceObject> {
-        companion object Type : EventType<StageInstanceUpdate>
+        companion object Event : EventType<StageInstanceUpdate>
     }
 
     class SubscriptionCreate
     internal constructor(
         override val data: SubscriptionObject,
-        override val type: EventType<SubscriptionCreate> = Type
+        override val type: EventType<SubscriptionCreate> = Event
     ) : Event<SubscriptionObject> {
-        companion object Type : EventType<SubscriptionCreate>
+        companion object Event : EventType<SubscriptionCreate>
     }
 
     class SubscriptionDelete
     internal constructor(
         override val data: SubscriptionObject,
-        override val type: EventType<SubscriptionDelete> = Type
+        override val type: EventType<SubscriptionDelete> = Event
     ) : Event<SubscriptionObject> {
-        companion object Type : EventType<SubscriptionDelete>
+        companion object Event : EventType<SubscriptionDelete>
     }
 
     class SubscriptionUpdate
     internal constructor(
         override val data: SubscriptionObject,
-        override val type: EventType<SubscriptionUpdate> = Type
+        override val type: EventType<SubscriptionUpdate> = Event
     ) : Event<SubscriptionObject> {
-        companion object Type : EventType<SubscriptionUpdate>
+        companion object Event : EventType<SubscriptionUpdate>
     }
 
     class ThreadCreate
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ThreadCreate> = Type
+        override val type: EventType<ThreadCreate> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ThreadCreate>
+        companion object Event : EventType<ThreadCreate>
     }
 
     class ThreadDelete
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ThreadDelete> = Type
+        override val type: EventType<ThreadDelete> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ThreadDelete>
+        companion object Event : EventType<ThreadDelete>
     }
 
     class ThreadListSync
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<ThreadListSync> = Type
+        override val type: EventType<ThreadListSync> = Event
     ): Event<ThreadListSync.DataObject> {
 
         @Serializable
@@ -901,13 +901,13 @@ open class GatewayEvent protected constructor() {
             val members: List<ThreadMemberObject>
         )
 
-        companion object Type : EventType<ThreadListSync>
+        companion object Event : EventType<ThreadListSync>
     }
 
     class ThreadMembersUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<ThreadMembersUpdate> = Type
+        override val type: EventType<ThreadMembersUpdate> = Event
     ): Event<ThreadMembersUpdate.DataObject> {
 
         @Serializable
@@ -919,29 +919,29 @@ open class GatewayEvent protected constructor() {
             @SerialName("removed_member_ids") val removedMemberIds: MaybeAbsent<List<Snowflake>>? = null
         )
 
-        companion object Type : EventType<ThreadMembersUpdate>
+        companion object Event : EventType<ThreadMembersUpdate>
     }
 
     class ThreadMemberUpdate
     internal constructor(
         override val data: ThreadMemberObject,
-        override val type: EventType<ThreadMemberUpdate> = Type
+        override val type: EventType<ThreadMemberUpdate> = Event
     ): Event<ThreadMemberObject> {
-        companion object Type : EventType<ThreadMemberUpdate>
+        companion object Event : EventType<ThreadMemberUpdate>
     }
 
     class ThreadUpdate
     internal constructor(
         override val data: ChannelObject,
-        override val type: EventType<ThreadUpdate> = Type
+        override val type: EventType<ThreadUpdate> = Event
     ): Event<ChannelObject> {
-        companion object Type : EventType<ThreadUpdate>
+        companion object Event : EventType<ThreadUpdate>
     }
 
     class TypingStart
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<TypingStart> = Type
+        override val type: EventType<TypingStart> = Event
     ) : Event<TypingStart.DataObject> {
 
         @Serializable
@@ -953,21 +953,21 @@ open class GatewayEvent protected constructor() {
             val member: MaybeAbsent<GuildMemberObject>? = null,
         )
 
-        companion object Type : EventType<TypingStart>
+        companion object Event : EventType<TypingStart>
     }
 
     class UserUpdate
     internal constructor(
         override val data: UserObject,
-        override val type: EventType<UserUpdate> = Type
+        override val type: EventType<UserUpdate> = Event
     ) : Event<UserObject> {
-        companion object Type : EventType<UserUpdate>
+        companion object Event : EventType<UserUpdate>
     }
 
     class VoiceChannelEffectSend
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<VoiceChannelEffectSend> = Type
+        override val type: EventType<VoiceChannelEffectSend> = Event
     ) : Event<VoiceChannelEffectSend.DataObject> {
 
         @Serializable
@@ -982,13 +982,13 @@ open class GatewayEvent protected constructor() {
             @SerialName("sound_volume") val soundVolume: Double
         )
 
-        companion object Type : EventType<VoiceChannelEffectSend>
+        companion object Event : EventType<VoiceChannelEffectSend>
     }
 
     class VoiceServerUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<VoiceServerUpdate> = Type
+        override val type: EventType<VoiceServerUpdate> = Event
     ) : Event<VoiceServerUpdate.DataObject> {
 
         @Serializable
@@ -998,21 +998,21 @@ open class GatewayEvent protected constructor() {
             val endpoint: String?
         )
 
-        companion object Type : EventType<VoiceServerUpdate>
+        companion object Event : EventType<VoiceServerUpdate>
     }
 
     class VoiceStateUpdate
     internal constructor(
         override val data: VoiceStateObject,
-        override val type: EventType<VoiceStateUpdate> = Type
+        override val type: EventType<VoiceStateUpdate> = Event
     ) : Event<VoiceStateObject> {
-        companion object Type : EventType<VoiceStateUpdate>
+        companion object Event : EventType<VoiceStateUpdate>
     }
 
     class WebhooksUpdate
     internal constructor(
         override val data: DataObject,
-        override val type: EventType<WebhooksUpdate> = Type
+        override val type: EventType<WebhooksUpdate> = Event
     ) : Event<WebhooksUpdate.DataObject> {
 
         @Serializable
@@ -1021,6 +1021,6 @@ open class GatewayEvent protected constructor() {
             @SerialName("channel_id") val channelId: Snowflake,
         )
 
-        companion object Type : EventType<WebhooksUpdate>
+        companion object Event : EventType<WebhooksUpdate>
     }
 }

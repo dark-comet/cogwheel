@@ -331,11 +331,11 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayEvent.Hello? {
+    ): Gateway.Hello? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
         
-        if (event !is GatewayEvent.Hello) {
-            if (event is GatewayEvent.Reconnect) {
+        if (event !is Gateway.Hello) {
+            if (event is Gateway.Reconnect) {
                 // per API spec: The reconnect event is dispatched when a client should reconnect to 
                 // the gateway (and resume their existing session, if they have one). This can occur 
                 // at any point in the gateway connection lifecycle, even before/in place of 
@@ -360,11 +360,11 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayEvent.Ready? {
+    ): Gateway.Ready? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
             
-        if (event !is GatewayEvent.Ready) {
-            if (event is GatewayEvent.InvalidSession) {
+        if (event !is Gateway.Ready) {
+            if (event is Gateway.InvalidSession) {
                 return null // Most likely caused by malformed argument in HELLO event, give up
             }
             
@@ -452,10 +452,10 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         shouldResumeNextAttempt: AtomicBoolean
     ) {
-        if (event is GatewayEvent.InvalidSession || event is GatewayEvent.Reconnect) {
+        if (event is Gateway.InvalidSession || event is Gateway.Reconnect) {
             shouldResumeNextAttempt.set(true)
 
-            if (event is GatewayEvent.InvalidSession) {
+            if (event is Gateway.InvalidSession) {
                 shouldResumeNextAttempt.set(event.isResumeRecommended)
             }
 

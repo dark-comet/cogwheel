@@ -20,8 +20,8 @@ internal constructor() {
     private var installParams: MaybeAbsent<ApplicationInstallParamsObject>? = null
     private var integrationTypesConfig: MaybeAbsent<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null
     private var flags: MaybeAbsent<Int>? = null
-    private var icon: MaybeAbsent<ImageData?>? = null
-    private var coverImage: MaybeAbsent<ImageData?>? = null
+    private var icon: MaybeAbsent<String?>? = null
+    private var coverImage: MaybeAbsent<String?>? = null
     private var interactionsEndpointUrl: MaybeAbsent<String>? = null
     private var tags: MaybeAbsent<List<String>>? = null
     private var eventWebhooksUrl: MaybeAbsent<String>? = null
@@ -61,24 +61,24 @@ internal constructor() {
     }
     
     fun icon(value: DiscordImage?) {
-        this.icon = MaybeAbsent(value?.imageData)
+        this.icon = MaybeAbsent(value?.imageData?.hash)
     }
     
     fun coverImage(value: DiscordImage) {
-        this.coverImage = MaybeAbsent(value.imageData)
+        this.coverImage = MaybeAbsent(value.imageData.hash)
     }
     
     fun interactionEndpointUrl(value: String) {
-        this.interactionsEndpointUrl = MaybeAbsent(value);
+        this.interactionsEndpointUrl = MaybeAbsent(value)
     }
     
     fun tags(value: List<String>) {
-        val valueCopy = ArrayList(value);
+        val valueCopy = ArrayList(value)
         this.tags = MaybeAbsent(valueCopy)
     }
     
     fun eventWebhooksUrl(value: String) {
-        this.eventWebhooksUrl = MaybeAbsent(value);
+        this.eventWebhooksUrl = MaybeAbsent(value)
     }
     
     fun eventWebhooksStatus(value: Int) {
@@ -86,8 +86,8 @@ internal constructor() {
     }
     
     fun eventWebhooksTypes(value: List<String>) {
-        val valueCopy = ArrayList(value);
-        this.eventWebhooksTypes = MaybeAbsent(valueCopy);
+        val valueCopy = ArrayList(value)
+        this.eventWebhooksTypes = MaybeAbsent(valueCopy)
     }
     
     internal fun build(): EditCurrentApplicationRequestParameters {

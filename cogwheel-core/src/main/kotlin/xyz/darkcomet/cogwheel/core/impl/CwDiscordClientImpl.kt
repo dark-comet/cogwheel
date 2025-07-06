@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.events.Event
+import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
@@ -20,6 +21,8 @@ import xyz.darkcomet.cogwheel.core.primitives.AssetSize
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 internal open class CwDiscordClientImpl 
 internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
@@ -67,7 +70,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         logger.info("DiscordClient initialized")
     }
 
-    override suspend fun startGatewayConnection() {
+    override suspend fun startGateway() {
         if (gatewayClient == null) {
             throw IllegalStateException("Gateway not initialized! Build DiscordClient with useGateway() first.")
         }
@@ -78,7 +81,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         )
     }
 
-    override fun stop() {
+    override fun stopGateway() {
         cancellationToken.cancel()
     }
 
@@ -145,38 +148,25 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
     
     internal class EventManagerImpl(client: CwGatewayClient?) : CwDiscordClient.EventManager {
         
-        private val listeners: MutableMap<Class<out Any>, ArrayList<(Event<*>) -> Unit>> = HashMap()
-        
-        // TODO: Hacky -- is there a cleaner solution?
-        //       Want listener to be of type "(T) -> Unit" rather than "(Event) -> Unit" for cleaner client code
-        //       But JVM type-erasure makes this information hard to store.
-        private val mapping: MutableMap<Any, (Event<*>) -> Unit> = HashMap()
+        private val listeners: MutableMap<EventType<*>, ArrayList<(Event<*>) -> Unit>> = HashMap()
         
         init {
             client?.onEventReceived { event ->
-                listeners[event.javaClass]?.forEach {
+                listeners[event.type]?.forEach {
                     it.invoke(event)
                 }
             }
         }
         
-        override fun <T : Event<*>> subscribe(eventType: Class<T>, listener: (T) -> Unit) {
-            val delegate: (Event<*>) -> Unit = {
-                @Suppress("UNCHECKED_CAST")
-                listener.invoke(it as T)
-            }
-            
-            mapping[listener] = delegate
+        override fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: (T) -> Unit) {
             listeners.putIfAbsent(eventType, ArrayList())
-            listeners[eventType]!!.add(delegate)
-        }
-
-        override fun <T : Event<*>> unsubscribe(eventType: Class<T>, listener: (T) -> Unit) {
-            val delegateListener = mapping[listener]
             
-            if (delegateListener != null) {
-                listeners[eventType]?.remove(delegateListener)
-            }
+            @Suppress("UNCHECKED_CAST")
+            listeners[eventType]!!.add(listener as (Event<*>) -> Unit)
+        }
+        
+        override fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: (T) -> Unit): Boolean {
+            return listeners[eventType]?.remove(listener) ?: false
         }
     }
     

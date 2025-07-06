@@ -1,9 +1,10 @@
 package xyz.darkcomet.cogwheel.core
 
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.impl.authentication.BotToken
-import xyz.darkcomet.cogwheel.core.impl.authentication.OAuth2Token
-import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.events.EventType
+import xyz.darkcomet.cogwheel.core.primitives.auth.BotToken
+import xyz.darkcomet.cogwheel.core.primitives.auth.OAuth2Token
+import xyz.darkcomet.cogwheel.core.primitives.auth.Token
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.network.objects.GatewayPresenceUpdateRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.GatewayRequestGuildMembersRequestParameters
@@ -11,7 +12,6 @@ import xyz.darkcomet.cogwheel.core.network.objects.GatewayVoiceStateUpdateReques
 import xyz.darkcomet.cogwheel.core.primitives.AssetLocation
 import xyz.darkcomet.cogwheel.core.primitives.AssetSize
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import java.net.URL
 
 interface CwDiscordClient {
     
@@ -20,9 +20,8 @@ interface CwDiscordClient {
     fun events(): EventManager
     fun locateAsset(): AssetLocator
     
-    suspend fun startGatewayConnection()
-    
-    fun stop()
+    suspend fun startGateway()
+    fun stopGateway()
 
     interface RestApi {
         val application: ApplicationResource
@@ -56,8 +55,8 @@ interface CwDiscordClient {
     }
     
     interface EventManager {
-        fun <T : Event<*>> subscribe(eventType: Class<T>, listener: (T) -> Unit)
-        fun <T : Event<*>> unsubscribe(eventType: Class<T>, listener: (T) -> Unit)
+        fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: (T) -> Unit)
+        fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: (T) -> Unit): Boolean
     }
     
     interface AssetLocator {
@@ -85,17 +84,19 @@ interface CwDiscordClient {
     }
     
     companion object {
-        fun fromBotToken(token: String, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
-            return build(BotToken(token), init)
+        @JvmStatic
+        fun fromBotToken(token: String, config: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
+            return build(BotToken(token), config)
         }
 
-        fun fromOAuth2Token(token: String, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
-            return build(OAuth2Token(token), init)
+        @JvmStatic
+        fun fromOAuth2Token(token: String, config: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
+            return build(OAuth2Token(token), config)
         }
 
-        private fun build(token: Token, init: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
-            val builder = CwDiscordClientBuilder(token)
-            init?.invoke(builder)
+        private fun build(token: Token, config: (CwDiscordClientBuilder.() -> Unit)? = null): CwDiscordClient {
+            val builder = CwDiscordClientBuilder.from(token)
+            config?.invoke(builder)
 
             return builder.build()
         }

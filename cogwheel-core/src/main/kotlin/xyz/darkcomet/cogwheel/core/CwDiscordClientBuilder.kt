@@ -3,13 +3,13 @@ package xyz.darkcomet.cogwheel.core
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientImpl
 import xyz.darkcomet.cogwheel.core.impl.CwDiscordClientSettings
-import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.primitives.auth.Token
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.ratelimit.RateLimitStrategy
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 
-class CwDiscordClientBuilder 
-internal constructor(token: Token) {
+open class CwDiscordClientBuilder
+protected constructor(token: Token) {
     
     var clientVersion: String?
         get() = settings.customClientVersion
@@ -51,7 +51,17 @@ internal constructor(token: Token) {
     
     fun isGatewayEnabled() = settings.gatewayEnabled
 
-    internal fun build(): CwDiscordClient {
+    protected fun buildInternal(): CwDiscordClient {
         return CwDiscordClientImpl(settings)
     }
+    
+    internal fun build(): CwDiscordClient {
+        return buildInternal()
+    }
+    
+    internal companion object {
+        fun from(token: Token): CwDiscordClientBuilder {
+            return CwDiscordClientBuilder(token)
+        }
+    } 
 }

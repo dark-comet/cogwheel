@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 @Serializable
-data class CwConfiguration(
+internal data class CwConfiguration(
     val clientName: String,
     val clientVersion: String,
     val clientUrl: String,

@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.core.impl.authentication
+package xyz.darkcomet.cogwheel.core.primitives.auth
 
 interface Token {
 

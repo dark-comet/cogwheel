@@ -6,18 +6,19 @@
 [![Automated Tests](https://github.com/dark-comet/Cogwheel/actions/workflows/automated-tests.yml/badge.svg)](https://github.com/dark-comet/Cogwheel/actions/workflows/automated-tests.yml)
 
 ## Overview
-Cogwheel is a Discord API library written in Kotlin, for building Discord bots
-in Kotlin or Java. Other JVM-based languages may be supported but are not the 
+Cogwheel is a Discord API library written in Kotlin, for building robust and testable 
+Discord bots in Kotlin or Java. Other JVM-based languages may be supported but are not the 
 intended target audience.
 
-This library intends to be a streamlined one-stop-shop for quickly getting
-started with Discord bot development. The public API is designed with developer 
-productivity in mind: 
-- High level domain models to allow the succinct expression of ideas.
+The main goal of Cogwheel is to enable bot developers across all levels to focus on their 
+own bot's behavior, and not be bogged down by API-specifics or library implementation details. 
+
+To that end:
+- The public API is designed with developer productivity and self-documentation in mind.
+- The framework uses high-level domain models to allow the succinct expression of ideas.
 - Strongly typed domain primitives to prevent API misuse.
-- Comprehensively enumerated option values to save time cross-checking Discord's 
+- Comprehensively enumerated API option values to save time cross-checking Discord's 
   official documentation.
-- Carefully chosen type and parameter names for self-documenting code. 
 
 It is a key design goal for Cogwheel to be intuitive to use, easy to get started, 
 and powerful enough to support most (if not all) common use cases. I hope you have 
@@ -45,7 +46,7 @@ For experts looking to make extensive use of the library, take note of the follo
 - `cogwheel-framework` models enumerated values (select option types, guild features, etc.)
   using `ExtensibleEnum<T>` to facilitate the discovery of new option values while the application is
   running. This is to allow the framework to safely handle newly introduced values from the 
-  API. So **there is a very rare (but not non-existent) possibility that the full set of enumeratable 
+  API. So **there is a very rare (but not non-existent) possibility that the full set of enumerable 
   values may change over the course of the bot's uptime.** Your code should be designed with this
   in mind. 
 

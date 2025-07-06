@@ -35,7 +35,7 @@ data class BulkGuildBanRequestParameters(
 @Serializable
 data class CreateApplicationEmojiRequestParameters(
     val name: String,
-    val image: ImageData
+    val image: String
 )
 
 @Serializable
@@ -98,21 +98,21 @@ data class CreateGuildChannelRequestParameters(
 @Serializable
 data class CreateGuildEmojiRequestParameters(
     val name: String,
-    val image: ImageData,
+    val image: String,
     val roles: List<Snowflake>
 )
 
 @Serializable
 data class CreateGuildFromGuildTemplateRequestParameters(
     val name: String,
-    val icon: MaybeAbsent<ImageData>? = null
+    val icon: MaybeAbsent<String>? = null
 )
 
 @Serializable
 data class CreateGuildRequestParameters(
     val name: String,
     val region: MaybeAbsent<String>? = null, // deprecated
-    val icon: MaybeAbsent<ImageData>? = null,
+    val icon: MaybeAbsent<String>? = null,
     @SerialName("verification_level") val verificationLevel: MaybeAbsent<Int>? = null,
     @SerialName("default_message_notifications") val defaultMessageNotifications: MaybeAbsent<Int>? = null,
     @SerialName("explicit_content_filter") val explicitContentFilter: MaybeAbsent<Int>? = null,
@@ -130,7 +130,7 @@ data class CreateGuildRoleRequestParameters(
     val permissions: PermissionSet,
     val color: Int,
     val hoist: Boolean,
-    val icon: ImageData?,
+    val icon: String?,
     @SerialName("unicode_emoji") val unicodeEmoji: String?,
     val mentionable: Boolean
 )
@@ -145,7 +145,7 @@ data class CreateGuildScheduledEventRequestParameters(
     @SerialName("scheduled_end_time") val scheduledEndTime: MaybeAbsent<ISO8601Timestamp>? = null,
     val description: MaybeAbsent<String>? = null,
     @SerialName("entity_type") val entityType: Int,
-    val image: MaybeAbsent<ImageData>? = null,
+    val image: MaybeAbsent<String>? = null,
     @SerialName("recurrence_rule") val recurrenceRule: MaybeAbsent<GuildScheduledEventRecurrenceRuleObject>? = null
 )
 
@@ -215,7 +215,7 @@ data class CreateUserDmRequestParameters(
 @Serializable
 data class CreateWebhookRequestParameters(
     val name: String,
-    val avatar: MaybeAbsent<ImageData>? = null,
+    val avatar: MaybeAbsent<String>? = null,
 )
 
 @Serializable
@@ -322,8 +322,8 @@ data class EditCurrentApplicationRequestParameters(
     @SerialName("install_params") val installParams: MaybeAbsent<ApplicationInstallParamsObject>? = null,
     @SerialName("integration_types_config") val integrationTypesConfig: MaybeAbsent<Map<String, ApplicationIntegrationTypeConfigurationObject>>? = null,
     val flags: MaybeAbsent<Int>? = null,
-    val icon: MaybeAbsent<ImageData?>? = null,
-    @SerialName("cover_image") val coverImage: MaybeAbsent<ImageData?>? = null,
+    val icon: MaybeAbsent<String?>? = null,
+    @SerialName("cover_image") val coverImage: MaybeAbsent<String?>? = null,
     @SerialName("interactions_endpoint_url") val interactionsEndpointUrl: MaybeAbsent<String>? = null,
     val tags: MaybeAbsent<List<String>>? = null,
     @SerialName("event_webhooks_url") val eventWebhooksUrl: MaybeAbsent<String>? = null,
@@ -334,8 +334,8 @@ data class EditCurrentApplicationRequestParameters(
 @Serializable
 data class ModifyCurrentUserRequestParameters(
     val username: String,
-    val avatar: ImageData?,
-    val banner: ImageData?
+    val avatar: String?,
+    val banner: String?
 )
 
 @Serializable
@@ -438,11 +438,11 @@ data class ModifyGuildRequestParameters(
     @SerialName("explicit_content_filter") val explicitContentFilter: MaybeAbsent<Int>? = null,
     @SerialName("afk_channel_id") val afkChannelId: MaybeAbsent<Snowflake>? = null,
     @SerialName("afk_timeout") val afkTimeout: MaybeAbsent<Int>? = null,
-    val icon: MaybeAbsent<ImageData>? = null,
+    val icon: MaybeAbsent<String>? = null,
     @SerialName("owner_id") val ownerId: MaybeAbsent<Snowflake>? = null,
-    val splash: MaybeAbsent<ImageData>? = null,
-    @SerialName("discovery_splash") val discoverySplash: MaybeAbsent<ImageData>? = null,
-    val banner: MaybeAbsent<ImageData>? = null,
+    val splash: MaybeAbsent<String>? = null,
+    @SerialName("discovery_splash") val discoverySplash: MaybeAbsent<String>? = null,
+    val banner: MaybeAbsent<String>? = null,
     @SerialName("system_channel_id") val systemChannelId: MaybeAbsent<Snowflake>? = null,
     @SerialName("system_channel_flags") val systemChannelFlags: MaybeAbsent<Int>? = null,
     @SerialName("rules_channel_id") val rulesChannelId: MaybeAbsent<Snowflake>? = null,
@@ -466,7 +466,7 @@ data class ModifyGuildRoleRequestParameters(
     val permissions: MaybeAbsent<PermissionSet>? = null,
     val color: MaybeAbsent<Int>? = null,
     val hoist: MaybeAbsent<Boolean>? = null,
-    val icon: MaybeAbsent<ImageData>? = null,
+    val icon: MaybeAbsent<String>? = null,
     @SerialName("unicode_emoji") val unicodeEmoji: MaybeAbsent<String>? = null,
     val mentionable: MaybeAbsent<Boolean>? = null
 )
@@ -482,7 +482,7 @@ data class ModifyGuildScheduledEventRequestParameters(
     val description: MaybeAbsent<String>? = null,
     @SerialName("entity_type") val entityType: MaybeAbsent<Int>? = null,
     val status: MaybeAbsent<Int>? = null,
-    val image: MaybeAbsent<ImageData>? = null,
+    val image: MaybeAbsent<String>? = null,
     @SerialName("recurrence_rule") val recurrenceRule: MaybeAbsent<GuildScheduledEventRecurrenceRuleObject>? = null
 )
 
@@ -547,7 +547,7 @@ data class ModifyUserVoiceStateRequestParameters(
 @Serializable
 data class ModifyWebhookRequestParameters(
     val name: MaybeAbsent<String>? = null,
-    val avatar: MaybeAbsent<ImageData>? = null,
+    val avatar: MaybeAbsent<String>? = null,
     @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake>? = null,
 )
 

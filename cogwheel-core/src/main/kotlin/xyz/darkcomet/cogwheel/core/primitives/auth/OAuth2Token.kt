@@ -1,6 +1,6 @@
-package xyz.darkcomet.cogwheel.core.impl.authentication
+package xyz.darkcomet.cogwheel.core.primitives.auth
 
-internal class OAuth2Token(private val token: String) : Token {
+class OAuth2Token(private val token: String) : Token {
     
     override val value: String
         get() = token

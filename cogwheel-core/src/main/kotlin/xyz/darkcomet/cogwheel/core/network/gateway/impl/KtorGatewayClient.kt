@@ -16,7 +16,7 @@ import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.ConnectionAttemptStartedArgs
 import xyz.darkcomet.cogwheel.core.aspects.DiscordClientAspects.Gateway.FetchGatewayUrlCompleteArgs
 import xyz.darkcomet.cogwheel.core.events.*
-import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.primitives.auth.Token
 import xyz.darkcomet.cogwheel.core.network.CancellationToken
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
 import xyz.darkcomet.cogwheel.core.network.gateway.CwGatewayClient
@@ -331,11 +331,11 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayHelloEvent? {
+    ): GatewayEvent.Hello? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
         
-        if (event !is GatewayHelloEvent) {
-            if (event is GatewayReconnectEvent) {
+        if (event !is GatewayEvent.Hello) {
+            if (event is GatewayEvent.Reconnect) {
                 // per API spec: The reconnect event is dispatched when a client should reconnect to 
                 // the gateway (and resume their existing session, if they have one). This can occur 
                 // at any point in the gateway connection lifecycle, even before/in place of 
@@ -360,11 +360,11 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         gatewaySession: KtorGatewaySession,
         isResume: AtomicBoolean
-    ): GatewayReadyEvent? {
+    ): GatewayEvent.Ready? {
         val event = receiveEvent(wssSession, wssSession, gatewaySession, isResume)
             
-        if (event !is GatewayReadyEvent) {
-            if (event is GatewayInvalidSessionEvent) {
+        if (event !is GatewayEvent.Ready) {
+            if (event is GatewayEvent.InvalidSession) {
                 return null // Most likely caused by malformed argument in HELLO event, give up
             }
             
@@ -452,10 +452,10 @@ private constructor(
         wssSession: DefaultClientWebSocketSession,
         shouldResumeNextAttempt: AtomicBoolean
     ) {
-        if (event is GatewayInvalidSessionEvent || event is GatewayReconnectEvent) {
+        if (event is GatewayEvent.InvalidSession || event is GatewayEvent.Reconnect) {
             shouldResumeNextAttempt.set(true)
 
-            if (event is GatewayInvalidSessionEvent) {
+            if (event is GatewayEvent.InvalidSession) {
                 shouldResumeNextAttempt.set(event.isResumeRecommended)
             }
 

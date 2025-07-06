@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
-import xyz.darkcomet.cogwheel.core.impl.authentication.Token
+import xyz.darkcomet.cogwheel.core.primitives.auth.Token
 import xyz.darkcomet.cogwheel.core.network.gateway.GatewayPayload
 import xyz.darkcomet.cogwheel.core.network.gateway.codes.GatewayOpCode
 import xyz.darkcomet.cogwheel.core.network.objects.*

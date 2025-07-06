@@ -73,9 +73,12 @@ class ImageData : DataUrlScheme {
     override val isBase64 = true
     override val data: String
     
+    val hash: String
+    
     private constructor(mediaType: String, base64Data: String) : super() {
         this.mediaType = mediaType
         data = base64Data
+        hash = data
     }
 
     companion object {

@@ -30,7 +30,7 @@ abstract class IntegrationTestFixture {
 
             val gatewayThread = Thread {
                 runBlocking {
-                    client.startGatewayConnection()
+                    client.startGateway()
                     gatewayShutdownOk.set(true)
                 }
             }
@@ -44,7 +44,7 @@ abstract class IntegrationTestFixture {
                     testCode.invoke()
                 }
             } finally {
-                client.stop()
+                client.stopGateway()
                 gatewayThread.join(60_000L)
                 assertTrue(gatewayShutdownOk.get(), "Failed to shutdown gateway connection on test end")
             }

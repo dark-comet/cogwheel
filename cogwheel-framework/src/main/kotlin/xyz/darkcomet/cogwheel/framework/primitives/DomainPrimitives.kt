@@ -39,6 +39,7 @@ private constructor(val value: String) {
 data class OAuth2Scope
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
     companion object : ExtensibleEnum<String, OAuth2Scope>() {
+        
         @JvmField val ACTIVITIES_READ = addPreset("activities.read")
         @JvmField val ACTIVITIES_WRITE = addPreset("activities.write")
         @JvmField val APPLICATIONS_BUILDS_READ = addPreset("applications.builds.read")
@@ -77,6 +78,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 data class ApplicationIntegrationType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, ApplicationIntegrationType>() {
+        
         @JvmField val GUILD_INSTALL = addPreset(0)
         @JvmField val USER_INSTALL = addPreset(1)
         
@@ -89,16 +91,17 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class ApplicationFlag
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, ApplicationFlag>() {
-        val APPLICATION_AUTO_MODERATION_RULE_CREATE_BADGE = addPreset(1 shl 6)
-        val GATEWAY_PRESENCE = addPreset(1 shl 12)
-        val GATEWAY_PRESENCE_LIMITED = addPreset(1 shl 13)
-        val GATEWAY_GUILD_MEMBERS = addPreset(1 shl 14)
-        val GATEWAY_GUILD_MEMBERS_LIMITED = addPreset(1 shl 15)
-        val VERIFICATION_PENDING_GUILD_LIMIT = addPreset(1 shl 16)
-        val EMBEDDED = addPreset(1 shl 17)
-        val GATEWAY_MESSAGE_CONTENT = addPreset(1 shl 18)
-        val GATEWAY_MESSAGE_CONTENT_LIMITED = addPreset(1 shl 19)
-        val APPLICATION_COMMAND_BADGE = addPreset(1 shl 23)
+        
+        @JvmField val APPLICATION_AUTO_MODERATION_RULE_CREATE_BADGE = addPreset(1 shl 6)
+        @JvmField val GATEWAY_PRESENCE = addPreset(1 shl 12)
+        @JvmField val GATEWAY_PRESENCE_LIMITED = addPreset(1 shl 13)
+        @JvmField val GATEWAY_GUILD_MEMBERS = addPreset(1 shl 14)
+        @JvmField val GATEWAY_GUILD_MEMBERS_LIMITED = addPreset(1 shl 15)
+        @JvmField val VERIFICATION_PENDING_GUILD_LIMIT = addPreset(1 shl 16)
+        @JvmField val EMBEDDED = addPreset(1 shl 17)
+        @JvmField val GATEWAY_MESSAGE_CONTENT = addPreset(1 shl 18)
+        @JvmField val GATEWAY_MESSAGE_CONTENT_LIMITED = addPreset(1 shl 19)
+        @JvmField val APPLICATION_COMMAND_BADGE = addPreset(1 shl 23)
         
         override fun createValue(newKey: Int): ApplicationFlag
             = ApplicationFlag(newKey)
@@ -109,6 +112,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class UserFlag
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, UserFlag>() {
+        
         @JvmField val STAFF = addPreset(1 shl 0)
         @JvmField val PARTNER = addPreset(1 shl 1)
         @JvmField val HYPESQUAD = addPreset(1 shl 2)
@@ -134,6 +138,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class UserPremiumType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, UserPremiumType>() {
+        
         @JvmField val NONE = addPreset(0)
         @JvmField val NITRO_CLASSIC = addPreset(1)
         @JvmField val NITRO = addPreset(2)
@@ -149,6 +154,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class UserNameplatePalette
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
     companion object : ExtensibleEnum<String, UserNameplatePalette>() {
+        
         @JvmField val CRIMSON = addPreset("crimson")
         @JvmField val BERRY = addPreset("berry")
         @JvmField val SKY = addPreset("sky")
@@ -171,6 +177,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 data class TeamMembershipState
 private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, TeamMembershipState>() {
+        
         @JvmField val INVITED = addPreset(1)
         @JvmField val ACCEPTED = addPreset(2)
         
@@ -184,6 +191,7 @@ private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
 data class TeamMemberRole 
 private constructor(override val key: String?) : ExtensibleEnumValue<String?> {
     companion object : ExtensibleEnum<String?, TeamMemberRole>() {
+        
         @JvmField val OWNER = addPreset(null)
         @JvmField val ADMIN = addPreset("admin")
         @JvmField val DEVELOPER = addPreset("developer")
@@ -198,6 +206,7 @@ private constructor(override val key: String?) : ExtensibleEnumValue<String?> {
 data class ApplicationEventWebhookStatus
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, ApplicationEventWebhookStatus>() {
+        
         @JvmField val DISABLED = addPreset(1)
         @JvmField val ENABLED = addPreset(2)
         @JvmField val DISABLED_BY_DISCORD = addPreset(3)
@@ -211,6 +220,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class WebhookEventType
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
     companion object : ExtensibleEnum<String, WebhookEventType>() {
+        
         @JvmField val APPLICATION_AUTHORIZED = addPreset("APPLICATION_AUTHORIZED")
         @JvmField val APPLICATION_DEAUTHORIZED = addPreset("APPLICATION_DEAUTHORIZED")
         @JvmField val ENTITLEMENT_CREATE = addPreset("ENTITLEMENT_CREATE")
@@ -225,6 +235,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 data class GuildVerificationLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, GuildVerificationLevel>() {
+        
         @JvmField val NONE = addPreset(0)
         @JvmField val LOW = addPreset(1)
         @JvmField val MEDIUM = addPreset(2)
@@ -240,6 +251,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class GuildExplicitContentFilterLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, GuildExplicitContentFilterLevel>() {
+        
         @JvmField val DISABLED = addPreset(0)
         @JvmField val MEMBERS_WITHOUT_ROLES = addPreset(1)
         @JvmField val ALL_MEMBERS = addPreset(2)
@@ -253,6 +265,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class GuildDefaultMessageNotificationLevel
 private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, GuildDefaultMessageNotificationLevel>() {
+        
         @JvmField val ALL_MESSAGES = addPreset(0)
         @JvmField val ONLY_MENTIONS = addPreset(1)
         
@@ -265,6 +278,7 @@ private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
 data class GuildFeature
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
     companion object : ExtensibleEnum<String, GuildFeature>() {
+        
         @JvmField val ANIMATED_BANNER = addPreset("ANIMATED_BANNER")
         @JvmField val ANIMATED_ICON = addPreset("ANIMATED_ICON")
         @JvmField val APPLICATION_COMMAND_PERMISSIONS_V2 = addPreset("APPLICATION_COMMAND_PERMISSIONS_V2")
@@ -306,6 +320,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 data class GuildNsfwLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, GuildNsfwLevel>() {
+        
         @JvmField val DEFAULT = addPreset(0)
         @JvmField val EXPLICIT = addPreset(1)
         @JvmField val SAFE = addPreset(2)
@@ -320,6 +335,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class GuildPremiumTier
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, GuildPremiumTier>() {
+        
         @JvmField val NONE = addPreset(0)
         @JvmField val TIER_1 = addPreset(1)
         @JvmField val TIER_2 = addPreset(2)
@@ -334,6 +350,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 data class ChannelType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object : ExtensibleEnum<Int, ChannelType>() {
+        
         @JvmField val GUILD_TEXT = addPreset(0)
         @JvmField val DM = addPreset(1)
         @JvmField val GUILD_VOICE = addPreset(2)

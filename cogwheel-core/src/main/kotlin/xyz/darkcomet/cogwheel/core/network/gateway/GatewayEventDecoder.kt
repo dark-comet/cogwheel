@@ -18,11 +18,11 @@ internal class GatewayEventDecoder private constructor() {
             return when (payload.op) {
                 GatewayOpCode.DISPATCH.code -> decodeDispatchEvent(payload, jsonSerializer)
                 GatewayOpCode.IDENTIFY.code -> unsupportedDecode(payload)
-                GatewayOpCode.HELLO.code -> decode<GatewayHelloEvent.DataObject>(payload, jsonSerializer) { GatewayHelloEvent(it) }
-                GatewayOpCode.RECONNECT.code -> GatewayReconnectEvent()
-                GatewayOpCode.INVALID_SESSION.code -> GatewayInvalidSessionEvent(isResumeRecommended = jsonSerializer.decodeFromJsonElement(payload.d!!))
-                GatewayOpCode.HEARTBEAT.code -> GatewayHeartbeatEvent()
-                GatewayOpCode.HEARTBEAT_ACK.code -> GatewayHeartbeatAckEvent()
+                GatewayOpCode.HELLO.code -> decode<GatewayEvent.Hello.DataObject>(payload, jsonSerializer) { GatewayEvent.Hello(it) }
+                GatewayOpCode.RECONNECT.code -> GatewayEvent.Reconnect()
+                GatewayOpCode.INVALID_SESSION.code -> GatewayEvent.InvalidSession(isResumeRecommended = jsonSerializer.decodeFromJsonElement(payload.d!!))
+                GatewayOpCode.HEARTBEAT.code -> GatewayEvent.Heartbeat()
+                GatewayOpCode.HEARTBEAT_ACK.code -> GatewayEvent.HeartbeatAck()
                 else -> null
             }
         }
@@ -32,81 +32,81 @@ internal class GatewayEventDecoder private constructor() {
             jsonSerializer: Json
         ): Event<*>? {
             return when (payload.t) {
-                READY.name -> decode<GatewayReadyEvent.DataObject>(payload, jsonSerializer) { GatewayReadyEvent(it) }
-                RESUMED.name -> GatewayResumedEvent()
-                APPLICATION_COMMAND_PERMISSIONS_UPDATE.name -> decode<ApplicationCommandPermissionObject>(payload, jsonSerializer) { ApplicationCommandPermissionsUpdateEvent(it) }
-                AUTO_MODERATION_RULE_CREATE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { AutoModerationRuleCreateEvent(it) }
-                AUTO_MODERATION_RULE_UPDATE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { AutoModerationRuleUpdateEvent(it) }
-                AUTO_MODERATION_RULE_DELETE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { AutoModerationRuleDeleteEvent(it) }
-                AUTO_MODERATION_ACTION_EXECUTION.name -> decode<AutoModerationActionExecutionEvent.DataObject>(payload, jsonSerializer) { AutoModerationActionExecutionEvent(it) }
-                CHANNEL_CREATE.name -> decode<ChannelObject>(payload, jsonSerializer) { ChannelCreateEvent(it) }
-                CHANNEL_UPDATE.name -> decode<ChannelObject>(payload, jsonSerializer) { ChannelUpdateEvent(it) }
-                CHANNEL_DELETE.name -> decode<ChannelObject>(payload, jsonSerializer) { ChannelDeleteEvent(it) }
-                CHANNEL_PINS_UPDATE.name -> decode<ChannelPinsUpdateEvent.DataObject>(payload, jsonSerializer) { ChannelPinsUpdateEvent(it) }
-                THREAD_CREATE.name -> decode<ChannelObject>(payload, jsonSerializer) { ThreadCreateEvent(it) }
-                THREAD_UPDATE.name -> decode<ChannelObject>(payload, jsonSerializer) { ThreadUpdateEvent(it) }
-                THREAD_DELETE.name -> decode<ChannelObject>(payload, jsonSerializer) { ThreadDeleteEvent(it) }
-                THREAD_LIST_SYNC.name -> decode<ThreadListSyncEvent.DataObject>(payload, jsonSerializer) { ThreadListSyncEvent(it) }
-                THREAD_MEMBER_UPDATE.name -> decode<ThreadMemberObject>(payload, jsonSerializer) { ThreadMemberUpdateEvent(it) }
-                THREAD_MEMBERS_UPDATE.name -> decode<ThreadMembersUpdateEvent.DataObject>(payload, jsonSerializer) { ThreadMembersUpdateEvent(it) }
-                ENTITLEMENT_CREATE.name -> decode<EntitlementObject>(payload, jsonSerializer) { EntitlementCreateEvent(it) }
-                ENTITLEMENT_UPDATE.name -> decode<EntitlementObject>(payload, jsonSerializer) { EntitlementUpdateEvent(it) }
-                ENTITLEMENT_DELETE.name -> decode<EntitlementObject>(payload, jsonSerializer) { EntitlementDeleteEvent(it) }
-                GUILD_CREATE.name -> decode<GuildObject>(payload, jsonSerializer) { GuildCreateEvent(it) }
-                GUILD_UPDATE.name -> decode<GuildObject>(payload, jsonSerializer) { GuildUpdateEvent(it) }
-                GUILD_DELETE.name -> decode<GuildObject>(payload, jsonSerializer) { GuildDeleteEvent(it) }
-                GUILD_AUDIT_LOG_ENTRY_CREATE.name -> decode<AuditLogEntryObject>(payload, jsonSerializer) { GuildAuditLogEntryCreateEvent(it) }
-                GUILD_BAN_ADD.name -> decode<GuildBanAddEvent.DataObject>(payload, jsonSerializer) { GuildBanAddEvent(it) }
-                GUILD_BAN_REMOVE.name -> decode<GuildBanRemoveEvent.DataObject>(payload, jsonSerializer) { GuildBanRemoveEvent(it) }
-                GUILD_EMOJIS_UPDATE.name -> decode<GuildEmojisUpdateEvent.DataObject>(payload, jsonSerializer) { GuildEmojisUpdateEvent(it) }
-                GUILD_STICKERS_UPDATE.name -> decode<GuildStickersUpdateEvent.DataObject>(payload, jsonSerializer) { GuildStickersUpdateEvent(it) }
-                GUILD_INTEGRATIONS_UPDATE.name -> decode<GuildIntegrationsUpdateEvent.DataObject>(payload, jsonSerializer) { GuildIntegrationsUpdateEvent(it) }
-                GUILD_MEMBER_ADD.name -> decode<GuildMemberObject>(payload, jsonSerializer) { GuildMemberAddEvent(it) }
-                GUILD_MEMBER_REMOVE.name -> decode<GuildMemberRemoveEvent.DataObject>(payload, jsonSerializer) { GuildMemberRemoveEvent(it) }
-                GUILD_MEMBER_UPDATE.name -> decode<GuildMemberUpdateEvent.DataObject>(payload, jsonSerializer) { GuildMemberUpdateEvent(it) }
-                GUILD_MEMBERS_CHUNK.name -> decode<GuildMembersChunkEvent.DataObject>(payload, jsonSerializer) { GuildMembersChunkEvent(it) }
-                GUILD_ROLE_CREATE.name -> decode<GuildRoleCreateEvent.DataObject>(payload, jsonSerializer) { GuildRoleCreateEvent(it) }
-                GUILD_ROLE_UPDATE.name -> decode<GuildRoleUpdateEvent.DataObject>(payload, jsonSerializer) { GuildRoleUpdateEvent(it) }
-                GUILD_ROLE_DELETE.name -> decode<GuildRoleDeleteEvent.DataObject>(payload, jsonSerializer) { GuildRoleDeleteEvent(it) }
-                GUILD_SCHEDULED_EVENT_CREATE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GuildScheduledEventCreateEvent(it) }
-                GUILD_SCHEDULED_EVENT_UPDATE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GuildScheduledEventUpdateEvent(it) }
-                GUILD_SCHEDULED_EVENT_DELETE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GuildScheduledEventDeleteEvent(it) }
-                GUILD_SCHEDULED_EVENT_USER_ADD.name -> decode<GuildScheduledEventUserAddEvent.DataObject>(payload, jsonSerializer) { GuildScheduledEventUserAddEvent(it) }
-                GUILD_SCHEDULED_EVENT_USER_REMOVE.name -> decode<GuildScheduledEventUserRemoveEvent.DataObject>(payload, jsonSerializer) { GuildScheduledEventUserRemoveEvent(it) }
-                GUILD_SOUNDBOARD_SOUND_CREATE.name -> decode<SoundboardSoundObject>(payload, jsonSerializer) { GuildSoundboardSoundCreateEvent(it) }
-                GUILD_SOUNDBOARD_SOUND_UPDATE.name -> decode<SoundboardSoundObject>(payload, jsonSerializer) { GuildSoundboardSoundUpdateEvent(it) }
-                GUILD_SOUNDBOARD_SOUND_DELETE.name -> decode<GuildSoundboardSoundDeleteEvent.DataObject>(payload, jsonSerializer) { GuildSoundboardSoundDeleteEvent(it) }
-                GUILD_SOUNDBOARD_SOUNDS_UPDATE.name -> decode<GuildSoundboardSoundsUpdateEvent.DataObject>(payload, jsonSerializer) { GuildSoundboardSoundsUpdateEvent(it) }
-                SOUNDBOARD_SOUNDS.name -> decode<SoundboardSoundsEvent.DataObject>(payload, jsonSerializer) { SoundboardSoundsEvent(it) }
-                INTEGRATION_CREATE.name -> decode<GuildIntegrationObject>(payload, jsonSerializer) { IntegrationCreateEvent(it) }
-                INTEGRATION_UPDATE.name -> decode<GuildIntegrationObject>(payload, jsonSerializer) { IntegrationUpdateEvent(it) }
-                INTEGRATION_DELETE.name -> decode<IntegrationDeleteEvent.DataObject>(payload, jsonSerializer) { IntegrationDeleteEvent(it) }
-                INTERACTION_CREATE.name -> decode<InteractionObject>(payload, jsonSerializer) { InteractionCreateEvent(it) }
-                INVITE_CREATE.name -> decode<InviteCreateEvent.DataObject>(payload, jsonSerializer) { InviteCreateEvent(it) }
-                INVITE_DELETE.name -> decode<InviteDeleteEvent.DataObject>(payload, jsonSerializer) { InviteDeleteEvent(it) }
-                MESSAGE_CREATE.name -> decode<MessageObject>(payload, jsonSerializer) { MessageCreateEvent(it) }
-                MESSAGE_UPDATE.name -> decode<MessageObject>(payload, jsonSerializer) { MessageUpdateEvent(it) }
-                MESSAGE_DELETE.name -> decode<MessageDeleteEvent.DataObject>(payload, jsonSerializer) { MessageDeleteEvent(it) }
-                MESSAGE_DELETE_BULK.name -> decode<MessageDeleteBulkEvent.DataObject>(payload, jsonSerializer) { MessageDeleteBulkEvent(it) }
-                MESSAGE_REACTION_ADD.name -> decode<MessageReactionAddEvent.DataObject>(payload, jsonSerializer) { MessageReactionAddEvent(it) }
-                MESSAGE_REACTION_REMOVE.name -> decode<MessageReactionRemoveEvent.DataObject>(payload, jsonSerializer) { MessageReactionRemoveEvent(it) }
-                MESSAGE_REACTION_REMOVE_ALL.name -> decode<MessageReactionRemoveAllEvent.DataObject>(payload, jsonSerializer) { MessageReactionRemoveAllEvent(it) }
-                MESSAGE_REACTION_REMOVE_EMOJI.name -> decode<MessageReactionRemoveEmojiEvent.DataObject>(payload, jsonSerializer) { MessageReactionRemoveEmojiEvent(it) }
-                PRESENCE_UPDATE.name -> decode<PresenceUpdateEvent.DataObject>(payload, jsonSerializer) { PresenceUpdateEvent(it) }
-                STAGE_INSTANCE_CREATE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { StageInstanceCreateEvent(it) }
-                STAGE_INSTANCE_UPDATE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { StageInstanceUpdateEvent(it) }
-                STAGE_INSTANCE_DELETE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { StageInstanceDeleteEvent(it) }
-                SUBSCRIPTION_CREATE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { SubscriptionCreateEvent(it) }
-                SUBSCRIPTION_UPDATE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { SubscriptionUpdateEvent(it) }
-                SUBSCRIPTION_DELETE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { SubscriptionDeleteEvent(it) }
-                TYPING_START.name -> decode<TypingStartEvent.DataObject>(payload, jsonSerializer) { TypingStartEvent(it) }
-                USER_UPDATE.name -> decode<UserObject>(payload, jsonSerializer) { UserUpdateEvent(it) }
-                VOICE_CHANNEL_EFFECT_SEND.name -> decode<VoiceChannelEffectSendEvent.DataObject>(payload, jsonSerializer) { VoiceChannelEffectSendEvent(it) }
-                VOICE_STATE_UPDATE.name -> decode<VoiceStateObject>(payload, jsonSerializer) { VoiceStateUpdateEvent(it) }
-                VOICE_SERVER_UPDATE.name -> decode<VoiceServerUpdateEvent.DataObject>(payload, jsonSerializer) { VoiceServerUpdateEvent(it) }
-                WEBHOOKS_UPDATE.name -> decode<WebhooksUpdateEvent.DataObject>(payload, jsonSerializer) { WebhooksUpdateEvent(it) }
-                MESSAGE_POLL_VOTE_ADD.name -> decode<MessagePollVoteAddEvent.DataObject>(payload, jsonSerializer) { MessagePollVoteAddEvent(it) }
-                MESSAGE_POLL_VOTE_REMOVE.name -> decode<MessagePollVoteRemoveEvent.DataObject>(payload, jsonSerializer) { MessagePollVoteRemoveEvent(it) }
+                READY.name -> decode<GatewayEvent.Ready.DataObject>(payload, jsonSerializer) { GatewayEvent.Ready(it) }
+                RESUMED.name -> GatewayEvent.Resumed()
+                APPLICATION_COMMAND_PERMISSIONS_UPDATE.name -> decode<ApplicationCommandPermissionObject>(payload, jsonSerializer) { GatewayEvent.ApplicationCommandPermissionsUpdate(it) }
+                AUTO_MODERATION_RULE_CREATE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { GatewayEvent.AutoModerationRuleCreate(it) }
+                AUTO_MODERATION_RULE_UPDATE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { GatewayEvent.AutoModerationRuleUpdate(it) }
+                AUTO_MODERATION_RULE_DELETE.name -> decode<GuildAutoModerationRuleObject>(payload, jsonSerializer) { GatewayEvent.AutoModerationRuleDelete(it) }
+                AUTO_MODERATION_ACTION_EXECUTION.name -> decode<GatewayEvent.AutoModerationActionExecution.DataObject>(payload, jsonSerializer) { GatewayEvent.AutoModerationActionExecution(it) }
+                CHANNEL_CREATE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ChannelCreate(it) }
+                CHANNEL_UPDATE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ChannelUpdate(it) }
+                CHANNEL_DELETE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ChannelDelete(it) }
+                CHANNEL_PINS_UPDATE.name -> decode<GatewayEvent.ChannelPinsUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.ChannelPinsUpdate(it) }
+                THREAD_CREATE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ThreadCreate(it) }
+                THREAD_UPDATE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ThreadUpdate(it) }
+                THREAD_DELETE.name -> decode<ChannelObject>(payload, jsonSerializer) { GatewayEvent.ThreadDelete(it) }
+                THREAD_LIST_SYNC.name -> decode<GatewayEvent.ThreadListSync.DataObject>(payload, jsonSerializer) { GatewayEvent.ThreadListSync(it) }
+                THREAD_MEMBER_UPDATE.name -> decode<ThreadMemberObject>(payload, jsonSerializer) { GatewayEvent.ThreadMemberUpdate(it) }
+                THREAD_MEMBERS_UPDATE.name -> decode<GatewayEvent.ThreadMembersUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.ThreadMembersUpdate(it) }
+                ENTITLEMENT_CREATE.name -> decode<EntitlementObject>(payload, jsonSerializer) { GatewayEvent.EntitlementCreate(it) }
+                ENTITLEMENT_UPDATE.name -> decode<EntitlementObject>(payload, jsonSerializer) { GatewayEvent.EntitlementUpdate(it) }
+                ENTITLEMENT_DELETE.name -> decode<EntitlementObject>(payload, jsonSerializer) { GatewayEvent.EntitlementDelete(it) }
+                GUILD_CREATE.name -> decode<GuildObject>(payload, jsonSerializer) { GatewayEvent.GuildCreate(it) }
+                GUILD_UPDATE.name -> decode<GuildObject>(payload, jsonSerializer) { GatewayEvent.GuildUpdate(it) }
+                GUILD_DELETE.name -> decode<GuildObject>(payload, jsonSerializer) { GatewayEvent.GuildDelete(it) }
+                GUILD_AUDIT_LOG_ENTRY_CREATE.name -> decode<AuditLogEntryObject>(payload, jsonSerializer) { GatewayEvent.GuildAuditLogEntryCreate(it) }
+                GUILD_BAN_ADD.name -> decode<GatewayEvent.GuildBanAdd.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildBanAdd(it) }
+                GUILD_BAN_REMOVE.name -> decode<GatewayEvent.GuildBanRemove.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildBanRemove(it) }
+                GUILD_EMOJIS_UPDATE.name -> decode<GatewayEvent.GuildEmojisUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildEmojisUpdate(it) }
+                GUILD_STICKERS_UPDATE.name -> decode<GatewayEvent.GuildStickersUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildStickersUpdate(it) }
+                GUILD_INTEGRATIONS_UPDATE.name -> decode<GatewayEvent.GuildIntegrationsUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildIntegrationsUpdate(it) }
+                GUILD_MEMBER_ADD.name -> decode<GuildMemberObject>(payload, jsonSerializer) { GatewayEvent.GuildMemberAdd(it) }
+                GUILD_MEMBER_REMOVE.name -> decode<GatewayEvent.GuildMemberRemove.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildMemberRemove(it) }
+                GUILD_MEMBER_UPDATE.name -> decode<GatewayEvent.GuildMemberUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildMemberUpdate(it) }
+                GUILD_MEMBERS_CHUNK.name -> decode<GatewayEvent.GuildMembersChunk.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildMembersChunk(it) }
+                GUILD_ROLE_CREATE.name -> decode<GatewayEvent.GuildRoleCreate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildRoleCreate(it) }
+                GUILD_ROLE_UPDATE.name -> decode<GatewayEvent.GuildRoleUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildRoleUpdate(it) }
+                GUILD_ROLE_DELETE.name -> decode<GatewayEvent.GuildRoleDelete.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildRoleDelete(it) }
+                GUILD_SCHEDULED_EVENT_CREATE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GatewayEvent.GuildScheduledEventCreate(it) }
+                GUILD_SCHEDULED_EVENT_UPDATE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GatewayEvent.GuildScheduledEventUpdate(it) }
+                GUILD_SCHEDULED_EVENT_DELETE.name -> decode<GuildScheduledEventObject>(payload, jsonSerializer) { GatewayEvent.GuildScheduledEventDelete(it) }
+                GUILD_SCHEDULED_EVENT_USER_ADD.name -> decode<GatewayEvent.GuildScheduledEventUserAdd.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildScheduledEventUserAdd(it) }
+                GUILD_SCHEDULED_EVENT_USER_REMOVE.name -> decode<GatewayEvent.GuildScheduledEventUserRemove.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildScheduledEventUserRemove(it) }
+                GUILD_SOUNDBOARD_SOUND_CREATE.name -> decode<SoundboardSoundObject>(payload, jsonSerializer) { GatewayEvent.GuildSoundboardSoundCreate(it) }
+                GUILD_SOUNDBOARD_SOUND_UPDATE.name -> decode<SoundboardSoundObject>(payload, jsonSerializer) { GatewayEvent.GuildSoundboardSoundUpdate(it) }
+                GUILD_SOUNDBOARD_SOUND_DELETE.name -> decode<GatewayEvent.GuildSoundboardSoundDelete.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildSoundboardSoundDelete(it) }
+                GUILD_SOUNDBOARD_SOUNDS_UPDATE.name -> decode<GatewayEvent.GuildSoundboardSoundsUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.GuildSoundboardSoundsUpdate(it) }
+                SOUNDBOARD_SOUNDS.name -> decode<GatewayEvent.SoundboardSounds.DataObject>(payload, jsonSerializer) { GatewayEvent.SoundboardSounds(it) }
+                INTEGRATION_CREATE.name -> decode<GuildIntegrationObject>(payload, jsonSerializer) { GatewayEvent.IntegrationCreate(it) }
+                INTEGRATION_UPDATE.name -> decode<GuildIntegrationObject>(payload, jsonSerializer) { GatewayEvent.IntegrationUpdate(it) }
+                INTEGRATION_DELETE.name -> decode<GatewayEvent.IntegrationDelete.DataObject>(payload, jsonSerializer) { GatewayEvent.IntegrationDelete(it) }
+                INTERACTION_CREATE.name -> decode<InteractionObject>(payload, jsonSerializer) { GatewayEvent.InteractionCreate(it) }
+                INVITE_CREATE.name -> decode<GatewayEvent.InviteCreate.DataObject>(payload, jsonSerializer) { GatewayEvent.InviteCreate(it) }
+                INVITE_DELETE.name -> decode<GatewayEvent.InviteDelete.DataObject>(payload, jsonSerializer) { GatewayEvent.InviteDelete(it) }
+                MESSAGE_CREATE.name -> decode<MessageObject>(payload, jsonSerializer) { GatewayEvent.MessageCreate(it) }
+                MESSAGE_UPDATE.name -> decode<MessageObject>(payload, jsonSerializer) { GatewayEvent.MessageUpdate(it) }
+                MESSAGE_DELETE.name -> decode<GatewayEvent.MessageDelete.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageDelete(it) }
+                MESSAGE_DELETE_BULK.name -> decode<GatewayEvent.MessageDeleteBulk.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageDeleteBulk(it) }
+                MESSAGE_REACTION_ADD.name -> decode<GatewayEvent.MessageReactionAdd.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageReactionAdd(it) }
+                MESSAGE_REACTION_REMOVE.name -> decode<GatewayEvent.MessageReactionRemove.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageReactionRemove(it) }
+                MESSAGE_REACTION_REMOVE_ALL.name -> decode<GatewayEvent.MessageReactionRemoveAll.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageReactionRemoveAll(it) }
+                MESSAGE_REACTION_REMOVE_EMOJI.name -> decode<GatewayEvent.MessageReactionRemoveEmoji.DataObject>(payload, jsonSerializer) { GatewayEvent.MessageReactionRemoveEmoji(it) }
+                PRESENCE_UPDATE.name -> decode<GatewayEvent.PresenceUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.PresenceUpdate(it) }
+                STAGE_INSTANCE_CREATE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { GatewayEvent.StageInstanceCreate(it) }
+                STAGE_INSTANCE_UPDATE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { GatewayEvent.StageInstanceUpdate(it) }
+                STAGE_INSTANCE_DELETE.name -> decode<StageInstanceObject>(payload, jsonSerializer) { GatewayEvent.StageInstanceDelete(it) }
+                SUBSCRIPTION_CREATE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { GatewayEvent.SubscriptionCreate(it) }
+                SUBSCRIPTION_UPDATE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { GatewayEvent.SubscriptionUpdate(it) }
+                SUBSCRIPTION_DELETE.name -> decode<SubscriptionObject>(payload, jsonSerializer) { GatewayEvent.SubscriptionDelete(it) }
+                TYPING_START.name -> decode<GatewayEvent.TypingStart.DataObject>(payload, jsonSerializer) { GatewayEvent.TypingStart(it) }
+                USER_UPDATE.name -> decode<UserObject>(payload, jsonSerializer) { GatewayEvent.UserUpdate(it) }
+                VOICE_CHANNEL_EFFECT_SEND.name -> decode<GatewayEvent.VoiceChannelEffectSend.DataObject>(payload, jsonSerializer) { GatewayEvent.VoiceChannelEffectSend(it) }
+                VOICE_STATE_UPDATE.name -> decode<VoiceStateObject>(payload, jsonSerializer) { GatewayEvent.VoiceStateUpdate(it) }
+                VOICE_SERVER_UPDATE.name -> decode<GatewayEvent.VoiceServerUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.VoiceServerUpdate(it) }
+                WEBHOOKS_UPDATE.name -> decode<GatewayEvent.WebhooksUpdate.DataObject>(payload, jsonSerializer) { GatewayEvent.WebhooksUpdate(it) }
+                MESSAGE_POLL_VOTE_ADD.name -> decode<GatewayEvent.MessagePollVoteAdd.DataObject>(payload, jsonSerializer) { GatewayEvent.MessagePollVoteAdd(it) }
+                MESSAGE_POLL_VOTE_REMOVE.name -> decode<GatewayEvent.MessagePollVoteRemove.DataObject>(payload, jsonSerializer) { GatewayEvent.MessagePollVoteRemove(it) }
                 else -> null
             }
         }

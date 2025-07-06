@@ -1,6 +1,6 @@
-package xyz.darkcomet.cogwheel.core.impl.authentication
+package xyz.darkcomet.cogwheel.core.primitives.auth
 
-internal class BotToken(private val token: String) : Token {
+class BotToken(private val token: String) : Token {
     
     override val value: String
         get() = token

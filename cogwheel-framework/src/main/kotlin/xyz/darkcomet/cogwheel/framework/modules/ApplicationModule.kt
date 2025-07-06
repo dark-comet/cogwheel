@@ -5,7 +5,7 @@ import xyz.darkcomet.cogwheel.core.network.http.rest.ApplicationResource
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.Application
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.toModel
-import xyz.darkcomet.cogwheel.framework.models.request.application.EditCurrentApplicationRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.specs.application.EditCurrentApplicationRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 
 @Suppress("unused") // All exposed members are part of the public API
@@ -13,27 +13,38 @@ class ApplicationModule
 internal constructor(private val resource: ApplicationResource) {
     
     @JvmField
-    val editCurrent = object : RequestEndpoint<EditCurrentApplicationRequestSpec, Application> {
-        override fun createRequest(): EditCurrentApplicationRequestSpec {
-            return EditCurrentApplicationRequestSpec();
-        }
-
-        override suspend fun invoke(requestSpec: EditCurrentApplicationRequestSpec): Response<Application> {
-            val request = requestSpec.build()
-            val rawResponse: CwHttpResponse<ApplicationObject?> = resource.editCurrentApplication(request)
-            val model: Application? = rawResponse.data?.toModel();
-
-            return Response(model, rawResponse);
-        }
-    }
+    val editCurrent = EditCurrentApplicationEndpoint(resource)
     
     @JvmField
-    val getCurrent = object : GetEndpoint<Application> {
-        override suspend fun invoke(): Response<Application> {
-            val rawResponse: CwHttpResponse<ApplicationObject?> = resource.getCurrentApplication();
-            val model: Application? = rawResponse.data?.toModel();
+    val getCurrent = GetCurrentApplicationEndpoint(resource)
+    
+}
 
-            return Response(model, rawResponse);
-        }
+class EditCurrentApplicationEndpoint
+internal constructor(private val resource: ApplicationResource) 
+    : RequestEndpointS<EditCurrentApplicationRequestSpec, Application> {
+        
+    override fun createRequest(): EditCurrentApplicationRequestSpec {
+        return EditCurrentApplicationRequestSpec();
+    }
+
+    override suspend fun invoke(requestSpec: EditCurrentApplicationRequestSpec): Response<Application> {
+        val request = requestSpec.build()
+        val rawResponse: CwHttpResponse<ApplicationObject?> = resource.editCurrentApplication(request)
+        val model: Application? = rawResponse.data?.toModel();
+
+        return Response(model, rawResponse);
+    }
+}
+
+class GetCurrentApplicationEndpoint
+internal constructor(private val resource: ApplicationResource) 
+    : GetEndpoint<Application> {
+    
+    override suspend fun invoke(): Response<Application> {
+        val rawResponse: CwHttpResponse<ApplicationObject?> = resource.getCurrentApplication();
+        val model: Application? = rawResponse.data?.toModel();
+
+        return Response(model, rawResponse);
     }
 }

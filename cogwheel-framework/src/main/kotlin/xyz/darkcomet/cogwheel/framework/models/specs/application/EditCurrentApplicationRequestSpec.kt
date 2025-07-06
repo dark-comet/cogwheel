@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.request.application
+package xyz.darkcomet.cogwheel.framework.models.specs.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject

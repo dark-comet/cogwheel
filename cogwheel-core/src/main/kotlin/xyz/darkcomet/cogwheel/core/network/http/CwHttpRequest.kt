@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import java.util.*
 import kotlin.collections.HashMap
 
+@ConsistentCopyVisibility
 data class CwHttpRequest 
 internal constructor(
     val method: CwHttpMethod,

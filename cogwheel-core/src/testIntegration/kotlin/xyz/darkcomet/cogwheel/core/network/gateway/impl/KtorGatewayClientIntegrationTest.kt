@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
 import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
-import xyz.darkcomet.cogwheel.core.events.GatewayHelloEvent
-import xyz.darkcomet.cogwheel.core.events.GatewayInvalidSessionEvent
-import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
+import xyz.darkcomet.cogwheel.core.events.Gateway
 import xyz.darkcomet.cogwheel.core.primitives.Intents
 import java.net.UnknownHostException
 import java.util.concurrent.CountDownLatch
@@ -27,8 +25,8 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         
         val events = client.events()
         
-        events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
-        events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
+        events.subscribe(Gateway.Hello) { receiveHelloLatch.countDown() }
+        events.subscribe(Gateway.Ready) { receiveReadyLatch.countDown() }
 
         withGateway(client) {
             val receivedReady = receiveReadyLatch.await(1000, TimeUnit.SECONDS)
@@ -52,17 +50,17 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         }
 
         val receiveInvalidSessionEvent = CountDownLatch(1)
-        val invalidSessionEvent = AtomicReference<GatewayInvalidSessionEvent>(null)
+        val invalidSessionEvent = AtomicReference<Gateway.InvalidSession>(null)
 
         val receiveHelloLatch = CountDownLatch(2)
         val receiveReadyLatch = CountDownLatch(2)
         
         val events = client.events()
 
-        events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
-        events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
+        events.subscribe(Gateway.Hello) { receiveHelloLatch.countDown() }
+        events.subscribe(Gateway.Ready) { receiveReadyLatch.countDown() }
         
-        events.subscribe(GatewayInvalidSessionEvent::class.java) {
+        events.subscribe(Gateway.InvalidSession) {
             invalidSessionEvent.set(it)
             receiveInvalidSessionEvent.countDown()
         }
@@ -107,8 +105,8 @@ class KtorGatewayClientIntegrationTest : IntegrationTestFixture() {
         }
         
         val events = client.events()
-        events.subscribe(GatewayHelloEvent::class.java) { receiveHelloLatch.countDown() }
-        events.subscribe(GatewayReadyEvent::class.java) { receiveReadyLatch.countDown() }
+        events.subscribe(Gateway.Hello) { receiveHelloLatch.countDown() }
+        events.subscribe(Gateway.Ready) { receiveReadyLatch.countDown() }
 
         withGateway(client) {
             assertTrue(receiveHelloLatch.await(1, TimeUnit.MINUTES), "Failed to receive HELLO event in time")

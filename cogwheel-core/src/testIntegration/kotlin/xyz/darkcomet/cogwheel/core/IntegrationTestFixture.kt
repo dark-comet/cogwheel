@@ -3,7 +3,7 @@ package xyz.darkcomet.cogwheel.core
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertTrue
-import xyz.darkcomet.cogwheel.core.events.GatewayReadyEvent
+import xyz.darkcomet.cogwheel.core.events.Gateway
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -14,7 +14,7 @@ abstract class IntegrationTestFixture {
             val gatewayAwaiter = CountDownLatch(1)
             val gatewayShutdownOk = AtomicBoolean(false)
 
-            val gatewayReadyListener: (GatewayReadyEvent) -> Unit = { event ->
+            val gatewayReadyListener: (Gateway.Ready) -> Unit = { event ->
                 runBlocking {
                     for (guild in event.data.guilds) {
                         launch {
@@ -26,7 +26,7 @@ abstract class IntegrationTestFixture {
 
                 gatewayAwaiter.countDown()
             }
-            client.events().subscribe(GatewayReadyEvent::class.java, gatewayReadyListener)
+            client.events().subscribe(Gateway.Ready, gatewayReadyListener)
 
             val gatewayThread = Thread {
                 runBlocking {
@@ -37,7 +37,7 @@ abstract class IntegrationTestFixture {
             gatewayThread.start()
 
             assertTrue(gatewayAwaiter.await(30, TimeUnit.SECONDS), "Timed out waiting for gateway startup")
-            client.events().unsubscribe(GatewayReadyEvent::class.java, gatewayReadyListener)
+            client.events().unsubscribe(Gateway.Ready, gatewayReadyListener)
 
             try {
                 runBlocking {

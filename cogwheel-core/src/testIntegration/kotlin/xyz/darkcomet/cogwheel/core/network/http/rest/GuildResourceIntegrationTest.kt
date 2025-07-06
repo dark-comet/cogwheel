@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.darkcomet.cogwheel.core.IntegrationTestFixture
 import xyz.darkcomet.cogwheel.core.TestCwDiscordClient
-import xyz.darkcomet.cogwheel.core.events.GuildCreateEvent
-import xyz.darkcomet.cogwheel.core.events.GuildDeleteEvent
-import xyz.darkcomet.cogwheel.core.events.GuildUpdateEvent
+import xyz.darkcomet.cogwheel.core.events.Gateway
 import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
@@ -25,13 +23,13 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
     @Test
     fun testCreate_Get_GetPreview_Modify_Delete() {
         val receivedGuildCreateEvent = CountDownLatch(1)
-        client.events().subscribe(GuildCreateEvent::class.java) { receivedGuildCreateEvent.countDown() }
+        client.events().subscribe(Gateway.GuildCreate) { receivedGuildCreateEvent.countDown() }
         
         val receivedGuildUpdateEvent = CountDownLatch(1)
-        client.events().subscribe(GuildUpdateEvent::class.java) { receivedGuildUpdateEvent.countDown() }
+        client.events().subscribe(Gateway.GuildUpdate) { receivedGuildUpdateEvent.countDown() }
         
         val receivedGuildDeleteEvent = CountDownLatch(1)
-        client.events().subscribe(GuildDeleteEvent::class.java) { receivedGuildDeleteEvent.countDown() }
+        client.events().subscribe(Gateway.GuildDelete) { receivedGuildDeleteEvent.countDown() }
         
         withGateway(client) {
             // CREATE
@@ -110,7 +108,7 @@ class GuildResourceIntegrationTest : IntegrationTestFixture() {
             afkTimeout = MaybeAbsent(newAfkTimeout),
             premiumProgressBarEnabled = MaybeAbsent(newPremiumProgressBarEnabled),
             description = MaybeAbsent(newGuildDescription),
-            icon = MaybeAbsent(iconImageData)
+            icon = MaybeAbsent(iconImageData.hash)
         )
         val modifyResponse = guildApi.modifyGuild(guildId, modifyRequest)
 

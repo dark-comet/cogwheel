@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.network.http.rest.*
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.events.EventSubscription
+import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.impl.models.CwConfiguration
 import xyz.darkcomet.cogwheel.core.network.CancellationTokenSource
@@ -22,8 +22,6 @@ import xyz.darkcomet.cogwheel.core.primitives.AssetSize
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.reflect.KType
-import kotlin.reflect.typeOf
 
 internal open class CwDiscordClientImpl 
 internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
@@ -154,7 +152,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
     internal inner class EventManagerImpl : CwDiscordClient.EventManager {
         
         private val listeners: MutableMap<EventType<*>, ArrayList<(Event<*>) -> Unit>> = HashMap()
-        private val delegateListeners: MutableMap<EventSubscription<*>, (Event<*>) -> Unit> = HashMap();
+        private val delegateListeners: MutableMap<EventListener<*>, (Event<*>) -> Unit> = HashMap();
         
         init {
             this@CwDiscordClientImpl.gatewayClient?.onEventReceived { event ->
@@ -164,7 +162,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
             }
         }
         
-        override fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: EventSubscription<T>) {
+        override fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: EventListener<T>) {
             val delegate: (Event<*>) -> Unit = {
                 @Suppress("UNCHECKED_CAST")
                 listener.eventReceived(it as T)
@@ -173,8 +171,8 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
             listeners.putIfAbsent(eventType, ArrayList())
             listeners[eventType]!!.add(delegate)
         }
-        
-        override fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: EventSubscription<T>): Boolean {
+
+        override fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: EventListener<T>): Boolean {
             val delegate = delegateListeners.remove(listener) 
                 ?: return false
             

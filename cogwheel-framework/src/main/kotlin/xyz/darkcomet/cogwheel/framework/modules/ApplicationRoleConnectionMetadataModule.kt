@@ -1,4 +1,4 @@
-@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride")
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride", "unused")
 
 package xyz.darkcomet.cogwheel.framework.modules
 

@@ -1446,29 +1446,29 @@ data class UserObject(
     @SerialName("premium_type") val premiumType: MaybeAbsent<Int>? = null,
     @SerialName("public_flags") val publicFlags: MaybeAbsent<Int>? = null,
     @SerialName("avatar_decoration_data") val avatarDecorationData: MaybeAbsent<UserAvatarDecorationDataObject>? = null,
-    val collectibles: MaybeAbsent<UserCollectiblesObject?>?,
-    @SerialName("primary_guild") val primaryGuild: MaybeAbsent<UserPrimaryGuildObject?>?
+    val collectibles: MaybeAbsent<UserCollectiblesObject?>? = null,
+    @SerialName("primary_guild") val primaryGuild: MaybeAbsent<UserPrimaryGuildObject?>? = null
 )
 
 @Serializable
 data class UserCollectiblesObject(
-    val nameplate: MaybeAbsent<UserNameplateObject>?
+    val nameplate: MaybeAbsent<UserNameplateObject?>? = null
 )
 
 @Serializable
 data class UserNameplateObject(
-    @SerialName("sku_id") val skuId: MaybeAbsent<Snowflake?>?,
-    val asset: MaybeAbsent<String?>?,
-    val label: MaybeAbsent<String?>?,
-    val palette: MaybeAbsent<String?>?
+    @SerialName("sku_id") val skuId: MaybeAbsent<Snowflake?>? = null,
+    val asset: MaybeAbsent<String?>? = null,
+    val label: MaybeAbsent<String?>? = null,
+    val palette: MaybeAbsent<String?>? = null
 )
 
 @Serializable
 data class UserPrimaryGuildObject(
-    @SerialName("identity_guild_id") val identityGuildId: MaybeAbsent<Snowflake?>?,
-    @SerialName("identity_enabled") val identityEnabled: MaybeAbsent<Boolean?>?,
-    val tag: MaybeAbsent<String?>?,
-    val badge: MaybeAbsent<String?>?
+    @SerialName("identity_guild_id") val identityGuildId: MaybeAbsent<Snowflake?>? = null,
+    @SerialName("identity_enabled") val identityEnabled: MaybeAbsent<Boolean?>? = null,
+    val tag: MaybeAbsent<String?>? = null,
+    val badge: MaybeAbsent<String?>? = null
 )
 
 @Serializable

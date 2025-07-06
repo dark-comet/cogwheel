@@ -3,7 +3,7 @@
 package xyz.darkcomet.cogwheel.framework
 
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.events.EventSubscription
+import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.primitives.auth.*
 import xyz.darkcomet.cogwheel.framework.modules.*
@@ -15,8 +15,8 @@ interface DiscordClient {
     suspend fun startGateway()
     fun stopGateway()
     
-    fun <T : Event<*>> on(eventType: EventType<T>, listener: EventSubscription<T>)
-    fun <T : Event<*>> off(eventType: EventType<T>, listener: EventSubscription<T>): Boolean
+    fun <T : Event<*>> on(eventType: EventType<T>, listener: EventListener<T>)
+    fun <T : Event<*>> off(eventType: EventType<T>, listener: EventListener<T>): Boolean
     
     interface RestApiModules {
         val application: ApplicationModule

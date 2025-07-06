@@ -30,7 +30,7 @@ class ApplicationResourceIntegrationTest {
             
             var request = EditCurrentApplicationRequestParameters(
                 description = MaybeAbsent("test description: ${UUID.randomUUID()}"),
-                icon = MaybeAbsent(iconImageData)
+                icon = MaybeAbsent(iconImageData.hash)
             )
             var response = api.application.editCurrentApplication(request)
             

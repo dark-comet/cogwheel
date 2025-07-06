@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.impl
 
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.Event
-import xyz.darkcomet.cogwheel.core.events.EventSubscription
+import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.framework.DiscordClient
 import xyz.darkcomet.cogwheel.framework.modules.*
@@ -39,17 +39,17 @@ internal class DiscordClientImpl(private val cwClient: CwDiscordClient) : Discor
         override val voice = VoiceModule(cwClient.restApi().voice)
         override val webhook = WebhookModule(cwClient.restApi().webhook)
     }
-
+    
     override suspend fun startGateway()
         = cwClient.startGateway()
 
     override fun stopGateway()
         = cwClient.stopGateway()
 
-    override fun <T : Event<*>> on(eventType: EventType<T>, listener: EventSubscription<T>) 
+    override fun <T : Event<*>> on(eventType: EventType<T>, listener: EventListener<T>) 
         = cwClient.events().subscribe(eventType, listener)
 
-    override fun <T : Event<*>> off(eventType: EventType<T>, listener: EventSubscription<T>): Boolean 
+    override fun <T : Event<*>> off(eventType: EventType<T>, listener: EventListener<T>): Boolean 
         = cwClient.events().unsubscribe(eventType, listener)
 
 }

@@ -6,7 +6,7 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.primitives.auth.*
-import xyz.darkcomet.cogwheel.framework.modules.*
+import xyz.darkcomet.cogwheel.framework.restapi.*
 import java.util.function.Consumer
 
 interface DiscordClient {

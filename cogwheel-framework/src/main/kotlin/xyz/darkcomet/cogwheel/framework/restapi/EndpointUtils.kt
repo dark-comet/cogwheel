@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package xyz.darkcomet.cogwheel.framework.modules
+package xyz.darkcomet.cogwheel.framework.restapi
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

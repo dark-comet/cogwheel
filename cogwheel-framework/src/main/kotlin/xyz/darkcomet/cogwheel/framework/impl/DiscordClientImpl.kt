@@ -5,7 +5,7 @@ import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.framework.DiscordClient
-import xyz.darkcomet.cogwheel.framework.modules.*
+import xyz.darkcomet.cogwheel.framework.restapi.*
 
 internal class DiscordClientImpl(private val cwClient: CwDiscordClient) : DiscordClient {
     

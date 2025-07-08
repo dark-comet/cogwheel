@@ -1,6 +1,6 @@
 @file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride", "unused")
 
-package xyz.darkcomet.cogwheel.framework.modules
+package xyz.darkcomet.cogwheel.framework.restapi
 
 import xyz.darkcomet.cogwheel.core.network.http.rest.ApplicationRoleConnectionMetadataResource
 import xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata.ApplicationRoleConnectionMetadata

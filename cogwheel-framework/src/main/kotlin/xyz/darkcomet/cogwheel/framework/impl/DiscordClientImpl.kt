@@ -1,17 +1,21 @@
 package xyz.darkcomet.cogwheel.framework.impl
 
+import kotlinx.coroutines.runBlocking
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.framework.DiscordClient
 import xyz.darkcomet.cogwheel.framework.modules.*
+import xyz.darkcomet.cogwheel.framework.primitives.asApplicationId
+import kotlin.time.TestTimeSource
 
 internal class DiscordClientImpl(private val cwClient: CwDiscordClient) : DiscordClient {
     
     private val modules = RestApiModulesImpl()
     
-    override fun modules(): DiscordClient.RestApiModules {
+    override fun restApi(): DiscordClient.RestApiModules {
         return modules
     }
     

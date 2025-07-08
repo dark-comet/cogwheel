@@ -22,7 +22,7 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
 
 class GetRecordsEndpoint
 internal constructor(private val resource: ApplicationRoleConnectionMetadataResource)
-    : GetEndpoint1<ApplicationId, List<ApplicationRoleConnectionMetadata>> {
+    : GetEndpoint1<ApplicationId, List<ApplicationRoleConnectionMetadata>>() {
 
     override suspend fun invoke(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
         val response = resource.getApplicationRoleConnectionMetadataRecords(id.snowflake);
@@ -31,18 +31,18 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
         return Response(result, response)
     }
 
-    override fun callAsync(id: ApplicationId): Future<Response<List<ApplicationRoleConnectionMetadata>>> {
-        return super.callAsync(id)
+    override fun async(id: ApplicationId): Future<Response<List<ApplicationRoleConnectionMetadata>>> {
+        return super.async(id)
     }
 
-    override fun call(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
-        return super.call(id)
+    override fun block(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
+        return super.block(id)
     }
 }
 
 class UpdateRecordsEndpoint
-internal constructor(private val resource: ApplicationRoleConnectionMetadataResource)
-    : RequestEndpoint2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>> {
+internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) 
+    : RequestEndpoint2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
 
     override suspend fun invoke(
         id: ApplicationId,
@@ -57,17 +57,17 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
         return Response(result, response)
     }
 
-    override fun callAsync(
+    override fun async(
         id: ApplicationId,
         newMetadata: List<ApplicationRoleConnectionMetadata>
     ): Future<Response<List<ApplicationRoleConnectionMetadata>>> {
-        return super.callAsync(id, newMetadata)
+        return super.async(id, newMetadata)
     }
 
-    override fun call(
+    override fun block(
         id: ApplicationId,
         newMetadata: List<ApplicationRoleConnectionMetadata>
     ): Response<List<ApplicationRoleConnectionMetadata>> {
-        return super.call(id, newMetadata)
+        return super.block(id, newMetadata)
     }
 }

@@ -9,192 +9,194 @@ import kotlinx.coroutines.future.asCompletableFuture
 import kotlinx.coroutines.runBlocking
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
+import java.util.function.Consumer
 
-interface GetEndpoint<TResponse> {
+abstract class GetEndpoint<TResponse> {
     
-    suspend operator fun invoke() : Response<TResponse>
+    abstract suspend operator fun invoke() : Response<TResponse>
 
-    fun callAsync() : Future<Response<TResponse>> {
+    open fun async() : Future<Response<TResponse>> {
         return CoroutineScope(Dispatchers.IO)
             .async { invoke() }
             .asCompletableFuture()
     }
 
-    fun call() : Response<TResponse> {
+    open fun block() : Response<TResponse> {
         return runBlocking { invoke() }
     }
 
 }
 
-interface GetEndpoint1<P1, TResponse> {
+abstract class GetEndpoint1<P1, TResponse> {
 
-    suspend operator fun invoke(p1: P1) : Response<TResponse>
+    abstract suspend operator fun invoke(p1: P1) : Response<TResponse>
 
-    fun callAsync(p1: P1) : Future<Response<TResponse>> {
+    open fun async(p1: P1) : Future<Response<TResponse>> {
         return CoroutineScope(Dispatchers.IO)
             .async { invoke(p1) }
             .asCompletableFuture()
     }
 
-    fun call(p1: P1) : Response<TResponse> {
+    open fun block(p1: P1) : Response<TResponse> {
         return runBlocking { invoke(p1) }
     }
 
 }
 
-interface RequestEndpointS<TRequestSpec, TResponse> {
+abstract class RequestEndpointS<TRequestSpec, TResponse> {
     
-    fun createRequest(): TRequestSpec
+    protected abstract fun createRequest(): TRequestSpec
     
-    suspend operator fun invoke(requestSpec: TRequestSpec) : Response<TResponse>
+    abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
     
-    suspend operator fun invoke(requestSpecConfig: TRequestSpec.() -> Unit) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.invoke(request)
-
-        return invoke(request)
-    }
-    
-    suspend operator fun invoke(requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
+    suspend operator fun invoke(
+        request: TRequestSpec? = null, 
+        config: Consumer<TRequestSpec>? = null
+    ) : Response<TResponse> {
         
-        return invoke(request)
-    }
-
-    fun callAsync(requestSpecConfig: RequestBuilder<TRequestSpec>) : Future<Response<TResponse>> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
+        val req = request ?: createRequest()
+        config?.accept(req)
         
-        return callAsync(request)
+        return invoke(req)
     }
 
-    fun callAsync(requestSpec: TRequestSpec) : Future<Response<TResponse>> {
+    @JvmOverloads
+    open fun async(
+        config: Consumer<TRequestSpec>? = null, 
+        request: TRequestSpec? = null
+    ) : Future<Response<TResponse>> {
+        
+        val req: TRequestSpec = request ?: createRequest()
+        config?.accept(req)
+
         return CoroutineScope(Dispatchers.IO)
-            .async { invoke(requestSpec) }
+            .async { invoke(req) }
             .asCompletableFuture()
     }
     
-    fun call(requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
+    @JvmOverloads
+    open fun block(
+        config: Consumer<TRequestSpec>? = null, 
+        request: TRequestSpec? = null
+    ) : Response<TResponse> {
         
-        return call(request)
-    }
+        val req = request ?: createRequest()
+        config?.accept(req)
 
-    fun call(requestSpec: TRequestSpec) : Response<TResponse> {
-        return runBlocking { invoke(requestSpec) }
+        return runBlocking { invoke(req) }
     }
 }
 
-interface RequestEndpoint1S<P1, TRequestSpec, TResponse> {
+// 1 mandatory parameter
+abstract class RequestEndpoint1S<P1, TRequestSpec, TResponse> {
 
-    fun createRequest(p1: P1): TRequestSpec
+    protected abstract fun createRequest(p1: P1): TRequestSpec
 
-    suspend operator fun invoke(p1: P1, requestSpec: TRequestSpec) : Response<TResponse>
-
-    suspend operator fun invoke(p1: P1, requestSpecConfig: TRequestSpec.() -> Unit) : Response<TResponse> {
-        val request: TRequestSpec = createRequest(p1)
-        requestSpecConfig.invoke(request)
-
-        return invoke(p1, request)
+    abstract suspend operator fun invoke(p1: P1, request: TRequestSpec) : Response<TResponse>
+    
+    open suspend operator fun invoke(
+        p1: P1,
+        config: Consumer<TRequestSpec>? = null,
+        request: TRequestSpec? = null,
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = request ?: createRequest(p1)
+        config?.accept(req)
+        
+        return invoke(p1, req)
     }
 
-    suspend operator fun invoke(p1: P1, requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest(p1)
-        requestSpecConfig.configure(request)
+    @JvmOverloads
+    open fun async(
+        p1: P1,
+        config: Consumer<TRequestSpec>? = null,
+        request: TRequestSpec? = null
+    ) : Future<Response<TResponse>> {
+        
+        val req: TRequestSpec = request ?: createRequest(p1)
+        config?.accept(req)
 
-        return invoke(p1, request)
-    }
-
-    fun async(p1: P1, requestSpecConfig: RequestBuilder<TRequestSpec>) : Future<Response<TResponse>> {
-        val request: TRequestSpec = createRequest(p1)
-        requestSpecConfig.configure(request)
-
-        return async(p1, request)
-    }
-
-    fun async(p1: P1, requestSpec: TRequestSpec) : Future<Response<TResponse>> {
         return CoroutineScope(Dispatchers.IO)
-            .async { invoke(p1, requestSpec) }
+            .async { invoke(p1, req) }
             .asCompletableFuture()
     }
 
-    fun block(p1: P1, requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest(p1)
-        requestSpecConfig.configure(request)
+    @JvmOverloads
+    open fun block(
+        p1: P1,
+        config: Consumer<TRequestSpec>? = null,
+        request: TRequestSpec? = null
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = request ?: createRequest(p1)
+        config?.accept(req)
 
-        return block(p1, request)
-    }
-
-    fun block(p1: P1, requestSpec: TRequestSpec) : Response<TResponse> {
-        return runBlocking { invoke(p1, requestSpec) }
+        return runBlocking { invoke(p1, req) }
     }
 }
 
-interface RequestEndpoint2<P1, P2, TResponse> {
+abstract class RequestEndpoint2<P1, P2, TResponse> {
 
-    suspend operator fun invoke(p1: P1, p2: P2) : Response<TResponse>
-
-    fun callAsync(p1: P1, p2: P2) : Future<Response<TResponse>> {
+    abstract suspend operator fun invoke(p1: P1, p2: P2) : Response<TResponse>
+    
+    open fun async(p1: P1, p2: P2) : Future<Response<TResponse>> {
         return CoroutineScope(Dispatchers.IO)
             .async { invoke(p1, p2) }
             .asCompletableFuture()
     }
 
-    fun call(p1: P1, p2: P2) : Response<TResponse> {
+    open fun block(p1: P1, p2: P2) : Response<TResponse> {
         return runBlocking { invoke(p1, p2) }
     }
 
 }
 
-interface RequestEndpoint2S<P1, P2, TRequestSpec, TResponse> {
+abstract class RequestEndpoint2S<P1, P2, TRequestSpec, TResponse> {
 
-    fun createRequest(): TRequestSpec
+    protected abstract fun createRequest(): TRequestSpec
 
-    suspend operator fun invoke(p1: P1, p2: P2, requestSpec: TRequestSpec) : Response<TResponse>
+    abstract suspend operator fun invoke(p1: P1, p2: P2, request: TRequestSpec) : Response<TResponse>
 
-    suspend operator fun invoke(p1: P1, p2: P2, requestSpecConfig: TRequestSpec.() -> Unit) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.invoke(request)
+    suspend operator fun invoke(
+        p1: P1, 
+        p2: P2,
+        request: TRequestSpec? = null,
+        config: Consumer<TRequestSpec>? = null
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = request ?: createRequest()
+        config?.accept(req)
 
-        return invoke(p1, p2, request)
+        return invoke(p1, p2, req)
     }
 
-    suspend operator fun invoke(p1: P1, p2: P2, requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
-
-        return invoke(p1, p2, request)
-    }
-
-    fun callAsync(p1: P1, p2: P2, requestSpecConfig: RequestBuilder<TRequestSpec>) : Future<Response<TResponse>> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
-
-        return callAsync(p1, p2, request)
-    }
-
-    fun callAsync(p1: P1, p2: P2, requestSpec: TRequestSpec) : Future<Response<TResponse>> {
+    @JvmOverloads
+    open fun async(
+        p1: P1, 
+        p2: P2, 
+        config: Consumer<TRequestSpec>? = null, 
+        request: TRequestSpec? = null
+    ) : Future<Response<TResponse>> {
+    
+        val req: TRequestSpec = request ?: createRequest()
+        config?.accept(req)
+        
         return CoroutineScope(Dispatchers.IO)
-            .async { invoke(p1, p2, requestSpec) }
+            .async { invoke(p1, p2, req) }
             .asCompletableFuture()
     }
 
-    fun call(p1: P1, p2: P2, requestSpecConfig: RequestBuilder<TRequestSpec>) : Response<TResponse> {
-        val request: TRequestSpec = createRequest()
-        requestSpecConfig.configure(request)
+    @JvmOverloads
+    open fun block(
+        p1: P1, 
+        p2: P2, 
+        config: Consumer<TRequestSpec>? = null, 
+        request: TRequestSpec? = null
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = request ?: createRequest()
+        config?.accept(req)
 
-        return call(p1, p2, request)
+        return runBlocking { invoke(p1, p2, req) }
     }
-
-    fun call(p1: P1, p2: P2, requestSpec: TRequestSpec) : Response<TResponse> {
-        return runBlocking { invoke(p1, p2, requestSpec) }
-    }
-}
-
-
-@FunctionalInterface
-interface RequestBuilder<TRequestSpec> {
-    fun configure(requestSpec: TRequestSpec)
 }

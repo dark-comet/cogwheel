@@ -10,7 +10,7 @@ import xyz.darkcomet.cogwheel.framework.modules.*
 
 interface DiscordClient {
     
-    fun modules(): RestApiModules 
+    fun restApi(): RestApiModules 
     
     suspend fun startGateway()
     fun stopGateway()

@@ -11,26 +11,26 @@ import xyz.darkcomet.cogwheel.framework.primitives.Response
 @Suppress("unused") // All exposed members are part of the public API
 class ApplicationModule 
 internal constructor(private val resource: ApplicationResource) {
+
+    @JvmField
+    val getCurrent = GetCurrentApplicationEndpoint(resource)
     
     @JvmField
     val editCurrent = EditCurrentApplicationEndpoint(resource)
-    
-    @JvmField
-    val getCurrent = GetCurrentApplicationEndpoint(resource)
     
 }
 
 class EditCurrentApplicationEndpoint
 internal constructor(private val resource: ApplicationResource) 
-    : RequestEndpointS<EditCurrentApplicationRequestSpec, Application> {
+    : RequestEndpointS<EditCurrentApplicationRequestSpec, Application>() {
         
     override fun createRequest(): EditCurrentApplicationRequestSpec {
         return EditCurrentApplicationRequestSpec();
     }
 
-    override suspend fun invoke(requestSpec: EditCurrentApplicationRequestSpec): Response<Application> {
-        val request = requestSpec.build()
-        val rawResponse: CwHttpResponse<ApplicationObject?> = resource.editCurrentApplication(request)
+    override suspend fun invoke(request: EditCurrentApplicationRequestSpec): Response<Application> {
+        val req = request.build()
+        val rawResponse: CwHttpResponse<ApplicationObject?> = resource.editCurrentApplication(req)
         val model: Application? = rawResponse.data?.toModel();
 
         return Response(model, rawResponse);
@@ -39,7 +39,7 @@ internal constructor(private val resource: ApplicationResource)
 
 class GetCurrentApplicationEndpoint
 internal constructor(private val resource: ApplicationResource) 
-    : GetEndpoint<Application> {
+    : GetEndpoint<Application>() {
     
     override suspend fun invoke(): Response<Application> {
         val rawResponse: CwHttpResponse<ApplicationObject?> = resource.getCurrentApplication();

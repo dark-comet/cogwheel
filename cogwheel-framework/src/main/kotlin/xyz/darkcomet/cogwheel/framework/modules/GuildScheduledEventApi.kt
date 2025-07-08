@@ -2,6 +2,6 @@ package xyz.darkcomet.cogwheel.framework.modules
 
 import xyz.darkcomet.cogwheel.core.network.http.rest.GuildScheduledEventResource
 
-class GuildScheduledEventModule
+class GuildScheduledEventApi
 internal constructor(private val resource: GuildScheduledEventResource) {
 }

@@ -9,7 +9,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
 
-class ApplicationRoleConnectionMetadataModule
+class ApplicationRoleConnectionMetadataApi
 internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) {
     
     @JvmField

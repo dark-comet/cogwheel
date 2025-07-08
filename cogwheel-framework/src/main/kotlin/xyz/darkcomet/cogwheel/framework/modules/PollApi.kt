@@ -2,6 +2,6 @@ package xyz.darkcomet.cogwheel.framework.modules
 
 import xyz.darkcomet.cogwheel.core.network.http.rest.PollResource
 
-class PollModule
+class PollApi
 internal constructor(private val resource: PollResource) {
 }

@@ -7,10 +7,11 @@ import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
 import xyz.darkcomet.cogwheel.core.primitives.auth.*
 import xyz.darkcomet.cogwheel.framework.modules.*
+import java.util.function.Consumer
 
 interface DiscordClient {
     
-    fun restApi(): RestApiModules 
+    fun restApi(): RestApi 
     
     suspend fun startGateway()
     fun stopGateway()
@@ -18,46 +19,46 @@ interface DiscordClient {
     fun <T : Event<*>> on(eventType: EventType<T>, listener: EventListener<T>)
     fun <T : Event<*>> off(eventType: EventType<T>, listener: EventListener<T>): Boolean
     
-    interface RestApiModules {
-        val application: ApplicationModule
-        val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataModule
-        val auditLog: AuditLogModule
-        val autoModeration: AutoModerationModule
-        val channel: ChannelModule
-        val emoji: EmojiModule
-        val entitlement: EntitlementModule
-        val gateway: GatewayModule
-        val guild: GuildModule
-        val guildScheduledEvent: GuildScheduledEventModule
-        val guildTemplate: GuildTemplateModule
-        val invite: InviteModule
-        val message: MessageModule
-        val poll: PollModule
-        val sku: SkuModule
-        val soundboard: SoundboardModule
-        val stageInstance: StageInstanceModule
-        val sticker: StickerModule
-        val subscription: SubscriptionModule
-        val user: UserModule
-        val voice: VoiceModule
-        val webhook: WebhookModule
+    interface RestApi {
+        val application: ApplicationApi
+        val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataApi
+        val auditLog: AuditLogApi
+        val autoModeration: AutoModerationApi
+        val channel: ChannelApi
+        val emoji: EmojiApi
+        val entitlement: EntitlementApi
+        val gateway: GatewayApi
+        val guild: GuildApi
+        val guildScheduledEvent: GuildScheduledEventApi
+        val guildTemplate: GuildTemplateApi
+        val invite: InviteApi
+        val message: MessageApi
+        val poll: PollApi
+        val sku: SkuApi
+        val soundboard: SoundboardApi
+        val stageInstance: StageInstanceApi
+        val sticker: StickerApi
+        val subscription: SubscriptionApi
+        val user: UserApi
+        val voice: VoiceApi
+        val webhook: WebhookApi
     }
     
     companion object {
         
         @JvmStatic @JvmOverloads
-        fun fromBotToken(token: String, config: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
+        fun fromBotToken(token: String, config: Consumer<DiscordClientBuilder>? = null): DiscordClient {
             return build(BotToken(token), config)
         }
         
         @JvmStatic @JvmOverloads
-        fun fromOAuth2Token(token: String, config: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
+        fun fromOAuth2Token(token: String, config: Consumer<DiscordClientBuilder>? = null): DiscordClient {
             return build(OAuth2Token(token), config)
         }
         
-        private fun build(token: Token, config: (DiscordClientBuilder.() -> Unit)? = null): DiscordClient {
+        private fun build(token: Token, config: Consumer<DiscordClientBuilder>? = null): DiscordClient {
             val builder = DiscordClientBuilder.from(token)
-            config?.invoke(builder)
+            config?.accept(builder)
             
             return builder.buildClient()
         }

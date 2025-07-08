@@ -1,47 +1,43 @@
 package xyz.darkcomet.cogwheel.framework.impl
 
-import kotlinx.coroutines.runBlocking
 import xyz.darkcomet.cogwheel.core.CwDiscordClient
 import xyz.darkcomet.cogwheel.core.events.Event
 import xyz.darkcomet.cogwheel.core.events.EventListener
 import xyz.darkcomet.cogwheel.core.events.EventType
-import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.framework.DiscordClient
 import xyz.darkcomet.cogwheel.framework.modules.*
-import xyz.darkcomet.cogwheel.framework.primitives.asApplicationId
-import kotlin.time.TestTimeSource
 
 internal class DiscordClientImpl(private val cwClient: CwDiscordClient) : DiscordClient {
     
-    private val modules = RestApiModulesImpl()
+    private val restApi = RestApiImpl()
     
-    override fun restApi(): DiscordClient.RestApiModules {
-        return modules
+    override fun restApi(): DiscordClient.RestApi {
+        return restApi
     }
     
-    private inner class RestApiModulesImpl : DiscordClient.RestApiModules {
-        override val application = ApplicationModule(cwClient.restApi().application)
-        override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataModule(cwClient.restApi().applicationRoleConnectionMetadata)
-        override val auditLog = AuditLogModule(cwClient.restApi().auditLog)
-        override val autoModeration = AutoModerationModule(cwClient.restApi().autoModeration)
-        override val channel: ChannelModule = ChannelModule(cwClient.restApi().channel)
-        override val emoji: EmojiModule = EmojiModule(cwClient.restApi().emoji)
-        override val entitlement: EntitlementModule = EntitlementModule(cwClient.restApi().entitlement)
-        override val gateway: GatewayModule = GatewayModule(cwClient.restApi().gateway)
-        override val guild: GuildModule = GuildModule(cwClient.restApi().guild)
-        override val guildScheduledEvent = GuildScheduledEventModule(cwClient.restApi().guildScheduledEvent)
-        override val guildTemplate = GuildTemplateModule(cwClient.restApi().guildTemplate)
-        override val invite = InviteModule(cwClient.restApi().invite)
-        override val message = MessageModule(cwClient.restApi().message)
-        override val poll = PollModule(cwClient.restApi().poll)
-        override val sku = SkuModule(cwClient.restApi().sku)
-        override val soundboard = SoundboardModule(cwClient.restApi().soundboard)
-        override val stageInstance = StageInstanceModule(cwClient.restApi().stageInstance)
-        override val sticker = StickerModule(cwClient.restApi().sticker)
-        override val subscription = SubscriptionModule(cwClient.restApi().subscription)
-        override val user = UserModule(cwClient.restApi().user)
-        override val voice = VoiceModule(cwClient.restApi().voice)
-        override val webhook = WebhookModule(cwClient.restApi().webhook)
+    private inner class RestApiImpl : DiscordClient.RestApi {
+        override val application = ApplicationApi(cwClient.restApi().application)
+        override val applicationRoleConnectionMetadata = ApplicationRoleConnectionMetadataApi(cwClient.restApi().applicationRoleConnectionMetadata)
+        override val auditLog = AuditLogApi(cwClient.restApi().auditLog)
+        override val autoModeration = AutoModerationApi(cwClient.restApi().autoModeration)
+        override val channel: ChannelApi = ChannelApi(cwClient.restApi().channel)
+        override val emoji: EmojiApi = EmojiApi(cwClient.restApi().emoji)
+        override val entitlement: EntitlementApi = EntitlementApi(cwClient.restApi().entitlement)
+        override val gateway: GatewayApi = GatewayApi(cwClient.restApi().gateway)
+        override val guild: GuildApi = GuildApi(cwClient.restApi().guild)
+        override val guildScheduledEvent = GuildScheduledEventApi(cwClient.restApi().guildScheduledEvent)
+        override val guildTemplate = GuildTemplateApi(cwClient.restApi().guildTemplate)
+        override val invite = InviteApi(cwClient.restApi().invite)
+        override val message = MessageApi(cwClient.restApi().message)
+        override val poll = PollApi(cwClient.restApi().poll)
+        override val sku = SkuApi(cwClient.restApi().sku)
+        override val soundboard = SoundboardApi(cwClient.restApi().soundboard)
+        override val stageInstance = StageInstanceApi(cwClient.restApi().stageInstance)
+        override val sticker = StickerApi(cwClient.restApi().sticker)
+        override val subscription = SubscriptionApi(cwClient.restApi().subscription)
+        override val user = UserApi(cwClient.restApi().user)
+        override val voice = VoiceApi(cwClient.restApi().voice)
+        override val webhook = WebhookApi(cwClient.restApi().webhook)
     }
     
     override suspend fun startGateway()

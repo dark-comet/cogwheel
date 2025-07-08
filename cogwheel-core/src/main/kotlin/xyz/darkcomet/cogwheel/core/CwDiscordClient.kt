@@ -16,15 +16,15 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 interface CwDiscordClient {
     
-    fun restApi(): RestApi
-    fun gatewayApi(): GatewayApi
-    fun events(): EventManager
-    fun locateAsset(): AssetLocator
+    fun restApi(): CwRestApi
+    fun gatewayApi(): CwGatewayApi
+    fun events(): CwEventManager
+    fun locateAsset(): CwAssetLocator
     
     suspend fun startGateway()
     fun stopGateway()
 
-    interface RestApi {
+    interface CwRestApi {
         val application: ApplicationResource
         val applicationRoleConnectionMetadata: ApplicationRoleConnectionMetadataResource
         val auditLog: AuditLogResource
@@ -49,18 +49,18 @@ interface CwDiscordClient {
         val webhook: WebhookResource
     }
     
-    interface GatewayApi {
+    interface CwGatewayApi {
         fun requestGuildMembers(request: GatewayRequestGuildMembersRequestParameters)
         fun updateVoiceState(request: GatewayVoiceStateUpdateRequestParameters)
         fun updatePresence(request: GatewayPresenceUpdateRequestParameters)
     }
     
-    interface EventManager {
+    interface CwEventManager {
         fun <T : Event<*>> subscribe(eventType: EventType<T>, listener: EventListener<T>)
         fun <T : Event<*>> unsubscribe(eventType: EventType<T>, listener: EventListener<T>): Boolean
     }
     
-    interface AssetLocator {
+    interface CwAssetLocator {
         fun customEmoji(emojiId: Snowflake, size: AssetSize): AssetLocation
         fun guildIcon(guildId: Snowflake, imageNameWithoutExtension: String, size: AssetSize): AssetLocation
         fun guildSplash(guildId: Snowflake, imageNameWithoutExtension: String, size: AssetSize): AssetLocation

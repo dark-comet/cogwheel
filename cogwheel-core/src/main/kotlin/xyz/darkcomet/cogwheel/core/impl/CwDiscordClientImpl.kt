@@ -33,10 +33,10 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
     private val restClient: CwHttpClient
     private val gatewayClient: CwGatewayClient?
     
-    private val restApi: CwDiscordClient.RestApi
-    private val gatewayApi: CwDiscordClient.GatewayApi
-    private val eventManager: CwDiscordClient.EventManager
-    private val assetLocator: CwDiscordClient.AssetLocator
+    private val restApi: CwDiscordClient.CwRestApi
+    private val gatewayApi: CwDiscordClient.CwGatewayApi
+    private val eventManager: CwDiscordClient.CwEventManager
+    private val assetLocator: CwDiscordClient.CwAssetLocator
     
     init {
         logger.info("{} v{} initializing...", config.clientName, config.clientVersion)
@@ -61,10 +61,10 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
             )
         } else null
         
-        restApi = RestApiImpl()
-        gatewayApi = GatewayApiImpl()
-        eventManager = EventManagerImpl()
-        assetLocator = AssetLocatorImpl(config.discordAssetBaseUrl)
+        restApi = CwRestApiImpl()
+        gatewayApi = CwGatewayApiImpl()
+        eventManager = CwEventManagerImpl()
+        assetLocator = CwAssetLocatorImpl(config.discordAssetBaseUrl)
         
         logger.info("DiscordClient initialized")
     }
@@ -84,12 +84,12 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         cancellationToken.cancel()
     }
 
-    override fun restApi(): CwDiscordClient.RestApi = restApi
-    override fun gatewayApi(): CwDiscordClient.GatewayApi = gatewayApi
-    override fun events(): CwDiscordClient.EventManager = eventManager
-    override fun locateAsset(): CwDiscordClient.AssetLocator = assetLocator
+    override fun restApi(): CwDiscordClient.CwRestApi = restApi
+    override fun gatewayApi(): CwDiscordClient.CwGatewayApi = gatewayApi
+    override fun events(): CwDiscordClient.CwEventManager = eventManager
+    override fun locateAsset(): CwDiscordClient.CwAssetLocator = assetLocator
     
-    internal inner class RestApiImpl : CwDiscordClient.RestApi {
+    internal inner class CwRestApiImpl : CwDiscordClient.CwRestApi {
         private val restClient = this@CwDiscordClientImpl.restClient
         
         override val application = ApplicationResource(restClient)
@@ -116,7 +116,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         override val webhook = WebhookResource(restClient)
     }
     
-    internal inner class GatewayApiImpl : CwDiscordClient.GatewayApi {
+    internal inner class CwGatewayApiImpl : CwDiscordClient.CwGatewayApi {
         
         private val client = this@CwDiscordClientImpl.gatewayClient
         
@@ -149,7 +149,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         
     }
     
-    internal inner class EventManagerImpl : CwDiscordClient.EventManager {
+    internal inner class CwEventManagerImpl : CwDiscordClient.CwEventManager {
         
         private val listeners: MutableMap<EventType<*>, ArrayList<(Event<*>) -> Unit>> = HashMap()
         private val delegateListeners: MutableMap<EventListener<*>, (Event<*>) -> Unit> = HashMap();
@@ -180,7 +180,7 @@ internal constructor(settings: CwDiscordClientSettings) : CwDiscordClient {
         }
     }
     
-    internal inner class AssetLocatorImpl(val baseUrl: String) : CwDiscordClient.AssetLocator {
+    internal inner class CwAssetLocatorImpl(val baseUrl: String) : CwDiscordClient.CwAssetLocator {
         
         override fun customEmoji(emojiId: Snowflake, size: AssetSize): AssetLocation {
             return locate("emojis/${emojiId}.png", size)

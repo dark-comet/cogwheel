@@ -9,7 +9,7 @@ import xyz.darkcomet.cogwheel.framework.models.specs.application.EditCurrentAppl
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 
 @Suppress("unused") // All exposed members are part of the public API
-class ApplicationModule 
+class ApplicationApi 
 internal constructor(private val resource: ApplicationResource) {
 
     @JvmField

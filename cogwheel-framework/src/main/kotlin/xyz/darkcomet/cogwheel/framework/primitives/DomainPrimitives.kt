@@ -7,6 +7,8 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 data class ApplicationId(val snowflake: Snowflake)
 
+data class ApplicationCommandId(val snowflake: Snowflake)
+
 data class UserId(val snowflake: Snowflake)
 
 data class GuildId(val snowflake: Snowflake)
@@ -139,6 +141,149 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         
         override fun createValue(newKey: Int): ApplicationFlag
             = ApplicationFlag(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ApplicationCommandType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, ApplicationCommandType>() {
+
+        @JvmField val CHAT_INPUT = addPreset(1)
+        @JvmField val USER = addPreset(2)
+        @JvmField val MESSAGE = addPreset(3)
+        @JvmField val PRIMARY_ENTRY_POINT = addPreset(4)
+
+        override fun createValue(newKey: Int): ApplicationCommandType
+                = ApplicationCommandType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ApplicationCommandOptionType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, ApplicationCommandOptionType>() {
+        
+        @JvmField val SUB_COMMAND = addPreset(1)
+        @JvmField val SUB_COMMAND_GROUP = addPreset(2)
+        @JvmField val STRING = addPreset(3)
+        @JvmField val INTEGER = addPreset(4)
+        @JvmField val BOOLEAN = addPreset(5)
+        @JvmField val USER = addPreset(6)
+        @JvmField val CHANNEL = addPreset(7)
+        @JvmField val ROLE = addPreset(8)
+        @JvmField val MENTIONABLE = addPreset(9)
+        @JvmField val NUMBER = addPreset(10)
+        @JvmField val ATTACHMENT = addPreset(11)
+        
+        override fun createValue(newKey: Int): ApplicationCommandOptionType
+            = ApplicationCommandOptionType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class InteractionContextType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, InteractionContextType>() {
+        
+        @JvmField val GUILD = addPreset(0)
+        @JvmField val BOT_DM = addPreset(1)
+        @JvmField val PRIVATE_CHANNEL = addPreset(2)
+        
+        override fun createValue(newKey: Int): InteractionContextType
+                = InteractionContextType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ApplicationCommandHandlerType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, ApplicationCommandHandlerType>() {
+
+        @JvmField val APP_HANDLER = addPreset(1)
+        @JvmField val DISCORD_LAUNCH_ACTIVITY = addPreset(2)
+
+        override fun createValue(newKey: Int): ApplicationCommandHandlerType
+                = ApplicationCommandHandlerType(newKey)
+    }
+}
+
+
+@ConsistentCopyVisibility
+data class AuditLogEventType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, AuditLogEventType>() {
+        
+        @JvmField val GUILD_UPDATE = addPreset(1)
+        @JvmField val CHANNEL_CREATE = addPreset(10)
+        @JvmField val CHANNEL_UPDATE = addPreset(11)
+        @JvmField val CHANNEL_DELETE = addPreset(12)
+        @JvmField val CHANNEL_OVERWRITE_CREATE = addPreset(13)
+        @JvmField val CHANNEL_OVERWRITE_UPDATE = addPreset(14)
+        @JvmField val CHANNEL_OVERWRITE_DELETE = addPreset(15)
+        @JvmField val MEMBER_KICK = addPreset(20)
+        @JvmField val MEMBER_PRUNE = addPreset(21)
+        @JvmField val MEMBER_BAN_ADD = addPreset(22)
+        @JvmField val MEMBER_BAN_REMOVE = addPreset(23)
+        @JvmField val MEMBER_UPDATE = addPreset(24)
+        @JvmField val MEMBER_ROLE_UPDATE = addPreset(25)
+        @JvmField val MEMBER_MOVE = addPreset(26)
+        @JvmField val MEMBER_DISCONNECT = addPreset(27)
+        @JvmField val BOT_ADD = addPreset(28)
+        @JvmField val ROLE_CREATE = addPreset(30)
+        @JvmField val ROLE_UPDATE = addPreset(31)
+        @JvmField val ROLE_DELETE = addPreset(32)
+        @JvmField val INVITE_CREATE = addPreset(40)
+        @JvmField val INVITE_UPDATE = addPreset(41)
+        @JvmField val INVITE_DELETE = addPreset(42)
+        @JvmField val WEBHOOK_CREATE = addPreset(50)
+        @JvmField val WEBHOOK_UPDATE = addPreset(51)
+        @JvmField val WEBHOOK_DELETE = addPreset(52)
+        @JvmField val EMOJI_CREATE = addPreset(60)
+        @JvmField val EMOJI_UPDATE = addPreset(61)
+        @JvmField val EMOJI_DELETE = addPreset(62)
+        @JvmField val MESSAGE_DELETE = addPreset(72)
+        @JvmField val MESSAGE_BULK_DELETE = addPreset(73)
+        @JvmField val MESSAGE_PIN = addPreset(74)
+        @JvmField val MESSAGE_UNPIN = addPreset(75)
+        @JvmField val INTEGRATION_CREATE = addPreset(80)
+        @JvmField val INTEGRATION_UPDATE = addPreset(81)
+        @JvmField val INTEGRATION_DELETE = addPreset(82)
+        @JvmField val STAGE_INSTANCE_CREATE = addPreset(83)
+        @JvmField val STAGE_INSTANCE_UPDATE = addPreset(84)
+        @JvmField val STAGE_INSTANCE_DELETE = addPreset(85)
+        @JvmField val STICKER_CREATE = addPreset(90)
+        @JvmField val STICKER_UPDATE = addPreset(91)
+        @JvmField val STICKER_DELETE = addPreset(92)
+        @JvmField val GUILD_SCHEDULED_EVENT_CREATE = addPreset(100)
+        @JvmField val GUILD_SCHEDULED_EVENT_UPDATE = addPreset(101)
+        @JvmField val GUILD_SCHEDULED_EVENT_DELETE = addPreset(102)
+        @JvmField val THREAD_CREATE = addPreset(110)
+        @JvmField val THREAD_UPDATE = addPreset(111)
+        @JvmField val THREAD_DELETE = addPreset(112)
+        @JvmField val APPLICATION_COMMAND_PERMISSIONS_UPDATE = addPreset(121)
+        @JvmField val SOUNDBOARD_SOUND_CREATE = addPreset(130)
+        @JvmField val SOUNDBOARD_SOUND_UPDATE = addPreset(131)
+        @JvmField val SOUNDBOARD_SOUND_DELETE = addPreset(132)
+        @JvmField val AUTO_MODERATION_RULE_CREATE = addPreset(140)
+        @JvmField val AUTO_MODERATION_RULE_UPDATE = addPreset(141)
+        @JvmField val AUTO_MODERATION_RULE_DELETE = addPreset(142)
+        @JvmField val AUTO_MODERATION_BLOCK_MESSAGE = addPreset(143)
+        @JvmField val AUTO_MODERATION_FLAG_TO_CHANNEL = addPreset(144)
+        @JvmField val AUTO_MODERATION_USER_COMMUNICATION_DISABLED = addPreset(145)
+        @JvmField val CREATOR_MONETIZATION_REQUEST_CREATED = addPreset(150)
+        @JvmField val CREATOR_MONETIZATION_TERMS_ACCEPTED = addPreset(151)
+        @JvmField val ONBOARDING_PROMPT_CREATE = addPreset(163)
+        @JvmField val ONBOARDING_PROMPT_UPDATE = addPreset(164)
+        @JvmField val ONBOARDING_PROMPT_DELETE = addPreset(165)
+        @JvmField val ONBOARDING_CREATE = addPreset(166)
+        @JvmField val ONBOARDING_UPDATE = addPreset(167)
+        @JvmField val HOME_SETTINGS_CREATE = addPreset(190)
+        @JvmField val HOME_SETTINGS_UPDATE = addPreset(191)
+
+        override fun createValue(newKey: Int): AuditLogEventType 
+            = AuditLogEventType(newKey)
+
     }
 }
 
@@ -464,6 +609,10 @@ sealed class ExtensibleEnum<TKey, TValue : ExtensibleEnumValue<TKey>> {
 
     fun addPreset(newKey: TKey): TValue {
         return values.register(createValue(newKey))
+    }
+    
+    fun values(): Iterable<TValue> {
+        return values.values()
     }
 
     internal abstract fun createValue(newKey: TKey): TValue

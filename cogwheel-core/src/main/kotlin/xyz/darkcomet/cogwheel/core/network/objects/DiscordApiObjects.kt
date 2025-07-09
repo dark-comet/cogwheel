@@ -139,7 +139,7 @@ data class ApplicationCommandObject(
 )
 
 @Serializable
-abstract class ApplicationCommandOptionChoiceObject {
+sealed class ApplicationCommandOptionChoiceObject {
     abstract val name: MaybeAbsent<String>?
 
     @SerialName("name_localizations")

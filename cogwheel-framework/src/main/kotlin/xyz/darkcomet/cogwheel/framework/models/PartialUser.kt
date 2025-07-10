@@ -3,8 +3,8 @@ package xyz.darkcomet.cogwheel.framework.models
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
 
 open class PartialUser(
-    val username: String?,
-    val discriminator: String?,
+    open val username: String?,
+    open val discriminator: String?,
 ) {
     companion object {
         internal fun from(obj: UserObject): PartialUser {

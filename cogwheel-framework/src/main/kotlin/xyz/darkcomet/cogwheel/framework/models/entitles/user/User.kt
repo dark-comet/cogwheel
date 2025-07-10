@@ -1,15 +1,13 @@
-package xyz.darkcomet.cogwheel.framework.models
+package xyz.darkcomet.cogwheel.framework.models.entitles.user
 
-import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserAvatarDecorationData
-import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserCollectibles
-import xyz.darkcomet.cogwheel.framework.models.entitles.user.UserPrimaryGuild
+import xyz.darkcomet.cogwheel.core.network.objects.UserObject
+import xyz.darkcomet.cogwheel.framework.models.PartialUser
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
-class User(
+data class User(
     val id: UserId,
-    username: String,
-    discriminator: String,
+    override val username: String,
+    override val discriminator: String,
     val globalName: String?,
     val avatar: String?,
     val bot: Boolean?,
@@ -26,4 +24,14 @@ class User(
     val avatarDecorationData: UserAvatarDecorationData?,
     val collectibles: UserCollectibles?,
     val primaryGuild: UserPrimaryGuild?
-) : PartialUser(username, discriminator)
+) : PartialUser(username, discriminator) {
+    companion object {
+        internal fun from(obj: UserObject): User {
+            return obj.toModel()
+        }
+    }
+}
+
+internal fun UserObject.toModel(): User {
+    TODO()
+}

@@ -9,6 +9,8 @@ data class ApplicationId(val snowflake: Snowflake)
 
 data class ApplicationCommandId(val snowflake: Snowflake)
 
+data class AuditLogEntryId(val snowflake: Snowflake)
+
 data class UserId(val snowflake: Snowflake)
 
 data class GuildId(val snowflake: Snowflake)

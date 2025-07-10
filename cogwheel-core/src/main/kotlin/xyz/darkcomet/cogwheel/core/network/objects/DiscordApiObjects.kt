@@ -269,9 +269,10 @@ data class AttachmentObject(
 
 @Serializable(with = AuditLogChangeObject.Serializer::class)
 data class AuditLogChangeObject(
-    @SerialName("new_value") val newValue: MaybeAbsent<Any>? = null,
-    @SerialName("old_value") val oldValue: MaybeAbsent<Any>? = null,
-    val key: MaybeAbsent<String>? = null
+    @SerialName("new_value") val newValue: MaybeAbsent<Any?>? = null,
+    @SerialName("old_value") val oldValue: MaybeAbsent<Any?>? = null,
+    val key: MaybeAbsent<String>? = null,
+    @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake>? = null,
 ) {
     internal object Serializer : KSerializer<AuditLogChangeObject> {
         

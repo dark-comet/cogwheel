@@ -1,4 +1,5 @@
 plugins {
+    idea
     `java-library`
     alias(libs.plugins.kotlin.jvm)
 }
@@ -10,7 +11,7 @@ repositories {
 dependencies {
     implementation(libs.guava)
     implementation(project(":cogwheel-core"))
-    
+
     testImplementation(libs.junit.jupiter.engine)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

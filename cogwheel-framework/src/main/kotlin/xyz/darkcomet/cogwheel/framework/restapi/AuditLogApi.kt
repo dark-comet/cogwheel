@@ -41,6 +41,5 @@ internal constructor(private val resource: AuditLogResource)
         
         return Response(result, response)
     }
-
-
+    
 }

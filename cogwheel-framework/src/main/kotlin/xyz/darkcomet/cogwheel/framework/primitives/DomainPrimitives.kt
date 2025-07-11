@@ -3,6 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.primitives
 
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import java.math.BigInteger
 
 
 data class ApplicationId(val snowflake: Snowflake)
@@ -50,6 +51,120 @@ private constructor(val value: String) {
     companion object {
         // TODO
     }
+}
+
+data class PermissionSet(val value: BigInteger) {
+
+    infix fun and(permission: Permission): PermissionSet {
+        return PermissionSet(value or permission.value)
+    }
+
+    infix fun and(otherSet: PermissionSet): PermissionSet {
+        return PermissionSet(value or otherSet.value)
+    }
+
+    fun contains(permission: Permission): Boolean {
+        return (value and permission.value) == permission.value
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is PermissionSet) {
+            return false
+        }
+
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
+    override fun toString(): String {
+        return value.toString(10)
+    }
+
+    companion object {
+        @JvmStatic 
+        fun from(vararg permissions: Permission): PermissionSet {
+            val value = permissions.fold(BigInteger.ZERO) { acc, permission ->
+                acc or permission.value
+            }
+            return PermissionSet(value)
+        }
+
+        @JvmStatic 
+        fun from(rawString: String): PermissionSet {
+            TODO()
+        }
+
+        @JvmStatic 
+        fun all(): PermissionSet {
+            val value = Permission.entries.fold(BigInteger.ZERO) { acc, permission ->
+                acc or permission.value
+            }
+            return PermissionSet(value)
+        }
+    }
+}
+
+enum class Permission(val value: BigInteger) {
+
+    CREATE_INSTANT_INVITE(BigInteger("0000000000000001", 16)),
+    KICK_MEMBERS(BigInteger("0000000000000002", 16)),
+    BAN_MEMBERS(BigInteger("0000000000000004", 16)),
+    ADMINISTRATOR(BigInteger("0000000000000008", 16)),
+    MANAGE_CHANNELS(BigInteger("0000000000000010", 16)),
+    MANAGE_GUILD(BigInteger("0000000000000020", 16)),
+    ADD_REACTIONS(BigInteger("0000000000000040", 16)),
+    VIEW_AUDIT_LOG(BigInteger("0000000000000080", 16)),
+    PRIORITY_SPEAKER(BigInteger("0000000000000100", 16)),
+    STREAM(BigInteger("0000000000000200", 16)),
+    VIEW_CHANNEL(BigInteger("0000000000000400", 16)),
+    SEND_MESSAGES(BigInteger("0000000000000800", 16)),
+    SEND_TTS_MESSAGES(BigInteger("0000000000001000", 16)),
+    MANAGE_MESSAGES(BigInteger("0000000000002000", 16)),
+    EMBED_LINKS(BigInteger("0000000000004000", 16)),
+    ATTACH_FILES(BigInteger("0000000000008000", 16)),
+    READ_MESSAGE_HISTORY(BigInteger("0000000000010000", 16)),
+    MENTION_EVERYONE(BigInteger("0000000000020000", 16)),
+    USE_EXTERNAL_EMOJIS(BigInteger("0000000000040000", 16)),
+    VIEW_GUILD_INSIGHTS(BigInteger("0000000000080000", 16)),
+    CONNECT(BigInteger("0000000000100000", 16)),
+    SPEAK(BigInteger("0000000000200000", 16)),
+    MUTE_MEMBERS(BigInteger("0000000000400000", 16)),
+    DEAFEN_MEMBERS(BigInteger("0000000000800000", 16)),
+    MOVE_MEMBERS(BigInteger("0000000001000000", 16)),
+    USE_VAD(BigInteger("0000000002000000", 16)),
+    CHANGE_NICKNAME(BigInteger("0000000004000000", 16)),
+    MANAGE_NICKNAMES(BigInteger("0000000008000000", 16)),
+    MANAGE_ROLES(BigInteger("0000000010000000", 16)),
+    MANAGE_WEBHOOKS(BigInteger("0000000020000000", 16)),
+    MANAGE_GUILD_EXPRESSIONS(BigInteger("0000000040000000", 16)),
+    USE_APPLICATION_COMMANDS(BigInteger("0000000080000000", 16)),
+    REQUEST_TO_SPEAK(BigInteger("0000000100000000", 16)),
+    MANAGE_EVENTS(BigInteger("0000000200000000", 16)),
+    MANAGE_THREADS(BigInteger("0000000400000000", 16)),
+    CREATE_PUBLIC_THREADS(BigInteger("0000000800000000", 16)),
+    CREATE_PRIVATE_THREADS(BigInteger("0000001000000000", 16)),
+    USE_EXTERNAL_STICKERS(BigInteger("0000002000000000", 16)),
+    SEND_MESSAGE_IN_THREADS(BigInteger("0000004000000000", 16)),
+    USE_EMBEDDED_ACTIVITIES(BigInteger("0000008000000000", 16)),
+    MODERATE_MEMBERS(BigInteger("0000010000000000", 16)),
+    VIEW_CREATOR_MONETIZATION_ANALYTICS(BigInteger("0000020000000000", 16)),
+    USE_SOUNDBOARD(BigInteger("0000040000000000", 16)),
+    CREATE_GUILD_EXPRESSIONS(BigInteger("0000080000000000", 16)),
+    CREATE_EVENTS(BigInteger("0000100000000000", 16)),
+    USE_EXTERNAL_SOUNDS(BigInteger("0000200000000000", 16)),
+    SEND_VOICE_MESSAGES(BigInteger("0000400000000000", 16)),
+    SEND_POLLS(BigInteger("0002000000000000", 16)),
+    USE_EXTERNAL_APPS(BigInteger("0004000000000000", 16)),
+
+    ;
+
+    infix fun and(other: Permission): PermissionSet {
+        return PermissionSet(value or other.value)
+    }
+    
 }
 
 @ConsistentCopyVisibility

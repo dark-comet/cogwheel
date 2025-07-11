@@ -2,7 +2,6 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.interactions
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationCommandObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.framework.models.Permissions
 import xyz.darkcomet.cogwheel.framework.models.require
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
@@ -18,7 +17,7 @@ data class ApplicationCommand(
     val description: String,
     val descriptionLocalizations: LocalizationMap?,
     val options: List<ApplicationCommandOption>?,
-    val defaultMemberPermissions: Permissions,
+    val defaultMemberPermissions: PermissionSet?,
     val dmPermission: Boolean?,
     val defaultPermission: Boolean?,
     val nsfw: Boolean?,
@@ -46,7 +45,7 @@ internal fun ApplicationCommandObject.toModel(): ApplicationCommand {
         description = requireNonNull(this, ApplicationCommandObject::description),
         descriptionLocalizations = requireNonNullIfPresent(this, ApplicationCommandObject::descriptionLocalizations)?.let { LocalizationMap.from(it) },
         options = requireNonNullIfPresent(this, ApplicationCommandObject::options)?.map { it.toModel() },
-        defaultMemberPermissions = require(this, ApplicationCommandObject::defaultMemberPermissions).let { Permissions.from(it) },
+        defaultMemberPermissions = require(this, ApplicationCommandObject::defaultMemberPermissions)?.let { PermissionSet.from(it) },
         dmPermission = requireNonNullIfPresent(this, ApplicationCommandObject::dmPermission),
         defaultPermission = this.defaultPermission?.value,
         nsfw = requireNonNullIfPresent(this, ApplicationCommandObject::nsfw),

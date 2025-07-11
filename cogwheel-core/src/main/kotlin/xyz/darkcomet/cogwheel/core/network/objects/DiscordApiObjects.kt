@@ -128,7 +128,7 @@ data class ApplicationCommandObject(
     val description: MaybeAbsent<String>? = null,
     @SerialName("description_localizations") val descriptionLocalizations: MaybeAbsent<Map<String, String>>? = null,
     val options: MaybeAbsent<List<ApplicationCommandOptionObject>>? = null,
-    @SerialName("default_member_permissions") val defaultMemberPermissions: MaybeAbsent<PermissionSet>? = null,
+    @SerialName("default_member_permissions") val defaultMemberPermissions: MaybeAbsent<String>? = null,
     @SerialName("dm_permission") val dmPermission: MaybeAbsent<Boolean>? = null,
     @SerialName("default_permission") val defaultPermission: MaybeAbsent<Boolean>? = null,
     val nsfw: MaybeAbsent<Boolean>? = null,
@@ -389,7 +389,7 @@ data class ChannelObject(
     @SerialName("thread_metadata") val threadMetadata: MaybeAbsent<ThreadMetadataObject>? = null,
     @SerialName("thread_member") val member: MaybeAbsent<ThreadMemberObject>? = null,
     @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: MaybeAbsent<Int>? = null,
-    @SerialName("permissions") val permissions: MaybeAbsent<PermissionSet>? = null,
+    @SerialName("permissions") val permissions: MaybeAbsent<String>? = null,
     val flags: MaybeAbsent<Int>? = null,
     @SerialName("total_message_sent") val totalMessageSent: MaybeAbsent<Int>? = null,
     @SerialName("available_tags") val availableTags: MaybeAbsent<List<ForumTagObject>>? = null,
@@ -405,8 +405,8 @@ data class ChannelObject(
 data class ChannelPermissionOverwriteObject(
     val id: MaybeAbsent<Snowflake>? = null,
     val type: MaybeAbsent<Int>? = null,
-    val allow: MaybeAbsent<PermissionSet>? = null,
-    val deny: MaybeAbsent<PermissionSet>? = null
+    val allow: MaybeAbsent<String?>? = null,
+    val deny: MaybeAbsent<String?>? = null
 )
 
 @Serializable
@@ -612,7 +612,7 @@ data class GuildMemberObject(
     val mute: MaybeAbsent<Boolean>? = null,
     val flags: MaybeAbsent<Int>? = null,
     val pending: MaybeAbsent<Boolean>? = null,
-    val permissions: MaybeAbsent<PermissionSet>? = null,
+    val permissions: MaybeAbsent<String>? = null,
     @SerialName("communication_disabled_until") val communicationDisabledUntil: MaybeAbsent<ISO8601Timestamp>? = null,
     @SerialName("avatar_decoration_data") val avatarDecorationData: MaybeAbsent<UserAvatarDecorationDataObject>? = null,
     @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null
@@ -633,7 +633,7 @@ data class GuildObject(
     @SerialName("discovery_splash") val discoverySplash: MaybeAbsent<String>? = null,
     val owner: MaybeAbsent<String>? = null, //Only set when using the GET Current User Guilds endpoint, and are relative to the requested user
     @SerialName("owner_id") val ownerId: MaybeAbsent<Snowflake>? = null,
-    val permissions: MaybeAbsent<PermissionSet>? = null,
+    val permissions: MaybeAbsent<String>? = null,
     @Deprecated("replaced by channel.rtc_region") val region: MaybeAbsent<String>? = null,
     @SerialName("afk_channel_id") val afkChannelId: MaybeAbsent<Snowflake>? = null,
     @SerialName("afk_timeout") val afkTimeout: MaybeAbsent<Int>? = null,
@@ -1264,7 +1264,7 @@ data class RoleObject(
     val icon: MaybeAbsent<String>? = null,
     @SerialName("unicode_emoji") val unicodeEmoji: MaybeAbsent<String>? = null,
     val position: MaybeAbsent<Int>? = null,
-    val permissions: MaybeAbsent<PermissionSet>? = null,
+    val permissions: MaybeAbsent<String>? = null,
     val managed: MaybeAbsent<Boolean>? = null,
     val mentionable: MaybeAbsent<Boolean>? = null,
     val tags: MaybeAbsent<RoleTagsObject>? = null,

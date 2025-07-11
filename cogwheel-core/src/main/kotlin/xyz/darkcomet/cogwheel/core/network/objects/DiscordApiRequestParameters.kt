@@ -127,7 +127,7 @@ data class CreateGuildRequestParameters(
 @Serializable
 data class CreateGuildRoleRequestParameters(
     val name: String,
-    val permissions: PermissionSet,
+    val permissions: String,
     val color: Int,
     val hoist: Boolean,
     val icon: String?,
@@ -220,8 +220,8 @@ data class CreateWebhookRequestParameters(
 
 @Serializable
 data class EditChannelPermissionsParameters(
-    val allow: MaybeAbsent<PermissionSet>? = null,
-    val deny: MaybeAbsent<PermissionSet>? = null,
+    val allow: MaybeAbsent<String?>? = null,
+    val deny: MaybeAbsent<String?>? = null,
     val type: Int
 )
 
@@ -463,7 +463,7 @@ data class ModifyGuildRolePositionRequestParameters(
 @Serializable
 data class ModifyGuildRoleRequestParameters(
     val name: MaybeAbsent<String>? = null,
-    val permissions: MaybeAbsent<PermissionSet>? = null,
+    val permissions: MaybeAbsent<String>? = null,
     val color: MaybeAbsent<Int>? = null,
     val hoist: MaybeAbsent<Boolean>? = null,
     val icon: MaybeAbsent<String>? = null,

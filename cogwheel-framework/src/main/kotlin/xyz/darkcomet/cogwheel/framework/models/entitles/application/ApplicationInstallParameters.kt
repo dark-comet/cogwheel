@@ -1,10 +1,10 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
-import xyz.darkcomet.cogwheel.core.primitives.PermissionSet
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.OAuth2Scope
+import xyz.darkcomet.cogwheel.framework.primitives.PermissionSet
 
 class ApplicationInstallParameters(
     val scopes: List<OAuth2Scope>,

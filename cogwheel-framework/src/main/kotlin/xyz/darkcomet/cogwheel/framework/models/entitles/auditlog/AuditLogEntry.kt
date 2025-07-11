@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.entitles.guild
+package xyz.darkcomet.cogwheel.framework.models.entitles.auditlog
 
 import xyz.darkcomet.cogwheel.core.network.objects.AuditLogEntryObject
 import xyz.darkcomet.cogwheel.framework.models.require

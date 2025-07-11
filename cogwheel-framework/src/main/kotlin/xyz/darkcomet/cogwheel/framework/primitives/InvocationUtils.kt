@@ -91,7 +91,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
 
     protected abstract fun createRequest(p1: P1): TRequestSpec
 
-    abstract suspend operator fun invoke(p1: P1, request: TRequestSpec) : Response<TResponse>
+    abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
     
     open suspend operator fun invoke(
         p1: P1,
@@ -102,7 +102,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
         val req: TRequestSpec = request ?: createRequest(p1)
         config?.accept(req)
         
-        return invoke(p1, req)
+        return invoke(req)
     }
 
     @JvmOverloads
@@ -116,7 +116,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
         config?.accept(req)
 
         return CoroutineScope(Dispatchers.IO)
-            .async { invoke(p1, req) }
+            .async { invoke(req) }
             .asCompletableFuture()
     }
 
@@ -130,7 +130,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
         val req: TRequestSpec = request ?: createRequest(p1)
         config?.accept(req)
 
-        return runBlocking { invoke(p1, req) }
+        return runBlocking { invoke(req) }
     }
 }
 
@@ -152,9 +152,9 @@ abstract class RequestInvocation2<P1, P2, TResponse> {
 
 abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
 
-    protected abstract fun createRequest(): TRequestSpec
+    protected abstract fun createRequest(p1: P1, p2: P2): TRequestSpec
 
-    abstract suspend operator fun invoke(p1: P1, p2: P2, request: TRequestSpec) : Response<TResponse>
+    abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
 
     suspend operator fun invoke(
         p1: P1, 
@@ -163,10 +163,10 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
         config: Consumer<TRequestSpec>? = null
     ) : Response<TResponse> {
         
-        val req: TRequestSpec = request ?: createRequest()
+        val req: TRequestSpec = request ?: createRequest(p1, p2)
         config?.accept(req)
 
-        return invoke(p1, p2, req)
+        return invoke(req)
     }
 
     @JvmOverloads
@@ -177,11 +177,11 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
         request: TRequestSpec? = null
     ) : Future<Response<TResponse>> {
     
-        val req: TRequestSpec = request ?: createRequest()
+        val req: TRequestSpec = request ?: createRequest(p1, p2)
         config?.accept(req)
         
         return CoroutineScope(Dispatchers.IO)
-            .async { invoke(p1, p2, req) }
+            .async { invoke(req) }
             .asCompletableFuture()
     }
 
@@ -193,9 +193,9 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
         request: TRequestSpec? = null
     ) : Response<TResponse> {
         
-        val req: TRequestSpec = request ?: createRequest()
+        val req: TRequestSpec = request ?: createRequest(p1, p2)
         config?.accept(req)
 
-        return runBlocking { invoke(p1, p2, req) }
+        return runBlocking { invoke(req) }
     }
 }

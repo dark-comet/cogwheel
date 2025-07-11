@@ -10,13 +10,20 @@ fun Snowflake.asApplicationCommandId(): ApplicationCommandId {
     return ApplicationCommandId(this)
 }
 
-fun Snowflake.asAuditLogEntryId(): AuditLogEntryId
-{
+fun Snowflake.asAuditLogEntryId(): AuditLogEntryId {
     return AuditLogEntryId(this)
+}
+
+fun Snowflake.asAutoModerationRuleId(): AutoModerationRuleId {
+    return AutoModerationRuleId(this)
 }
 
 fun Snowflake.asUserId(): UserId {
     return UserId(this)
+}
+
+fun Snowflake.asRoleId(): RoleId {
+    return RoleId(this)
 }
 
 fun Snowflake.asGuildId(): GuildId {

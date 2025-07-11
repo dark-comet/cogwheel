@@ -12,9 +12,13 @@ data class ApplicationCommandId(val snowflake: Snowflake)
 
 data class AuditLogEntryId(val snowflake: Snowflake)
 
+data class AutoModerationRuleId(val snowflake: Snowflake)
+
 data class UserId(val snowflake: Snowflake)
 
 data class GuildId(val snowflake: Snowflake)
+
+data class RoleId(val snowflake: Snowflake)
 
 data class ChannelId(val snowflake: Snowflake)
 
@@ -401,6 +405,68 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): AuditLogEventType 
             = AuditLogEventType(newKey)
+
+    }
+}
+
+@ConsistentCopyVisibility
+data class AutoModerationEventType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, AutoModerationEventType>() {
+        
+        @JvmField val MESSAGE_SEND = addPreset(1)
+        @JvmField val MEMBER_UPDATE = addPreset(2)
+        
+        override fun createValue(newKey: Int): AutoModerationEventType 
+            = AutoModerationEventType(newKey)
+
+    }
+}
+
+@ConsistentCopyVisibility
+data class AutoModerationTriggerType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, AutoModerationTriggerType>() {
+
+        @JvmField val KEYWORD = addPreset(1)
+        @JvmField val SPAM = addPreset(3)
+        @JvmField val KEYWORD_PRESET = addPreset(4)
+        @JvmField val MENTION_SPAM = addPreset(5)
+        @JvmField val MEMBER_PROFILE = addPreset(6)
+
+        override fun createValue(newKey: Int): AutoModerationTriggerType
+            = AutoModerationTriggerType(newKey)
+
+    }
+}
+
+@ConsistentCopyVisibility
+data class AutoModerationKeywordPresetType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, AutoModerationKeywordPresetType>() {
+
+        @JvmField val PROFANITY = addPreset(1)
+        @JvmField val SEXUAL_CONTENT = addPreset(2)
+        @JvmField val SLURS = addPreset(3)
+
+        override fun createValue(newKey: Int): AutoModerationKeywordPresetType
+            = AutoModerationKeywordPresetType(newKey)
+
+    }
+}
+
+@ConsistentCopyVisibility
+data class AutoModerationActionType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, AutoModerationActionType>() {
+
+        @JvmField val BLOCK_MESSAGE = addPreset(1)
+        @JvmField val SEND_ALERT_MESSAGE = addPreset(2)
+        @JvmField val TIMEOUT = addPreset(3)
+        @JvmField val BLOCK_MEMBER_INTERACTION = addPreset(4)
+
+        override fun createValue(newKey: Int): AutoModerationActionType
+            = AutoModerationActionType(newKey)
 
     }
 }

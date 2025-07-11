@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.entitles.guild
+package xyz.darkcomet.cogwheel.framework.models.entitles.auditlog
 
 import xyz.darkcomet.cogwheel.core.network.objects.AuditLogOptionalAuditEntryInfoObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake

@@ -5,8 +5,8 @@ package xyz.darkcomet.cogwheel.framework.restapi
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.http.rest.AuditLogResource
 import xyz.darkcomet.cogwheel.core.network.objects.GuildAuditLogObject
-import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildAuditLog
-import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toModel
+import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.GuildAuditLog
+import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.toModel
 import xyz.darkcomet.cogwheel.framework.models.specs.auditlog.GetGuildAuditLogRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
@@ -28,9 +28,9 @@ internal constructor(private val resource: AuditLogResource)
         return GetGuildAuditLogRequestSpec(guildId)
     }
 
-    override suspend fun invoke(guildId: GuildId, request: GetGuildAuditLogRequestSpec): Response<GuildAuditLog> {
+    override suspend fun invoke(request: GetGuildAuditLogRequestSpec): Response<GuildAuditLog> {
         val response: CwHttpResponse<GuildAuditLogObject> = resource.getGuildAuditLog(
-            guildId = guildId.snowflake,
+            guildId = request.guildId.snowflake,
             userId = request.userId,
             actionType = request.actionType,
             before = request.before,

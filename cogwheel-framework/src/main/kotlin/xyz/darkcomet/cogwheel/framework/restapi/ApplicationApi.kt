@@ -6,6 +6,8 @@ import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.Application
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.toModel
 import xyz.darkcomet.cogwheel.framework.models.specs.application.EditCurrentApplicationRequestSpec
+import xyz.darkcomet.cogwheel.framework.primitives.Invocation0
+import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocationS
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 
 @Suppress("unused") // All exposed members are part of the public API
@@ -22,7 +24,7 @@ internal constructor(private val resource: ApplicationResource) {
 
 class EditCurrentApplicationEndpoint
 internal constructor(private val resource: ApplicationResource) 
-    : RequestEndpointS<EditCurrentApplicationRequestSpec, Application>() {
+    : RequestInvocationS<EditCurrentApplicationRequestSpec, Application>() {
         
     override fun createRequest(): EditCurrentApplicationRequestSpec {
         return EditCurrentApplicationRequestSpec();
@@ -39,7 +41,7 @@ internal constructor(private val resource: ApplicationResource)
 
 class GetCurrentApplicationEndpoint
 internal constructor(private val resource: ApplicationResource) 
-    : GetEndpoint<Application>() {
+    : Invocation0<Application>() {
     
     override suspend fun invoke(): Response<Application> {
         val rawResponse: CwHttpResponse<ApplicationObject?> = resource.getCurrentApplication();

@@ -9,6 +9,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildAuditLog
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toModel
 import xyz.darkcomet.cogwheel.framework.models.specs.auditlog.GetGuildAuditLogRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
+import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 
 class AuditLogApi
@@ -21,7 +22,7 @@ internal constructor(private val resource: AuditLogResource) {
 
 class GetGuildAuditLogEndpoint 
 internal constructor(private val resource: AuditLogResource)
-    : RequestEndpoint1S<GuildId, GetGuildAuditLogRequestSpec, GuildAuditLog>() {
+    : RequestInvocation1S<GuildId, GetGuildAuditLogRequestSpec, GuildAuditLog>() {
         
     override fun createRequest(guildId: GuildId): GetGuildAuditLogRequestSpec {
         return GetGuildAuditLogRequestSpec(guildId)

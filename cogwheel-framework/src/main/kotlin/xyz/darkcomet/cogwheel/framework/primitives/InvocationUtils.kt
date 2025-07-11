@@ -1,17 +1,16 @@
 @file:Suppress("unused")
 
-package xyz.darkcomet.cogwheel.framework.restapi
+package xyz.darkcomet.cogwheel.framework.primitives
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.future.asCompletableFuture
 import kotlinx.coroutines.runBlocking
-import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
 import java.util.function.Consumer
 
-abstract class GetEndpoint<TResponse> {
+abstract class Invocation0<TResponse> {
     
     abstract suspend operator fun invoke() : Response<TResponse>
 
@@ -27,7 +26,7 @@ abstract class GetEndpoint<TResponse> {
 
 }
 
-abstract class GetEndpoint1<P1, TResponse> {
+abstract class Invocation1<P1, TResponse> {
 
     abstract suspend operator fun invoke(p1: P1) : Response<TResponse>
 
@@ -43,7 +42,7 @@ abstract class GetEndpoint1<P1, TResponse> {
 
 }
 
-abstract class RequestEndpointS<TRequestSpec, TResponse> {
+abstract class RequestInvocationS<TRequestSpec, TResponse> {
     
     protected abstract fun createRequest(): TRequestSpec
     
@@ -88,7 +87,7 @@ abstract class RequestEndpointS<TRequestSpec, TResponse> {
 }
 
 // 1 mandatory parameter
-abstract class RequestEndpoint1S<P1, TRequestSpec, TResponse> {
+abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
 
     protected abstract fun createRequest(p1: P1): TRequestSpec
 
@@ -135,7 +134,7 @@ abstract class RequestEndpoint1S<P1, TRequestSpec, TResponse> {
     }
 }
 
-abstract class RequestEndpoint2<P1, P2, TResponse> {
+abstract class RequestInvocation2<P1, P2, TResponse> {
 
     abstract suspend operator fun invoke(p1: P1, p2: P2) : Response<TResponse>
     
@@ -151,7 +150,7 @@ abstract class RequestEndpoint2<P1, P2, TResponse> {
 
 }
 
-abstract class RequestEndpoint2S<P1, P2, TRequestSpec, TResponse> {
+abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
 
     protected abstract fun createRequest(): TRequestSpec
 

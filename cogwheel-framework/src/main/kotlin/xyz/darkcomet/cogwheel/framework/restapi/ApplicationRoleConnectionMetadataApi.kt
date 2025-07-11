@@ -6,6 +6,8 @@ import xyz.darkcomet.cogwheel.core.network.http.rest.ApplicationRoleConnectionMe
 import xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata.ApplicationRoleConnectionMetadata
 import xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata.toModel
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
+import xyz.darkcomet.cogwheel.framework.primitives.Invocation1
+import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation2
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
 
@@ -22,7 +24,7 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
 
 class GetRecordsEndpoint
 internal constructor(private val resource: ApplicationRoleConnectionMetadataResource)
-    : GetEndpoint1<ApplicationId, List<ApplicationRoleConnectionMetadata>>() {
+    : Invocation1<ApplicationId, List<ApplicationRoleConnectionMetadata>>() {
 
     override suspend fun invoke(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
         val response = resource.getApplicationRoleConnectionMetadataRecords(id.snowflake);
@@ -42,7 +44,7 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
 
 class UpdateRecordsEndpoint
 internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) 
-    : RequestEndpoint2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
+    : RequestInvocation2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
 
     override suspend fun invoke(
         id: ApplicationId,

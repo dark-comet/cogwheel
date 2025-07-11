@@ -23,4 +23,11 @@ class PermissionSetTest {
             }
         }
     }
+    
+    @Test
+    fun testCreateFromString() {
+        val permissionSet = PermissionSet.from("2112")
+        assertTrue(permissionSet.contains(Permission.SEND_MESSAGES))
+        assertTrue(permissionSet.contains(Permission.ADD_REACTIONS))
+    }
 }

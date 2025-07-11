@@ -94,7 +94,8 @@ data class PermissionSet(val value: BigInteger) {
 
         @JvmStatic 
         fun from(rawString: String): PermissionSet {
-            TODO()
+            val value = BigInteger(rawString, 10)
+            return PermissionSet(value)
         }
 
         @JvmStatic 

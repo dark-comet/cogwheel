@@ -13,7 +13,7 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class AutoModerationResource 
 internal constructor(private val httpClient: CwHttpClient) {
 
-    suspend fun listAutoModerationRulesForGuild(guildId: Snowflake): CwHttpResponse<List<GuildAutoModerationRuleObject>> {
+    suspend fun listAutoModerationRules(guildId: Snowflake): CwHttpResponse<List<GuildAutoModerationRuleObject>> {
         val httpRequest = CwHttpRequest.create(GET, "/guilds/${guildId}/auto-moderation/rules")
         val response = httpClient.submit(httpRequest)
 

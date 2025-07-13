@@ -1,4 +1,4 @@
-@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride")
 
 package xyz.darkcomet.cogwheel.framework.restapi
 
@@ -7,16 +7,18 @@ import xyz.darkcomet.cogwheel.core.network.http.rest.AuditLogResource
 import xyz.darkcomet.cogwheel.core.network.objects.GuildAuditLogObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.GuildAuditLog
 import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.toModel
-import xyz.darkcomet.cogwheel.framework.models.specs.auditlog.GetGuildAuditLogRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.specs.GetGuildAuditLogRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
 import xyz.darkcomet.cogwheel.framework.primitives.Response
+import java.util.concurrent.Future
+import java.util.function.Consumer
 
 class AuditLogApi
 internal constructor(private val resource: AuditLogResource) {
     
     @JvmField
-    val getForGuild = GetGuildAuditLogEndpoint(resource)
+    val get = GetGuildAuditLogEndpoint(resource)
     
 }
 
@@ -41,5 +43,26 @@ internal constructor(private val resource: AuditLogResource)
         
         return Response(result, response)
     }
-    
+
+    override suspend fun invoke(
+        guildId: GuildId,
+        request: GetGuildAuditLogRequestSpec?,
+        config: (GetGuildAuditLogRequestSpec.() -> Unit)?
+    ): Response<GuildAuditLog> {
+        return super.invoke(guildId, request, config)
+    }
+
+    override fun async(
+        guildId: GuildId,
+        config: Consumer<GetGuildAuditLogRequestSpec>?
+    ): Future<Response<GuildAuditLog>> {
+        return super.async(guildId, config)
+    }
+
+    override fun block(
+        guildId: GuildId,
+        config: Consumer<GetGuildAuditLogRequestSpec>?
+    ): Response<GuildAuditLog> {
+        return super.block(guildId, config)
+    }
 }

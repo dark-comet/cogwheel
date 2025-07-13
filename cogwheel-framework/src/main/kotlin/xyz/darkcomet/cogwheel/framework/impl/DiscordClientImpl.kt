@@ -14,7 +14,7 @@ internal class DiscordClientImpl(private val cwClient: CwDiscordClient) : Discor
     override fun restApi(): DiscordClient.RestApi {
         return restApi
     }
-    
+
     private inner class RestApiImpl : DiscordClient.RestApi {
         private val rest = cwClient.restApi()
         

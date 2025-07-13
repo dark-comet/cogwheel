@@ -12,6 +12,10 @@ data class AutoModerationAction(
             return obj.toModel()
         }
     }
+    
+    internal fun toObject(): AutoModerationActionObject {
+        TODO()
+    }
 }
 
 internal fun AutoModerationActionObject.toModel(): AutoModerationAction {

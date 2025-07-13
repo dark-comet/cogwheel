@@ -9,7 +9,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.RoleId
 import xyz.darkcomet.cogwheel.framework.primitives.UserId
 
-data class AutoModerationRule(
+data class GuildAutoModerationRule(
     val id: AutoModerationRuleId,
     val guildId: GuildId,
     val name: String,
@@ -23,12 +23,12 @@ data class AutoModerationRule(
     val exemptChannels: List<ChannelId>,
 ) {
     companion object {
-        internal fun from(obj: GuildAutoModerationRuleObject): AutoModerationRule {
+        internal fun from(obj: GuildAutoModerationRuleObject): GuildAutoModerationRule {
             return obj.toModel()
         }
     }
 }
 
-internal fun GuildAutoModerationRuleObject.toModel(): AutoModerationRule {
+internal fun GuildAutoModerationRuleObject.toModel(): GuildAutoModerationRule {
     TODO()
 }

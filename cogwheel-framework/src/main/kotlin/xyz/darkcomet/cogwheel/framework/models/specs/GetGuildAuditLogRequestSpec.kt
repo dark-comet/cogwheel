@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.specs.auditlog
+package xyz.darkcomet.cogwheel.framework.models.specs
 
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.framework.primitives.AuditLogEventType

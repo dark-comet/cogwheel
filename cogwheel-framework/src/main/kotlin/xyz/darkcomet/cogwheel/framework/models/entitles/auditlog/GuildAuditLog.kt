@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.auditlog
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildAuditLogObject
-import xyz.darkcomet.cogwheel.framework.models.entitles.automod.AutoModerationRule
+import xyz.darkcomet.cogwheel.framework.models.entitles.automod.GuildAutoModerationRule
 import xyz.darkcomet.cogwheel.framework.models.entitles.automod.toModel
 import xyz.darkcomet.cogwheel.framework.models.entitles.channel.Channel
 import xyz.darkcomet.cogwheel.framework.models.entitles.channel.toModel
@@ -20,7 +20,7 @@ import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 data class GuildAuditLog(
     val applicationCommands: List<ApplicationCommand>,
     val auditLogEntries: List<AuditLogEntry>,
-    val autoModerationRules: List<AutoModerationRule>,
+    val autoModerationRules: List<GuildAutoModerationRule>,
     val guildScheduledEvents: List<GuildScheduledEvent>,
     val integrations: List<PartialGuildIntegration>,
     val threads: List<Channel>,

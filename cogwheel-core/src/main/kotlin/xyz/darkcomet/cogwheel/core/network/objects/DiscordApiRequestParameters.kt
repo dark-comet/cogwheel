@@ -353,10 +353,10 @@ data class ModifyDmChannelRequestParameters(
 
 @Serializable
 data class ModifyGuildAutoModerationRuleRequestParameters(
-    val name: String,
-    @SerialName("event_type") val eventType: Int,
+    val name: MaybeAbsent<String>? = null,
+    @SerialName("event_type") val eventType: MaybeAbsent<Int>? = null,
     @SerialName("trigger_metadata") val triggerMetadata: MaybeAbsent<AutoModerationRuleTriggerMetadataObject>? = null,
-    val actions: List<AutoModerationActionObject>,
+    val actions: MaybeAbsent<List<AutoModerationActionObject>>? = null,
     val enabled: MaybeAbsent<Boolean>? = null,
     @SerialName("exempt_roles") val exemptRoles: MaybeAbsent<List<Snowflake>>? = null,
     @SerialName("exempt_channels") val exemptChannels: MaybeAbsent<List<Snowflake>>? = null,

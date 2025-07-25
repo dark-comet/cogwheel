@@ -15,7 +15,7 @@ import java.util.concurrent.Future
 import java.util.function.Consumer
 
 class AuditLogApi
-internal constructor(private val resource: AuditLogResource) {
+internal constructor(resource: AuditLogResource) {
     
     @JvmField
     val get = GetGuildAuditLogEndpoint(resource)

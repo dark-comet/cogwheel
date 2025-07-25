@@ -12,7 +12,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
 
 class ApplicationRoleConnectionMetadataApi
-internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) {
+internal constructor(resource: ApplicationRoleConnectionMetadataResource) {
     
     @JvmField
     val getRecords = GetRecordsEndpoint(resource)

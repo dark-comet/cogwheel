@@ -16,11 +16,11 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
     internal var name: String? = null
     internal var eventType: Int? = null
     internal var triggerType: Int? = null
-    internal var triggerMetadata: AutoModerationRuleTriggerMetadataObject? = null
+    internal var triggerMetadata: MaybeAbsent<AutoModerationRuleTriggerMetadataObject>? = null
     internal var actions: List<AutoModerationActionObject> = ArrayList(2)
-    internal var enabled: Boolean? = null
-    internal var exemptRoles: List<Snowflake>? = null
-    internal var exemptChannels: List<Snowflake>? = null
+    internal var enabled: MaybeAbsent<Boolean>? = null
+    internal var exemptRoles: MaybeAbsent<List<Snowflake>>? = null
+    internal var exemptChannels: MaybeAbsent<List<Snowflake>>? = null
     
     internal var auditLogReason: String? = null
     
@@ -34,13 +34,13 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
         = apply { this.triggerType = triggerType.key }
     
     fun triggerMetadata(metadata: AutoModerationRuleTriggerMetadata?): CreateGuildAutoModerationRuleRequestSpec
-        = apply { this.triggerMetadata = metadata?.toObject() }
+        = apply { this.triggerMetadata = MaybeAbsent(metadata?.toObject()) }
     
     fun triggerMetadata(metadataBuilder: Consumer<AutoModerationRuleTriggerMetadata.BuilderSpec>): CreateGuildAutoModerationRuleRequestSpec {
         val builder = AutoModerationRuleTriggerMetadata.builder()
         metadataBuilder.accept(builder)
         
-        this.triggerMetadata = builder.build().toObject()
+        this.triggerMetadata = MaybeAbsent(builder.build().toObject())
         return this
     }
     
@@ -48,7 +48,7 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
         val builder = AutoModerationRuleTriggerMetadata.builder()
         metadataBuilder.invoke(builder)
         
-        this.triggerMetadata = builder.build().toObject()
+        this.triggerMetadata = MaybeAbsent(builder.build().toObject())
         return this 
     }
     
@@ -59,13 +59,13 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
         = apply { this.actions = actions.map { it.toObject() }.toList() }
     
     fun enabled(flag: Boolean): CreateGuildAutoModerationRuleRequestSpec
-        = apply { this.enabled = flag }
+        = apply { this.enabled = MaybeAbsent(flag) }
     
     fun exemptRoles(vararg ids: RoleId): CreateGuildAutoModerationRuleRequestSpec
-        = apply { this.exemptRoles = ids.map { it.snowflake }.toList() }
+        = apply { this.exemptRoles = MaybeAbsent(ids.map { it.snowflake }.toList()) }
     
     fun exemptChannels(vararg ids: ChannelId): CreateGuildAutoModerationRuleRequestSpec
-        = apply { this.exemptChannels = ids.map { it.snowflake }.toList() }
+        = apply { this.exemptChannels = MaybeAbsent(ids.map { it.snowflake }.toList()) }
     
     fun auditLogReason(reason: String?): CreateGuildAutoModerationRuleRequestSpec
         = apply { this.auditLogReason = reason }
@@ -89,11 +89,11 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
             name = finalName, 
             eventType = finalEventType,
             triggerType = finalTriggerType,
-            triggerMetadata = if (triggerMetadata != null) MaybeAbsent(triggerMetadata) else null,
+            triggerMetadata = triggerMetadata,
             actions = actions,
-            enabled = if (enabled != null) MaybeAbsent(enabled) else null,
-            exemptRoles = if (exemptRoles != null) MaybeAbsent(exemptRoles) else null,
-            exemptChannels = if (exemptChannels != null) MaybeAbsent(exemptChannels) else null,
+            enabled = enabled,
+            exemptRoles = exemptRoles,
+            exemptChannels = exemptChannels,
         )
     }
 }

@@ -12,7 +12,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.Response
 
 @Suppress("unused") // All exposed members are part of the public API
 class ApplicationApi 
-internal constructor(private val resource: ApplicationResource) {
+internal constructor(resource: ApplicationResource) {
 
     @JvmField
     val getCurrent = GetCurrentApplicationEndpoint(resource)

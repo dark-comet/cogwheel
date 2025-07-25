@@ -7,8 +7,11 @@ import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationInstallParameters
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationIntegrationTypeConfiguration
+import xyz.darkcomet.cogwheel.framework.primitives.ApplicationEventWebhookStatus
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationFlag
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationIntegrationType
+import xyz.darkcomet.cogwheel.framework.primitives.WebhookEventType
+import java.util.function.Consumer
 
 class EditCurrentApplicationRequestSpec 
 internal constructor() {
@@ -27,67 +30,103 @@ internal constructor() {
     private var eventWebhooksStatus: MaybeAbsent<Int>? = null
     private var eventWebhooksTypes: MaybeAbsent<List<String>>? = null
 
-    fun customInstallUrl(value: String) {
-        this.customInstallUrl = MaybeAbsent(value)
-    }
+    fun customInstallUrl(value: String) : EditCurrentApplicationRequestSpec
+        = apply { this.customInstallUrl = MaybeAbsent(value) }
     
-    fun description(value: String) {
-        this.description = MaybeAbsent(value)
-    }
+    fun description(value: String) : EditCurrentApplicationRequestSpec
+        = apply { this.description = MaybeAbsent(value) }
     
-    fun roleConnectionVerificationUrl(value: String) {
-        this.roleConnectionVerificationUrl = MaybeAbsent(value)
-    }
+    fun roleConnectionVerificationUrl(value: String) : EditCurrentApplicationRequestSpec
+        = apply { this.roleConnectionVerificationUrl = MaybeAbsent(value) }
     
-    fun installParams(value: ApplicationInstallParameters) {
-        this.installParams = MaybeAbsent(value.toObject())
-    }
+    fun installParams(value: ApplicationInstallParameters) : EditCurrentApplicationRequestSpec
+        = apply { this.installParams = MaybeAbsent(value.toObject()) }
     
-    fun integrationTypesConfig(value: Map<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>) {
-        val rawMap = HashMap<String, ApplicationIntegrationTypeConfigurationObject>()
+    fun installParams(paramsBuilder: ApplicationInstallParameters.BuilderSpec.() -> Unit) : EditCurrentApplicationRequestSpec {
+        val builder = ApplicationInstallParameters.builder()
+        paramsBuilder.invoke(builder)
+        this.installParams = MaybeAbsent(builder.build().toObject())
         
-        value.entries.forEach { 
+        return this
+    }
+    
+    fun installParams(paramsBuilder: Consumer<ApplicationInstallParameters.BuilderSpec>) : EditCurrentApplicationRequestSpec {
+        val builder = ApplicationInstallParameters.builder()
+        paramsBuilder.accept(builder)
+        this.installParams = MaybeAbsent(builder.build().toObject())
+        
+        return this
+    }
+    
+    fun integrationTypesConfig(map: Map<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>) : EditCurrentApplicationRequestSpec
+        = apply { this.integrationTypesConfig = integrationTypesConfigRaw(map) }
+
+    private fun integrationTypesConfigRaw(
+        map: Map<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>
+    ): MaybeAbsent<Map<String, ApplicationIntegrationTypeConfigurationObject>> {
+        
+        val rawMap = HashMap<String, ApplicationIntegrationTypeConfigurationObject>()
+
+        map.entries.forEach {
             val rawType = it.key.key.toString()
             val rawConfigObj = it.value.toObject()
             rawMap.put(rawType, rawConfigObj)
         }
         
-        this.integrationTypesConfig = MaybeAbsent(rawMap)
+        return MaybeAbsent(rawMap) 
+    }
+
+    fun integrationTypesConfig(
+        mapBuilder: Consumer<MutableMap<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>>
+    ) : EditCurrentApplicationRequestSpec {
+        
+        val map = mutableMapOf<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
+        mapBuilder.accept(map)
+        this.integrationTypesConfig = integrationTypesConfigRaw(map)
+        
+        return this
     }
     
-    fun flags(value: ApplicationFlag) {
-        this.flags = MaybeAbsent(value.key)
+    fun integrationTypesConfig(
+        mapBuilder: MutableMap<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>.() -> Unit
+    ) : EditCurrentApplicationRequestSpec {
+        
+        val map = mutableMapOf<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
+        mapBuilder.invoke(map)
+        this.integrationTypesConfig = integrationTypesConfigRaw(map)
+        
+        return this
     }
     
-    fun icon(value: DiscordImage?) {
-        this.icon = MaybeAbsent(value?.imageData?.hash)
-    }
+    fun flags(value: ApplicationFlag) : EditCurrentApplicationRequestSpec
+        = apply { this.flags = MaybeAbsent(value.key) }
     
-    fun coverImage(value: DiscordImage) {
-        this.coverImage = MaybeAbsent(value.imageData.hash)
-    }
+    fun icon(value: DiscordImage?) : EditCurrentApplicationRequestSpec
+        = apply { this.icon = MaybeAbsent(value?.imageData?.hash) }
     
-    fun interactionEndpointUrl(value: String) {
-        this.interactionsEndpointUrl = MaybeAbsent(value)
-    }
+    fun coverImage(value: DiscordImage) : EditCurrentApplicationRequestSpec
+        = apply { this.coverImage = MaybeAbsent(value.imageData.hash) }
     
-    fun tags(value: List<String>) {
-        val valueCopy = ArrayList(value)
-        this.tags = MaybeAbsent(valueCopy)
-    }
+    fun interactionEndpointUrl(value: String) : EditCurrentApplicationRequestSpec 
+        = apply { this.interactionsEndpointUrl = MaybeAbsent(value) }
     
-    fun eventWebhooksUrl(value: String) {
-        this.eventWebhooksUrl = MaybeAbsent(value)
-    }
+    fun tags(value: List<String>) : EditCurrentApplicationRequestSpec
+        = apply { this.tags = MaybeAbsent(ArrayList(value)) }
     
-    fun eventWebhooksStatus(value: Int) {
-        this.eventWebhooksStatus = MaybeAbsent(value)
-    }
+    fun tags(vararg values: String) : EditCurrentApplicationRequestSpec
+        = apply { this.tags = MaybeAbsent(values.toList()) }
     
-    fun eventWebhooksTypes(value: List<String>) {
-        val valueCopy = ArrayList(value)
-        this.eventWebhooksTypes = MaybeAbsent(valueCopy)
-    }
+    fun eventWebhooksUrl(url: String) : EditCurrentApplicationRequestSpec
+        = apply { this.eventWebhooksUrl = MaybeAbsent(url) }
+    
+    fun eventWebhooksStatus(status: ApplicationEventWebhookStatus) : EditCurrentApplicationRequestSpec 
+        = apply { this.eventWebhooksStatus = MaybeAbsent(status.key) }
+    
+    fun eventWebhooksTypes(types: List<WebhookEventType>) : EditCurrentApplicationRequestSpec
+        = apply { this.eventWebhooksTypes = MaybeAbsent(types.map { it.key }) }
+    
+    fun eventWebhookTypes(vararg types: WebhookEventType) : EditCurrentApplicationRequestSpec
+        = apply { this.eventWebhooksTypes = MaybeAbsent(types.toList().map { it.key }) }
     
     internal fun build(): EditCurrentApplicationRequestParameters {
         return EditCurrentApplicationRequestParameters(

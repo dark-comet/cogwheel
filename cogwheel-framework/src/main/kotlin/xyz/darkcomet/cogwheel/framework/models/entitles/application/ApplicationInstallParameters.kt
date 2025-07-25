@@ -4,7 +4,9 @@ import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObjec
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.OAuth2Scope
+import xyz.darkcomet.cogwheel.framework.primitives.Permission
 import xyz.darkcomet.cogwheel.framework.primitives.PermissionSet
+import java.math.BigInteger
 
 class ApplicationInstallParameters(
     val scopes: List<OAuth2Scope>,
@@ -18,8 +20,28 @@ class ApplicationInstallParameters(
     }
     
     companion object {
+        fun builder(): BuilderSpec = BuilderSpec()
+        
         internal fun from(obj: ApplicationInstallParamsObject): ApplicationInstallParameters {
             return obj.toModel()
+        }
+    }
+    
+    class BuilderSpec {
+        private var scopes: List<OAuth2Scope> = ArrayList(1)
+        private var permissions: PermissionSet = PermissionSet(BigInteger("0", 10))
+        
+        fun scopes(vararg scopes: OAuth2Scope): BuilderSpec
+            = apply { this.scopes = scopes.toList() }
+        
+        fun permissions(vararg permissions: Permission): BuilderSpec 
+            = apply { this.permissions = PermissionSet.from(*permissions) }
+        
+        fun permissions(permissionSet: PermissionSet): BuilderSpec
+            = apply { this.permissions = permissionSet }
+        
+        fun build(): ApplicationInstallParameters {
+            return ApplicationInstallParameters(scopes, permissions)
         }
     }
 }

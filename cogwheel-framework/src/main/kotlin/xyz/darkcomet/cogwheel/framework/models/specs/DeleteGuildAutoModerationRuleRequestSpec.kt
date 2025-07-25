@@ -10,5 +10,5 @@ class DeleteGuildAutoModerationRuleRequestSpec(
     internal var auditLogReason: String? = null
 
     fun auditLogReason(reason: String?): DeleteGuildAutoModerationRuleRequestSpec
-            = apply { this.auditLogReason = reason }
+        = apply { this.auditLogReason = reason }
 }

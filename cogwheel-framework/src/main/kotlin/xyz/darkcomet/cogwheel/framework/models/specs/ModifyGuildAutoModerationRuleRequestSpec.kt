@@ -15,30 +15,30 @@ class ModifyGuildAutoModerationRuleRequestSpec(
     internal val ruleId: AutoModerationRuleId
 ) {
     
-    internal var name: String? = null
-    internal var eventType: Int? = null
-    internal var triggerMetadata: AutoModerationRuleTriggerMetadataObject? = null
-    internal var actions: List<AutoModerationActionObject>? = null
-    internal var enabled: Boolean? = null
-    internal var exemptRoles: List<Snowflake>? = null
-    internal var exemptChannels: List<Snowflake>? = null
+    internal var name: MaybeAbsent<String>? = null
+    internal var eventType: MaybeAbsent<Int>? = null
+    internal var triggerMetadata: MaybeAbsent<AutoModerationRuleTriggerMetadataObject>? = null
+    internal var actions: MaybeAbsent<List<AutoModerationActionObject>>? = null
+    internal var enabled: MaybeAbsent<Boolean>? = null
+    internal var exemptRoles: MaybeAbsent<List<Snowflake>>? = null
+    internal var exemptChannels: MaybeAbsent<List<Snowflake>>? = null
     
-    internal var auditLogReason: String? = null
+    internal var auditLogReason: MaybeAbsent<String>? = null
     
     fun name(name: String): ModifyGuildAutoModerationRuleRequestSpec
-        = apply { this.name = name }
+        = apply { this.name = MaybeAbsent(name) }
 
     fun eventType(eventType: AutoModerationEventType): ModifyGuildAutoModerationRuleRequestSpec
-        = apply { this.eventType = eventType.key }
+        = apply { this.eventType = MaybeAbsent(eventType.key) }
 
     fun triggerMetadata(metadata: AutoModerationRuleTriggerMetadata?): ModifyGuildAutoModerationRuleRequestSpec
-        = apply { this.triggerMetadata = metadata?.toObject() }
+        = apply { this.triggerMetadata = MaybeAbsent(metadata?.toObject()) }
 
     fun triggerMetadata(metadataBuilder: Consumer<AutoModerationRuleTriggerMetadata.BuilderSpec>): ModifyGuildAutoModerationRuleRequestSpec {
         val builder = AutoModerationRuleTriggerMetadata.builder()
         metadataBuilder.accept(builder)
 
-        this.triggerMetadata = builder.build().toObject()
+        this.triggerMetadata = MaybeAbsent(builder.build().toObject())
         return this
     }
 
@@ -46,34 +46,37 @@ class ModifyGuildAutoModerationRuleRequestSpec(
         val builder = AutoModerationRuleTriggerMetadata.builder()
         metadataBuilder.invoke(builder)
 
-        this.triggerMetadata = builder.build().toObject()
+        this.triggerMetadata = MaybeAbsent(builder.build().toObject())
         return this
     }
 
     fun actions(actions: List<AutoModerationAction>): ModifyGuildAutoModerationRuleRequestSpec
-            = apply { this.actions = actions.map { it.toObject() } }
+        = apply { this.actions = MaybeAbsent(actions.map { it.toObject() }) }
 
+    fun actions(vararg actions: AutoModerationAction): ModifyGuildAutoModerationRuleRequestSpec 
+        = actions(actions.toList())
+    
     fun enabled(flag: Boolean): ModifyGuildAutoModerationRuleRequestSpec
-            = apply { this.enabled = flag }
+        = apply { this.enabled = MaybeAbsent(flag) }
 
     fun exemptRoles(vararg ids: RoleId): ModifyGuildAutoModerationRuleRequestSpec
-            = apply { this.exemptRoles = ids.map { it.snowflake }.toList() }
+        = apply { this.exemptRoles = MaybeAbsent(ids.map { it.snowflake }.toList()) }
 
     fun exemptChannels(vararg ids: ChannelId): ModifyGuildAutoModerationRuleRequestSpec
-            = apply { this.exemptChannels = ids.map { it.snowflake }.toList() }
+        = apply { this.exemptChannels = MaybeAbsent(ids.map { it.snowflake }.toList()) }
 
     fun auditLogReason(reason: String?): ModifyGuildAutoModerationRuleRequestSpec
-            = apply { this.auditLogReason = reason }
+        = apply { this.auditLogReason = MaybeAbsent(reason) }
 
     internal fun buildParameters(): ModifyGuildAutoModerationRuleRequestParameters {
         return ModifyGuildAutoModerationRuleRequestParameters(
-            name = if (name != null) MaybeAbsent(name) else null,
-            eventType = if (eventType != null) MaybeAbsent(eventType) else null,
-            triggerMetadata = if (triggerMetadata != null) MaybeAbsent(triggerMetadata) else null,
-            actions = if (actions != null) MaybeAbsent(actions) else null,
-            enabled = if (enabled != null) MaybeAbsent(enabled) else null,
-            exemptRoles = if (exemptRoles != null) MaybeAbsent(exemptRoles) else null,
-            exemptChannels = if (exemptChannels != null) MaybeAbsent(exemptChannels) else null,
+            name = name,
+            eventType = eventType,
+            triggerMetadata = triggerMetadata,
+            actions = actions,
+            enabled = enabled,
+            exemptRoles = exemptRoles,
+            exemptChannels = exemptChannels,
         )
     }
 }

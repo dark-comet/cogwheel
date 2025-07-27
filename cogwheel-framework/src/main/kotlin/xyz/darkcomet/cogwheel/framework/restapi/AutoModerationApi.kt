@@ -1,13 +1,13 @@
-@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride")
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "RedundantOverride", "unused")
 
 package xyz.darkcomet.cogwheel.framework.restapi
 
 import xyz.darkcomet.cogwheel.core.network.http.rest.AutoModerationResource
 import xyz.darkcomet.cogwheel.framework.models.entitles.automod.GuildAutoModerationRule
 import xyz.darkcomet.cogwheel.framework.models.entitles.automod.toModel
-import xyz.darkcomet.cogwheel.framework.models.specs.CreateGuildAutoModerationRuleRequestSpec
-import xyz.darkcomet.cogwheel.framework.models.specs.DeleteGuildAutoModerationRuleRequestSpec
-import xyz.darkcomet.cogwheel.framework.models.specs.ModifyGuildAutoModerationRuleRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.request.CreateGuildAutoModerationRuleRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.request.DeleteGuildAutoModerationRuleRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.request.ModifyGuildAutoModerationRuleRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.*
 import java.util.concurrent.Future
 import java.util.function.Consumer

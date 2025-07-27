@@ -311,7 +311,8 @@ data class GroupDmAddRecipientRequestParameters(
 
 @Serializable
 data class ModifyApplicationEmojiRequestParameters(
-    val name: String
+    val name: String,
+    val image: String
 )
 
 @Serializable

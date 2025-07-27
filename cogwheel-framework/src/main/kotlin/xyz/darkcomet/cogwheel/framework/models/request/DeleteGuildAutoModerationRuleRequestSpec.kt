@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.specs
+package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.framework.primitives.AutoModerationRuleId
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId

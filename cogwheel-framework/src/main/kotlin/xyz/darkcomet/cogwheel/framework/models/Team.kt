@@ -22,7 +22,7 @@ data class Team(
 
 internal fun TeamObject.toModel(): Team {
     return Team(
-        icon = require(this, TeamObject::icon)?.let { DiscordImage.fromImageHash(it) },
+        icon = require(this, TeamObject::icon)?.let { DiscordImage.fromDataUriScheme(it) },
         id = requireNonNull(this, TeamObject::id).asTeamId(),
         members = requireNonNull(this, TeamObject::members).map { it.toModel() },
         name = requireNonNull(this, TeamObject::name),

@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.specs
+package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationActionObject
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationRuleTriggerMetadataObject
@@ -23,7 +23,7 @@ class ModifyGuildAutoModerationRuleRequestSpec(
     internal var exemptRoles: MaybeAbsent<List<Snowflake>>? = null
     internal var exemptChannels: MaybeAbsent<List<Snowflake>>? = null
     
-    internal var auditLogReason: MaybeAbsent<String>? = null
+    internal var auditLogReason: String? = null
     
     fun name(name: String): ModifyGuildAutoModerationRuleRequestSpec
         = apply { this.name = MaybeAbsent(name) }
@@ -66,7 +66,7 @@ class ModifyGuildAutoModerationRuleRequestSpec(
         = apply { this.exemptChannels = MaybeAbsent(ids.map { it.snowflake }.toList()) }
 
     fun auditLogReason(reason: String?): ModifyGuildAutoModerationRuleRequestSpec
-        = apply { this.auditLogReason = MaybeAbsent(reason) }
+        = apply { this.auditLogReason = reason }
 
     internal fun buildParameters(): ModifyGuildAutoModerationRuleRequestParameters {
         return ModifyGuildAutoModerationRuleRequestParameters(

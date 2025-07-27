@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.core.network.http.rest.AuditLogResource
 import xyz.darkcomet.cogwheel.core.network.objects.GuildAuditLogObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.GuildAuditLog
 import xyz.darkcomet.cogwheel.framework.models.entitles.auditlog.toModel
-import xyz.darkcomet.cogwheel.framework.models.specs.GetGuildAuditLogRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.request.GetGuildAuditLogRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
 import xyz.darkcomet.cogwheel.framework.primitives.Response

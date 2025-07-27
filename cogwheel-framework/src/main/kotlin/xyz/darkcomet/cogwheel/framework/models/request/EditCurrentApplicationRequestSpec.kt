@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models.specs
+package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
@@ -10,6 +10,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationI
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationEventWebhookStatus
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationFlag
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationIntegrationType
+import xyz.darkcomet.cogwheel.framework.primitives.MapBuilder
 import xyz.darkcomet.cogwheel.framework.primitives.WebhookEventType
 import java.util.function.Consumer
 
@@ -77,23 +78,23 @@ internal constructor() {
     }
 
     fun integrationTypesConfig(
-        mapBuilder: Consumer<MutableMap<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>>
+        mapBuilder: Consumer<MapBuilder<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>>
     ) : EditCurrentApplicationRequestSpec {
         
-        val map = mutableMapOf<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
+        val map = MapBuilder<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
         mapBuilder.accept(map)
-        this.integrationTypesConfig = integrationTypesConfigRaw(map)
+        this.integrationTypesConfig = integrationTypesConfigRaw(map.build())
         
         return this
     }
     
     fun integrationTypesConfig(
-        mapBuilder: MutableMap<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>.() -> Unit
+        mapBuilder: MapBuilder<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>.() -> Unit
     ) : EditCurrentApplicationRequestSpec {
         
-        val map = mutableMapOf<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
+        val map = MapBuilder<ApplicationIntegrationType, ApplicationIntegrationTypeConfiguration>()
         mapBuilder.invoke(map)
-        this.integrationTypesConfig = integrationTypesConfigRaw(map)
+        this.integrationTypesConfig = integrationTypesConfigRaw(map.build())
         
         return this
     }
@@ -102,10 +103,10 @@ internal constructor() {
         = apply { this.flags = MaybeAbsent(value.key) }
     
     fun icon(value: DiscordImage?) : EditCurrentApplicationRequestSpec
-        = apply { this.icon = MaybeAbsent(value?.imageData?.hash) }
+        = apply { this.icon = MaybeAbsent(value?.data?.hash) }
     
     fun coverImage(value: DiscordImage) : EditCurrentApplicationRequestSpec
-        = apply { this.coverImage = MaybeAbsent(value.imageData.hash) }
+        = apply { this.coverImage = MaybeAbsent(value.data.hash) }
     
     fun interactionEndpointUrl(value: String) : EditCurrentApplicationRequestSpec 
         = apply { this.interactionsEndpointUrl = MaybeAbsent(value) }

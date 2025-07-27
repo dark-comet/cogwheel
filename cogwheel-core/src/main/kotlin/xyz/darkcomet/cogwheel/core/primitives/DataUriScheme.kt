@@ -12,41 +12,33 @@ import java.nio.file.Path
 import java.util.*
 import kotlin.io.path.extension
 
-@Serializable(with = DataUrlScheme.Serializer::class)
-sealed class DataUrlScheme {
-
+abstract class DataUriScheme {
+    
     abstract val mediaType: String
     abstract val isBase64: Boolean
     abstract val data: String
     
-    internal object Serializer : KSerializer<DataUrlScheme> {
-        
-        override val descriptor: SerialDescriptor
-            get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
+    override fun toString(): String {
+        return serialize(this)
+    }
 
-        override fun deserialize(decoder: Decoder): DataUrlScheme {
-            val rawValue = decoder.decodeString()
-            val parts = rawValue.split(",")
-            
-            if (parts.size != 2) {
-                throw IllegalArgumentException("Malformed DataUrlScheme value (${parts.size} parts instead of 2): $rawValue")
-            }
-            
-            val descriptors = parts[0].split(";")
-            
-            val mediaType = descriptors[0].removePrefix("data:")
-//            val isBase64 = descriptors.last().lowercase() == "base64"
-            val data = parts[1]
-            
-            if (mediaType.startsWith("image/")) {
-                return ImageData.fromMediaType(mediaType, data)
-            } else {
-                throw IllegalArgumentException("Unsupported DataUrlScheme media type: $mediaType")
-            }
+    override fun equals(other: Any?): Boolean {
+        if (other !is DataUriScheme) {
+            return false
         }
+        
+        return other.mediaType == mediaType && other.data == data && isBase64 == other.isBase64
+    }
 
-        override fun serialize(encoder: Encoder, value: DataUrlScheme) {
-            val serializedData = StringBuilder().apply {
+    override fun hashCode(): Int {
+        return Objects.hash(mediaType, isBase64, data)
+    }
+
+    companion object {
+        
+        @JvmStatic
+        fun serialize(value: DataUriScheme): String {
+            return StringBuilder().apply {
                 append("data:")
                 append(value.mediaType)
                 if (value.isBase64) {
@@ -55,16 +47,34 @@ sealed class DataUrlScheme {
                 append(",")
                 append(value.data)
             }.toString()
-            
-            encoder.encodeString(serializedData)
         }
+        
+        @JvmStatic
+        fun deserialize(rawValue: String): DataUriScheme {
+            val parts = rawValue.split(",")
 
+            if (parts.size != 2) {
+                throw IllegalArgumentException("Malformed DataUrlScheme value (${parts.size} parts instead of 2): $rawValue")
+            }
+
+            val descriptors = parts[0].split(";")
+
+            val mediaType = descriptors[0].removePrefix("data:")
+//            val isBase64 = descriptors.last().lowercase() == "base64"
+            val data = parts[1]
+
+            if (mediaType.startsWith("image/")) {
+                return ImageData.fromMediaType(mediaType, data)
+            } else {
+                throw UnsupportedOperationException("Unsupported DataUrlScheme media type: $mediaType")
+            }
+        }
+        
     }
-    
 }
 
-@Serializable(with = DataUrlScheme.Serializer::class)
-class ImageData : DataUrlScheme {
+@Serializable(with = ImageData.Serializer::class)
+class ImageData : DataUriScheme {
 
     override val mediaType: String
     override val isBase64 = true
@@ -125,5 +135,27 @@ class ImageData : DataUrlScheme {
         PNG("png"),
         JPG("jpg"),
         GIF("gif")
+    }
+
+    internal object Serializer : KSerializer<ImageData> {
+
+        override val descriptor: SerialDescriptor
+            get() = PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
+
+        override fun deserialize(decoder: Decoder): ImageData {
+            val rawString = decoder.decodeString()
+            val urlScheme = deserialize(rawString)
+            
+            return when(urlScheme) {
+                is ImageData -> urlScheme
+                else -> throw UnsupportedOperationException("Failed to decode ImageData from DataUrlScheme: unexpected media type '${urlScheme.mediaType}' (expected 'image/*')")
+            }
+        }
+
+        override fun serialize(encoder: Encoder, value: ImageData) {
+            val urlSchemeString = serialize(value)
+            encoder.encodeString(urlSchemeString)
+        }
+
     }
 }

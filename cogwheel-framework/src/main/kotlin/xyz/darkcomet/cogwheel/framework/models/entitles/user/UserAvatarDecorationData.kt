@@ -19,7 +19,7 @@ data class UserAvatarDecorationData(
 
 internal fun UserAvatarDecorationDataObject.toModel(): UserAvatarDecorationData {
     return UserAvatarDecorationData(
-        asset = requireNonNull(this, UserAvatarDecorationDataObject::asset).let { DiscordImage.fromImageHash(it) },
+        asset = requireNonNull(this, UserAvatarDecorationDataObject::asset).let { DiscordImage.fromDataUriScheme(it) },
         skuId = requireNonNull(this, UserAvatarDecorationDataObject::skuId).asSkuId()
     )
 }

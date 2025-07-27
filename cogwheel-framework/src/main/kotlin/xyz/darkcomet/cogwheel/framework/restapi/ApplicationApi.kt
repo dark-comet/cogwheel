@@ -5,7 +5,7 @@ import xyz.darkcomet.cogwheel.core.network.http.rest.ApplicationResource
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.Application
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.toModel
-import xyz.darkcomet.cogwheel.framework.models.specs.EditCurrentApplicationRequestSpec
+import xyz.darkcomet.cogwheel.framework.models.request.EditCurrentApplicationRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.Invocation0
 import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocationS
 import xyz.darkcomet.cogwheel.framework.primitives.Response

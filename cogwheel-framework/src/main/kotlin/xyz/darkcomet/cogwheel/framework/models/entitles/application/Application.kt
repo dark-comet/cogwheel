@@ -69,7 +69,7 @@ internal fun ApplicationObject.toModel(): Application {
         guild = requireNonNullIfPresent(this, ApplicationObject::guild)?.toPartialGuildModel(),
         primarySkuId = requireNonNullIfPresent(this, ApplicationObject::primarySkuId)?.asSkuId(),
         slug = requireNonNullIfPresent(this, ApplicationObject::slug),
-        coverImage = requireNonNullIfPresent(this, ApplicationObject::coverImage)?.let { DiscordImage.fromImageHash(it) },
+        coverImage = requireNonNullIfPresent(this, ApplicationObject::coverImage)?.let { DiscordImage.fromDataUriScheme(it) },
         flags = requireNonNullIfPresent(this, ApplicationObject::flags)?.let { ApplicationFlag.fromOrAdd(it) },
         approximateGuildCount = requireNonNullIfPresent(this, ApplicationObject::approximateGuildCount),
         approximateUserInstallCount = requireNonNullIfPresent(this, ApplicationObject::approximateUserInstallCount),

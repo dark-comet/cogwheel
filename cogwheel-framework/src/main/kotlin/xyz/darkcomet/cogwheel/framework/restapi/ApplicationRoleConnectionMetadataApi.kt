@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata.ApplicationR
 import xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata.toModel
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.Invocation1
-import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation2
+import xyz.darkcomet.cogwheel.framework.primitives.Invocation2
 import xyz.darkcomet.cogwheel.framework.primitives.Response
 import java.util.concurrent.Future
 
@@ -44,7 +44,7 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
 
 class UpdateRecordsEndpoint
 internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) 
-    : RequestInvocation2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
+    : Invocation2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
 
     override suspend fun invoke(
         id: ApplicationId,

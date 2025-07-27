@@ -489,7 +489,7 @@ data class EmbedVideoObject(
 data class EmojiObject(
     val id: MaybeAbsent<Snowflake?>? = null,
     val name: MaybeAbsent<String?>? = null,
-    val roles: MaybeAbsent<List<RoleObject>>? = null,
+    val roles: MaybeAbsent<List<Snowflake>>? = null,
     val user: MaybeAbsent<UserObject>? = null,
     @SerialName("require_colons") val requireColons: MaybeAbsent<Boolean>? = null,
     val managed: MaybeAbsent<Boolean>? = null,

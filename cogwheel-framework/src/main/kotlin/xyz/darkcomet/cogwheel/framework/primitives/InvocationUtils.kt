@@ -179,23 +179,6 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
     }
 }
 
-// 2 mandatory parameters, no request spec
-abstract class RequestInvocation2<P1, P2, TResponse> {
-
-    abstract suspend operator fun invoke(p1: P1, p2: P2) : Response<TResponse>
-    
-    open fun async(p1: P1, p2: P2) : Future<Response<TResponse>> {
-        return CoroutineScope(Dispatchers.IO)
-            .async { invoke(p1, p2) }
-            .asCompletableFuture()
-    }
-
-    open fun block(p1: P1, p2: P2) : Response<TResponse> {
-        return runBlocking { invoke(p1, p2) }
-    }
-
-}
-
 // 2 mandatory parameters + optional request spec
 abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
 

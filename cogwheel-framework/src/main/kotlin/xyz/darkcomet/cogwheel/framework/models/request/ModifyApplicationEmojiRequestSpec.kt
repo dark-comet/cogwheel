@@ -7,7 +7,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.EmojiId
 
 class ModifyApplicationEmojiRequestSpec(
-    internal val appId: ApplicationId,
+    internal val applicationId: ApplicationId,
     internal val emojiId: EmojiId,
 ) {
     

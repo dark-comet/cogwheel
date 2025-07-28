@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-class PossibleTest {
+class MaybeAbsentTest {
     
     @Test
     fun testSerialize_nullValueWrapper_nothingSerialized() {

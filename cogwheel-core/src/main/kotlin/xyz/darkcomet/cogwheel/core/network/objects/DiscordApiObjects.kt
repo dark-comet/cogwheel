@@ -508,7 +508,8 @@ data class EntitlementObject(
     @SerialName("starts_at") val startsAt: MaybeAbsent<ISO8601Timestamp>? = null,
     @SerialName("ends_at") val endsAt: MaybeAbsent<ISO8601Timestamp>? = null,
     @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null,
-    val consumed: MaybeAbsent<Boolean>? = null
+    val consumed: MaybeAbsent<Boolean>? = null,
+    @SerialName("subscription_id") val subscriptionId: MaybeAbsent<Snowflake>? = null,
 )
 
 @Serializable

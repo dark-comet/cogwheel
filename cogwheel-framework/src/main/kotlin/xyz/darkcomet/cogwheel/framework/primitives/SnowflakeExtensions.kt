@@ -45,3 +45,11 @@ fun Snowflake.asTeamId(): TeamId {
 fun Snowflake.asSkuId(): SkuId {
     return SkuId(this)
 }
+
+fun Snowflake.asEntitlementId(): EntitlementId {
+    return EntitlementId(this)
+}
+
+fun Snowflake.asSubscriptionId(): SubscriptionId {
+    return SubscriptionId(this)
+}

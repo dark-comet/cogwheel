@@ -50,10 +50,10 @@ internal constructor(private val resource: ApplicationRoleConnectionMetadataReso
         id: ApplicationId,
         newMetadata: List<ApplicationRoleConnectionMetadata>
     ): Response<List<ApplicationRoleConnectionMetadata>> {
-        val appId = id.snowflake
+        val applicationId = id.snowflake
         val newRecords = newMetadata.map { it.toObject() }
 
-        val response = resource.updateApplicationRoleConnectionMetadataRecords(appId, newRecords);
+        val response = resource.updateApplicationRoleConnectionMetadataRecords(applicationId, newRecords);
         val result = response.data?.map { it.toModel() }
 
         return Response(result, response)

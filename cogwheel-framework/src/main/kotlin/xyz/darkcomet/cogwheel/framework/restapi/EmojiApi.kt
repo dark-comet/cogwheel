@@ -200,8 +200,8 @@ class ListApplicationEmojisEndpoint
 internal constructor (private val resource: EmojiResource)
     : Invocation1<ApplicationId, List<Emoji>>() {
         
-    override suspend fun invoke(appId: ApplicationId): Response<List<Emoji>> {
-        val response = resource.listApplicationEmojis(appId.snowflake)
+    override suspend fun invoke(applicationId: ApplicationId): Response<List<Emoji>> {
+        val response = resource.listApplicationEmojis(applicationId.snowflake)
         
         val result: List<Emoji>? = response.data?.let { responseObj -> 
             responseObj.items.map { emojiObj -> emojiObj.toModel() }
@@ -210,12 +210,12 @@ internal constructor (private val resource: EmojiResource)
         return Response(result, response)
     }
 
-    override fun async(appId: ApplicationId): Future<Response<List<Emoji>>> {
-        return super.async(appId)
+    override fun async(applicationId: ApplicationId): Future<Response<List<Emoji>>> {
+        return super.async(applicationId)
     }
 
-    override fun block(appId: ApplicationId): Response<List<Emoji>> {
-        return super.block(appId)
+    override fun block(applicationId: ApplicationId): Response<List<Emoji>> {
+        return super.block(applicationId)
     }
 }
 
@@ -223,19 +223,19 @@ class GetApplicationEmojiEndpoint
 internal constructor(private val resource: EmojiResource)
     : Invocation2<ApplicationId, EmojiId, Emoji>() {
         
-    override suspend fun invoke(appId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
-        val response = resource.getApplicationEmoji(appId.snowflake, emojiId.snowflake)
+    override suspend fun invoke(applicationId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
+        val response = resource.getApplicationEmoji(applicationId.snowflake, emojiId.snowflake)
         val result = response.data?.toModel()
         
         return Response(result, response)
     }
 
-    override fun async(appId: ApplicationId, emojiId: EmojiId): Future<Response<Emoji>> {
-        return super.async(appId, emojiId)
+    override fun async(applicationId: ApplicationId, emojiId: EmojiId): Future<Response<Emoji>> {
+        return super.async(applicationId, emojiId)
     }
 
-    override fun block(appId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
-        return super.block(appId, emojiId)
+    override fun block(applicationId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
+        return super.block(applicationId, emojiId)
     }
 }
 
@@ -243,13 +243,13 @@ class CreateApplicationEmojiEndpoint
 internal constructor(private val resource: EmojiResource)
     : RequestInvocation1S<ApplicationId, CreateApplicationEmojiRequestSpec, Emoji>() {
     
-        override fun createRequest(appId: ApplicationId): CreateApplicationEmojiRequestSpec {
-        return CreateApplicationEmojiRequestSpec(appId)
+        override fun createRequest(applicationId: ApplicationId): CreateApplicationEmojiRequestSpec {
+        return CreateApplicationEmojiRequestSpec(applicationId)
     }
 
     override suspend fun invoke(request: CreateApplicationEmojiRequestSpec): Response<Emoji> {
         val response = resource.createApplicationEmoji(
-            request.appId.snowflake,
+            request.applicationId.snowflake,
             request.buildParameters()
         )
         val result = response.data?.toModel()
@@ -258,25 +258,25 @@ internal constructor(private val resource: EmojiResource)
     }
 
     override suspend fun invoke(
-        appId: ApplicationId,
+        applicationId: ApplicationId,
         request: CreateApplicationEmojiRequestSpec?,
         config: (CreateApplicationEmojiRequestSpec.() -> Unit)?
     ): Response<Emoji> {
-        return super.invoke(appId, request, config)
+        return super.invoke(applicationId, request, config)
     }
 
     override fun async(
-        appId: ApplicationId,
+        applicationId: ApplicationId,
         config: Consumer<CreateApplicationEmojiRequestSpec>?
     ): Future<Response<Emoji>> {
-        return super.async(appId, config)
+        return super.async(applicationId, config)
     }
 
     override fun block(
-        appId: ApplicationId,
+        applicationId: ApplicationId,
         config: Consumer<CreateApplicationEmojiRequestSpec>?
     ): Response<Emoji> {
-        return super.block(appId, config)
+        return super.block(applicationId, config)
     }
 }
 
@@ -284,13 +284,13 @@ class ModifyApplicationEmojiEndpoint
 internal constructor (private val resource: EmojiResource)
     : RequestInvocation2S<ApplicationId, EmojiId, ModifyApplicationEmojiRequestSpec, Emoji>() {
         
-    override fun createRequest(appId: ApplicationId, emojiId: EmojiId): ModifyApplicationEmojiRequestSpec {
-        return ModifyApplicationEmojiRequestSpec(appId, emojiId)
+    override fun createRequest(applicationId: ApplicationId, emojiId: EmojiId): ModifyApplicationEmojiRequestSpec {
+        return ModifyApplicationEmojiRequestSpec(applicationId, emojiId)
     }
 
     override suspend fun invoke(request: ModifyApplicationEmojiRequestSpec): Response<Emoji> {
         val response = resource.modifyApplicationEmoji(
-            request.appId.snowflake,
+            request.applicationId.snowflake,
             request.emojiId.snowflake,
             request.buildParameters()
         )
@@ -304,18 +304,18 @@ class DeleteApplicationEmojiEndpoint
 internal constructor (private val resource: EmojiResource)
     : Invocation2<ApplicationId, EmojiId, Boolean>() {
     
-    override suspend fun invoke(appId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
-        val response = resource.deleteApplicationEmoji(appId.snowflake, emojiId.snowflake)
+    override suspend fun invoke(applicationId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
+        val response = resource.deleteApplicationEmoji(applicationId.snowflake, emojiId.snowflake)
         val result = response.raw.success
         
         return Response(result, response)
     }
 
-    override fun async(appId: ApplicationId, emojiId: EmojiId): Future<Response<Boolean>> {
-        return super.async(appId, emojiId)
+    override fun async(applicationId: ApplicationId, emojiId: EmojiId): Future<Response<Boolean>> {
+        return super.async(applicationId, emojiId)
     }
 
-    override fun block(appId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
-        return super.block(appId, emojiId)
+    override fun block(applicationId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
+        return super.block(applicationId, emojiId)
     }
 }

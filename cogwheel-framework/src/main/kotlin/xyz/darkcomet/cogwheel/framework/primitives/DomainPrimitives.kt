@@ -28,6 +28,10 @@ data class TeamId(val snowflake: Snowflake)
 
 data class SkuId(val snowflake: Snowflake)
 
+data class EntitlementId(val snowflake: Snowflake)
+
+data class SubscriptionId(val snowflake: Snowflake)
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -730,6 +734,38 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): ChannelType
             = ChannelType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class EntitlementType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, EntitlementType>() {
+        
+        @JvmField val PURCHASE = addPreset(1)
+        @JvmField val PREMIUM_SUBSCRIPTION = addPreset(2)
+        @JvmField val DEVELOPER_GIFT = addPreset(3)
+        @JvmField val TEST_MODE_PURCHASE = addPreset(4)
+        @JvmField val FREE_PURCHASE = addPreset(5)
+        @JvmField val USER_GIFT = addPreset(6)
+        @JvmField val PREMIUM_PURCHASE = addPreset(7)
+        @JvmField val APPLICATION_SUBSCRIPTION = addPreset(8)
+
+        override fun createValue(newKey: Int): EntitlementType 
+            = EntitlementType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class EntitlementOwnerType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, EntitlementOwnerType>() {
+
+        @JvmField val GUILD_SUBSCRIPTION = addPreset(1)
+        @JvmField val USER_SUBSCRIPTION = addPreset(2)
+        
+        override fun createValue(newKey: Int): EntitlementOwnerType
+            = EntitlementOwnerType(newKey)
     }
 }
 

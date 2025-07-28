@@ -16,7 +16,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     suspend fun listEntitlements(
         applicationId: Snowflake,
         userId: Snowflake? = null,
-        skuIds: List<Snowflake>? = null,
+        skuIds: String? = null,
         before: Snowflake? = null,
         after: Snowflake? = null,
         limit: Int? = null,
@@ -27,16 +27,13 @@ internal constructor(private val httpClient: CwHttpClient) {
         
         val httpRequest = CwHttpRequest.create(GET, "/applications/${applicationId}/entitlements") {
             optionalQueryStringParam("user_ids", userId)
+            optionalQueryStringParam("sku_ids", skuIds)
             optionalQueryStringParam("before", before)
             optionalQueryStringParam("after", after)
             optionalQueryStringParam("limit", limit)
             optionalQueryStringParam("guild_id", guildId)
             optionalQueryStringParam("exclude_ended", excludeEnded)
             optionalQueryStringParam("exclude_deleted", excludeDeleted)
-            
-            if (skuIds != null) {
-                optionalQueryStringParam("sku_ids", skuIds.stream().map { it.toString() }.collect(Collectors.joining(",")))
-            }
         }
         val response = httpClient.submit(httpRequest)
 

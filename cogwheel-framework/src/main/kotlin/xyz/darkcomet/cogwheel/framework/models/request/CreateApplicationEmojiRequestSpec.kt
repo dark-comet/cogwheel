@@ -6,7 +6,7 @@ import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
 import xyz.darkcomet.cogwheel.framework.models.DiscordImage
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 
-class CreateApplicationEmojiRequestSpec(internal var appId: ApplicationId) {
+class CreateApplicationEmojiRequestSpec(internal var applicationId: ApplicationId) {
     
     internal var name: String? = null
     internal var image: ImageData? = null

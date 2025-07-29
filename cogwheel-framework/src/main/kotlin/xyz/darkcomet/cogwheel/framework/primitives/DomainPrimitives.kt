@@ -32,6 +32,8 @@ data class EntitlementId(val snowflake: Snowflake)
 
 data class SubscriptionId(val snowflake: Snowflake)
 
+data class GuildScheduledEventId(val snowflake: Snowflake)
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -768,6 +770,104 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
             = EntitlementOwnerType(newKey)
     }
 }
+
+@ConsistentCopyVisibility
+data class GuildScheduledEventPrivacyLevel
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, GuildScheduledEventPrivacyLevel>() {
+        
+        @JvmField val GUILD_ONLY = addPreset(2)
+        
+        override fun createValue(newKey: Int): GuildScheduledEventPrivacyLevel
+            = GuildScheduledEventPrivacyLevel(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class GuildScheduledEventEntityType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, GuildScheduledEventEntityType>() {
+        
+        @JvmField val STAGE_INSTANCE = addPreset(1)
+        @JvmField val VOICE = addPreset(2)
+        @JvmField val EXTERNAL = addPreset(3)
+        
+        override fun createValue(newKey: Int): GuildScheduledEventEntityType
+            = GuildScheduledEventEntityType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class GuildScheduledEventStatus
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, GuildScheduledEventStatus>() {
+
+        @JvmField val SCHEDULED = addPreset(1)
+        @JvmField val ACTIVE = addPreset(2)
+        @JvmField val COMPLETED = addPreset(3)
+        @JvmField val CANCELED = addPreset(4)
+
+        override fun createValue(newKey: Int): GuildScheduledEventStatus
+            = GuildScheduledEventStatus(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class RecurrenceRuleFrequency
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, RecurrenceRuleFrequency>() {
+
+        @JvmField val YEARLY = addPreset(0)
+        @JvmField val MONTHLY = addPreset(1)
+        @JvmField val WEEKLY = addPreset(2)
+        @JvmField val DAILY = addPreset(3)
+
+        override fun createValue(newKey: Int): RecurrenceRuleFrequency
+            = RecurrenceRuleFrequency(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class RecurrenceRuleWeekday
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, RecurrenceRuleWeekday>() {
+
+        @JvmField val MONDAY = addPreset(0)
+        @JvmField val TUESDAY = addPreset(1)
+        @JvmField val WEDNESDAY = addPreset(2)
+        @JvmField val THURSDAY = addPreset(3)
+        @JvmField val FRIDAY = addPreset(4)
+        @JvmField val SATURDAY = addPreset(5)
+        @JvmField val SUNDAY = addPreset(6)
+        
+        override fun createValue(newKey: Int): RecurrenceRuleWeekday
+            = RecurrenceRuleWeekday(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class RecurrenceRuleMonth
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object : ExtensibleEnum<Int, RecurrenceRuleMonth>() {
+
+        @JvmField val JANUARY = addPreset(1)
+        @JvmField val FEBRUARY = addPreset(2)
+        @JvmField val MARCH = addPreset(3)
+        @JvmField val APRIL = addPreset(4)
+        @JvmField val MAY = addPreset(5)
+        @JvmField val JUNE = addPreset(6)
+        @JvmField val JULY = addPreset(7)
+        @JvmField val AUGUST = addPreset(8)
+        @JvmField val SEPTEMBER = addPreset(9)
+        @JvmField val OCTOBER = addPreset(10)
+        @JvmField val NOVEMBER = addPreset(11)
+        @JvmField val DECEMBER = addPreset(12)
+
+        override fun createValue(newKey: Int): RecurrenceRuleMonth
+            = RecurrenceRuleMonth(newKey)
+    }
+}
+
 
 /*
     Base class for all enum-like API value definitions in this file. This is used instead of the

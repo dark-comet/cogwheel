@@ -53,3 +53,7 @@ fun Snowflake.asEntitlementId(): EntitlementId {
 fun Snowflake.asSubscriptionId(): SubscriptionId {
     return SubscriptionId(this)
 }
+
+fun Snowflake.asGuildScheduledEventId(): GuildScheduledEventId {
+    return GuildScheduledEventId(this)
+}

@@ -140,7 +140,7 @@ data class CreateGuildScheduledEventRequestParameters(
     val channelId: MaybeAbsent<Snowflake>? = null,
     @SerialName("entity_metadata") val entityMetadata: MaybeAbsent<GuildScheduledEventEntityMetadataObject>? = null,
     val name: String,
-    @SerialName("privacy_level") val privacyLevel: MaybeAbsent<Int>? = null,
+    @SerialName("privacy_level") val privacyLevel: Int? = null,
     @SerialName("scheduled_start_time") val scheduledStartTime: ISO8601Timestamp,
     @SerialName("scheduled_end_time") val scheduledEndTime: MaybeAbsent<ISO8601Timestamp>? = null,
     val description: MaybeAbsent<String>? = null,
@@ -474,17 +474,17 @@ data class ModifyGuildRoleRequestParameters(
 
 @Serializable
 data class ModifyGuildScheduledEventRequestParameters(
-    val channelId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("entity_metadata") val entityMetadata: MaybeAbsent<GuildScheduledEventEntityMetadataObject>? = null,
+    val channelId: MaybeAbsent<Snowflake?>? = null,
+    @SerialName("entity_metadata") val entityMetadata: MaybeAbsent<GuildScheduledEventEntityMetadataObject?>? = null,
     val name: MaybeAbsent<String>? = null,
     @SerialName("privacy_level") val privacyLevel: MaybeAbsent<Int>? = null,
     @SerialName("scheduled_start_time") val scheduledStartTime: MaybeAbsent<ISO8601Timestamp>? = null,
     @SerialName("scheduled_end_time") val scheduledEndTime: MaybeAbsent<ISO8601Timestamp>? = null,
-    val description: MaybeAbsent<String>? = null,
+    val description: MaybeAbsent<String?>? = null,
     @SerialName("entity_type") val entityType: MaybeAbsent<Int>? = null,
     val status: MaybeAbsent<Int>? = null,
     val image: MaybeAbsent<String>? = null,
-    @SerialName("recurrence_rule") val recurrenceRule: MaybeAbsent<GuildScheduledEventRecurrenceRuleObject>? = null
+    @SerialName("recurrence_rule") val recurrenceRule: MaybeAbsent<GuildScheduledEventRecurrenceRuleObject?>? = null
 )
 
 @Serializable

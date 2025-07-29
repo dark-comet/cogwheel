@@ -12,7 +12,7 @@ private constructor(internal val data: ImageData) {
         }
         
         @JvmStatic
-        fun fromImageData(imageData: String): DiscordImage {
+        fun fromImageData(imageData: ImageData): DiscordImage {
             TODO()
         }
     }

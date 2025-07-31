@@ -1,11 +1,11 @@
 package xyz.darkcomet.cogwheel.core.network.http.rest
 
-import kotlinx.serialization.builtins.ListSerializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.GET
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.POST
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.GetPollAnswerVotersResponseObject
 import xyz.darkcomet.cogwheel.core.network.objects.MessageObject
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
@@ -19,7 +19,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         answerId: Int,
         after: Snowflake? = null,
         limit: Int? = null,
-    ): CwHttpResponse<List<UserObject>> {
+    ): CwHttpResponse<GetPollAnswerVotersResponseObject> {
         val httpRequest = CwHttpRequest.create(
             GET, "/channels/${channelId}/polls/${messageId}/answers/${answerId}",
             rateLimitRouteIdentifier = "/channels/${channelId}/polls/*/answers/*"
@@ -29,12 +29,12 @@ internal constructor(private val httpClient: CwHttpClient) {
         }
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(ListSerializer(UserObject.serializer()))
+        return response.withData(GetPollAnswerVotersResponseObject.serializer())
     }
     
     suspend fun endPoll(
         channelId: Snowflake, 
-        messageId: Int
+        messageId: Snowflake
     ): CwHttpResponse<MessageObject> {
         
         val httpRequest = CwHttpRequest.create(

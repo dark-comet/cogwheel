@@ -3,7 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.TeamObject
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.require
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.TeamId

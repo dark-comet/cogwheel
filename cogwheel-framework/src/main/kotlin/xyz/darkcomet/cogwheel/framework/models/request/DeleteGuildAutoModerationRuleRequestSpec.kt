@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.framework.primitives.AutoModerationRuleId

@@ -1,10 +1,12 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
 import xyz.darkcomet.cogwheel.core.network.objects.EditCurrentApplicationRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationInstallParameters
 import xyz.darkcomet.cogwheel.framework.models.entitles.application.ApplicationIntegrationTypeConfiguration
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationEventWebhookStatus

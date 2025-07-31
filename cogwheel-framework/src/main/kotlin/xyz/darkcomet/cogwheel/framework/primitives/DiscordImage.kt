@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models
+package xyz.darkcomet.cogwheel.framework.primitives
 
 import xyz.darkcomet.cogwheel.core.primitives.ImageData
 

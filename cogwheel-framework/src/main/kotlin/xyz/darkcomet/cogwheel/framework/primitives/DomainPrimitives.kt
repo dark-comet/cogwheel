@@ -34,6 +34,8 @@ data class SubscriptionId(val snowflake: Snowflake)
 
 data class GuildScheduledEventId(val snowflake: Snowflake)
 
+data class MessageId(val snowflake: Snowflake)
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -982,6 +984,17 @@ private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteg
     }
 }
 
+@ConsistentCopyVisibility
+data class PollLayoutType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, PollLayoutType>() {
+
+        @JvmField val DEFAULT = addPreset(1)
+        
+        override fun createValue(newKey: Int): PollLayoutType
+            = PollLayoutType(newKey)
+    }
+}
 
 /*
     Base class for all enum-like API value definitions in this file. This is used instead of the

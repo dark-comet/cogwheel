@@ -1,9 +1,11 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.CreateGuildEmojiRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.RoleId
 

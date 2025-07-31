@@ -61,3 +61,8 @@ data class ListPublicArchivedThreadsResponseObject(
     val members: List<ThreadMemberObject>,
     @SerialName("has_more") val hasMore: Boolean,
 )
+
+@Serializable
+data class GetPollAnswerVotersResponseObject(
+    val users: List<UserObject>
+)

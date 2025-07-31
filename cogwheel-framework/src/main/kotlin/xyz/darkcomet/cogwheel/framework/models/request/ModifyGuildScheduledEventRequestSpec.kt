@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventEntityMetadataObject
@@ -6,7 +8,7 @@ import xyz.darkcomet.cogwheel.core.network.objects.ModifyGuildScheduledEventRequ
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildScheduledEventEntityMetadata
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildScheduledEventRecurrenceRule
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelId

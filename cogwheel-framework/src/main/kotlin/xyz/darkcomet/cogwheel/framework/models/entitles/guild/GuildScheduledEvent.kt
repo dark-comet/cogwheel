@@ -5,7 +5,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.User
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.toModel
 import xyz.darkcomet.cogwheel.framework.models.require

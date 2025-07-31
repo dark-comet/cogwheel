@@ -57,3 +57,7 @@ fun Snowflake.asSubscriptionId(): SubscriptionId {
 fun Snowflake.asGuildScheduledEventId(): GuildScheduledEventId {
     return GuildScheduledEventId(this)
 }
+
+fun Snowflake.asMessageId(): MessageId {
+    return MessageId(this)
+}

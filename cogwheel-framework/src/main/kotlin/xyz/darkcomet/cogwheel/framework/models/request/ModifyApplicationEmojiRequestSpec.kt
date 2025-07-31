@@ -1,8 +1,10 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.request
 
 import xyz.darkcomet.cogwheel.core.network.objects.ModifyApplicationEmojiRequestParameters
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
-import xyz.darkcomet.cogwheel.framework.models.DiscordImage
+import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.EmojiId
 

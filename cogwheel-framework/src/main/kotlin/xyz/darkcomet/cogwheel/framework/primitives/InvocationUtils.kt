@@ -101,6 +101,7 @@ abstract class RequestInvocationS<TRequestSpec, TResponse> {
         return invoke(req)
     }
 
+    @JvmOverloads
     fun async(config: Consumer<TRequestSpec>? = null) : Future<Response<TResponse>> {
         val req = createRequest()
         config?.accept(req)
@@ -113,7 +114,8 @@ abstract class RequestInvocationS<TRequestSpec, TResponse> {
             .async { invoke(request) }
             .asCompletableFuture()
     }
-    
+
+    @JvmOverloads
     fun block(config: Consumer<TRequestSpec>? = null) : Response<TResponse> {
         
         val req = createRequest()
@@ -146,6 +148,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
         return invoke(req)
     }
 
+    @JvmOverloads
     open fun async(
         p1: P1,
         config: Consumer<TRequestSpec>? = null
@@ -163,6 +166,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
 
+    @JvmOverloads
     open fun block(
         p1: P1,
         config: Consumer<TRequestSpec>? = null
@@ -199,6 +203,7 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
         return invoke(req)
     }
 
+    @JvmOverloads
     open fun async(
         p1: P1, 
         p2: P2, 
@@ -217,6 +222,7 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
 
+    @JvmOverloads
     open fun block(
         p1: P1, 
         p2: P2, 
@@ -224,6 +230,66 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
     ) : Response<TResponse> {
         
         val req: TRequestSpec = createRequest(p1, p2)
+        config?.accept(req)
+
+        return block(req)
+    }
+    
+    fun block(request: TRequestSpec) : Response<TResponse> {
+        return runBlocking { invoke(request) }
+    }
+}
+
+// 3 mandatory parameters + optional request spec
+abstract class RequestInvocation3S<P1, P2, P3, TRequestSpec, TResponse> {
+    
+    protected abstract fun createRequest(p1: P1, p2: P2, p3: P3): TRequestSpec
+    
+    abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
+    
+    suspend operator fun invoke(
+        p1: P1, 
+        p2: P2, 
+        p3: P3,
+        request: TRequestSpec? = null,
+        config: (TRequestSpec.() -> Unit)? = null
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = request ?: createRequest(p1, p2, p3)
+        config?.invoke(req)
+        
+        return invoke(req)
+    }
+
+    @JvmOverloads
+    open fun async(
+        p1: P1, 
+        p2: P2, 
+        p3: P3, 
+        config: Consumer<TRequestSpec>? = null
+    ) : Future<Response<TResponse>> {
+        
+        val req: TRequestSpec = createRequest(p1, p2, p3)
+        config?.accept(req)
+        
+        return async(req)
+    }
+    
+    fun async(request: TRequestSpec) : Future<Response<TResponse>> {
+        return CoroutineScope(Dispatchers.IO)
+            .async { invoke(request) }
+            .asCompletableFuture()
+    }
+    
+    @JvmOverloads
+    open fun block(
+        p1: P1, 
+        p2: P2, 
+        p3: P3, 
+        config: Consumer<TRequestSpec>? = null
+    ) : Response<TResponse> {
+        
+        val req: TRequestSpec = createRequest(p1, p2, p3)
         config?.accept(req)
 
         return block(req)

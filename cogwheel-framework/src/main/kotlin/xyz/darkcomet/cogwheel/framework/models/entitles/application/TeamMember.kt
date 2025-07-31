@@ -3,9 +3,9 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.TeamMemberObject
-import xyz.darkcomet.cogwheel.framework.models.PartialUser
+import xyz.darkcomet.cogwheel.framework.models.entitles.user.PartialUser
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.toPartialUserModel
+import xyz.darkcomet.cogwheel.framework.models.entitles.user.toPartialUserModel
 import xyz.darkcomet.cogwheel.framework.primitives.TeamId
 import xyz.darkcomet.cogwheel.framework.primitives.TeamMemberRole
 import xyz.darkcomet.cogwheel.framework.primitives.TeamMembershipState

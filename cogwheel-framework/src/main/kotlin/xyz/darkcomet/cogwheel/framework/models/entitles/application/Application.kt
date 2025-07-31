@@ -5,7 +5,9 @@ import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
 import xyz.darkcomet.cogwheel.framework.models.*
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.PartialGuild
-import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toPartialGuildModel
+import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toPartialModel
+import xyz.darkcomet.cogwheel.framework.models.entitles.user.PartialUser
+import xyz.darkcomet.cogwheel.framework.models.entitles.user.toPartialUserModel
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
 @Suppress("unused")
@@ -66,7 +68,7 @@ internal fun ApplicationObject.toModel(): Application {
         verifyKey = requireNonNull(this, ApplicationObject::verifyKey),
         team = require(this, ApplicationObject::team)?.toModel(),
         guildId = requireNonNullIfPresent(this, ApplicationObject::guildId)?.asGuildId(),
-        guild = requireNonNullIfPresent(this, ApplicationObject::guild)?.toPartialGuildModel(),
+        guild = requireNonNullIfPresent(this, ApplicationObject::guild)?.toPartialModel(),
         primarySkuId = requireNonNullIfPresent(this, ApplicationObject::primarySkuId)?.asSkuId(),
         slug = requireNonNullIfPresent(this, ApplicationObject::slug),
         coverImage = requireNonNullIfPresent(this, ApplicationObject::coverImage)?.let { DiscordImage.fromDataUriScheme(it) },

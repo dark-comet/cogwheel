@@ -887,6 +887,7 @@ data class InviteObject(
     @SerialName("expires_at") val expiresAt: MaybeAbsent<ISO8601Timestamp>? = null,
     @SerialName("stage_instance") val stageInstance: MaybeAbsent<InviteStageInstanceObject>? = null,
     @SerialName("guild_scheduled_event") val guildScheduledEvent: MaybeAbsent<GuildScheduledEventObject>? = null,
+    val flags: MaybeAbsent<Int>? = null
 )
 
 @Serializable

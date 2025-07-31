@@ -27,12 +27,12 @@ data class PartialGuild(
 ) {
     companion object {
         internal fun from(obj: GuildObject): PartialGuild {
-            return obj.toPartialGuildModel();
+            return obj.toPartialModel();
         }
     }
 }
 
-internal fun GuildObject.toPartialGuildModel(): PartialGuild {
+internal fun GuildObject.toPartialModel(): PartialGuild {
     return PartialGuild(
         id = requireNonNullIfPresent(this, GuildObject::id)?.asGuildId(),
         name = requireNonNullIfPresent(this, GuildObject::name),

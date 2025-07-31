@@ -56,132 +56,189 @@ private constructor(val value: Int) {
 }
 
 @ConsistentCopyVisibility
-data class DiscordLocale
-private constructor(val value: String) {
-    companion object {
-        // TODO
+data class DiscordLocale  
+private constructor(override val key: String) : ExtensibleEnumValue<String> {
+    companion object Presets : ExtensibleEnum<String, DiscordLocale>() {
+        
+        @JvmField val INDONESIAN = addPreset("id")
+        @JvmField val DANISH = addPreset("da")
+        @JvmField val GERMAN = addPreset("de")
+        @JvmField val ENGLISH_UK = addPreset("en-GB")
+        @JvmField val ENGLISH_US = addPreset("en-US")
+        @JvmField val SPANISH = addPreset("es-ES")
+        @JvmField val SPANISH_LATAM = addPreset("es-419")
+        @JvmField val FRENCH = addPreset("fr")
+        @JvmField val CROATIAN = addPreset("hr")
+        @JvmField val ITALIAN = addPreset("it")
+        @JvmField val LITHUANIAN = addPreset("lt")
+        @JvmField val HUNGARIAN = addPreset("hu")
+        @JvmField val DUTCH = addPreset("nl")
+        @JvmField val NORWEGIAN = addPreset("no")
+        @JvmField val POLISH = addPreset("pl")
+        @JvmField val PORTUGUESE_BRAZILIAN = addPreset("pt-BR")
+        @JvmField val ROMANIAN_ROMANIA = addPreset("ro")
+        @JvmField val FINNISH = addPreset("fi")
+        @JvmField val SWEDISH = addPreset("sv-SE")
+        @JvmField val VIETNAMESE = addPreset("vi")
+        @JvmField val TURKISH = addPreset("tr")
+        @JvmField val CZECH = addPreset("cs")
+        @JvmField val GREEK = addPreset("el")
+        @JvmField val BULGARIAN = addPreset("bg")
+        @JvmField val RUSSIAN = addPreset("ru")
+        @JvmField val UKRAINIAN = addPreset("uk")
+        @JvmField val HINDI = addPreset("hi")
+        @JvmField val THAI = addPreset("th")
+        @JvmField val CHINESE_CHINA = addPreset("zh-CN")
+        @JvmField val JAPANESE = addPreset("ja")
+        @JvmField val CHINESE_TAIWAN = addPreset("zh-TW")
+        @JvmField val KOREAN = addPreset("ko")
+        
+        override fun createValue(newKey: String): DiscordLocale
+            = DiscordLocale(newKey)
     }
 }
 
-data class PermissionSet(val value: BigInteger) {
-
-    infix fun and(permission: Permission): PermissionSet {
-        return PermissionSet(value or permission.value)
+data class Bitmask<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) {
+    
+    infix fun or(entry: T): Bitmask<T> {
+        return Bitmask(value or entry.key)
     }
 
-    infix fun and(otherSet: PermissionSet): PermissionSet {
-        return PermissionSet(value or otherSet.value)
+    infix fun or(otherSet: Bitmask<T>): Bitmask<T> {
+        return Bitmask(value or otherSet.value)
     }
-
-    fun contains(permission: Permission): Boolean {
-        return (value and permission.value) == permission.value
+    
+    infix fun and(entry: T): Bitmask<T> {
+        return Bitmask(value and entry.key)
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (other !is PermissionSet) {
-            return false
-        }
-
-        return value == other.value
+    
+    infix fun and(otherSet: Bitmask<T>): Bitmask<T> {
+        return Bitmask(value and otherSet.value)
     }
-
-    override fun hashCode(): Int {
-        return value.hashCode()
+    
+    fun contain(entry: T): Boolean {
+        return (value and entry.key) == entry.key
+    }
+    
+    fun containsAll(vararg entries: T): Boolean {
+        return entries.all { contain(it) }
     }
 
     override fun toString(): String {
         return value.toString(10)
     }
-
+    
     companion object {
-        @JvmStatic 
-        fun from(vararg permissions: Permission): PermissionSet {
-            val value = permissions.fold(BigInteger.ZERO) { acc, permission ->
-                acc or permission.value
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> from(vararg entries: T) : Bitmask<T> {
+            val value = entries.fold(BigInteger.ZERO) { acc, entry ->
+                acc or entry.key
             }
-            return PermissionSet(value)
+            return Bitmask(value)
+        }
+        
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> from(base10String: String): Bitmask<T> {
+            val value = BigInteger(base10String, 10)
+            return Bitmask(value)
+        }
+        
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Int): Bitmask<T> {
+            return Bitmask(value.toBigInteger())
         }
 
-        @JvmStatic 
-        fun from(rawString: String): PermissionSet {
-            val value = BigInteger(rawString, 10)
-            return PermissionSet(value)
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Long): Bitmask<T> {
+            return Bitmask(value.toBigInteger())
         }
-
-        @JvmStatic 
-        fun all(): PermissionSet {
-            val value = Permission.entries.fold(BigInteger.ZERO) { acc, permission ->
-                acc or permission.value
+        
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> allOf(enumSet: ExtensibleEnum<BigInteger, T>) : Bitmask<T> {
+            val value = enumSet.values().fold(BigInteger.ZERO) { acc, entry -> 
+                acc or entry.key
             }
-            return PermissionSet(value)
+            return Bitmask(value)
         }
     }
 }
 
-enum class Permission(val value: BigInteger) {
+@ConsistentCopyVisibility
+data class GuildInviteFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, GuildInviteFlag>() {
 
-    CREATE_INSTANT_INVITE(BigInteger("0000000000000001", 16)),
-    KICK_MEMBERS(BigInteger("0000000000000002", 16)),
-    BAN_MEMBERS(BigInteger("0000000000000004", 16)),
-    ADMINISTRATOR(BigInteger("0000000000000008", 16)),
-    MANAGE_CHANNELS(BigInteger("0000000000000010", 16)),
-    MANAGE_GUILD(BigInteger("0000000000000020", 16)),
-    ADD_REACTIONS(BigInteger("0000000000000040", 16)),
-    VIEW_AUDIT_LOG(BigInteger("0000000000000080", 16)),
-    PRIORITY_SPEAKER(BigInteger("0000000000000100", 16)),
-    STREAM(BigInteger("0000000000000200", 16)),
-    VIEW_CHANNEL(BigInteger("0000000000000400", 16)),
-    SEND_MESSAGES(BigInteger("0000000000000800", 16)),
-    SEND_TTS_MESSAGES(BigInteger("0000000000001000", 16)),
-    MANAGE_MESSAGES(BigInteger("0000000000002000", 16)),
-    EMBED_LINKS(BigInteger("0000000000004000", 16)),
-    ATTACH_FILES(BigInteger("0000000000008000", 16)),
-    READ_MESSAGE_HISTORY(BigInteger("0000000000010000", 16)),
-    MENTION_EVERYONE(BigInteger("0000000000020000", 16)),
-    USE_EXTERNAL_EMOJIS(BigInteger("0000000000040000", 16)),
-    VIEW_GUILD_INSIGHTS(BigInteger("0000000000080000", 16)),
-    CONNECT(BigInteger("0000000000100000", 16)),
-    SPEAK(BigInteger("0000000000200000", 16)),
-    MUTE_MEMBERS(BigInteger("0000000000400000", 16)),
-    DEAFEN_MEMBERS(BigInteger("0000000000800000", 16)),
-    MOVE_MEMBERS(BigInteger("0000000001000000", 16)),
-    USE_VAD(BigInteger("0000000002000000", 16)),
-    CHANGE_NICKNAME(BigInteger("0000000004000000", 16)),
-    MANAGE_NICKNAMES(BigInteger("0000000008000000", 16)),
-    MANAGE_ROLES(BigInteger("0000000010000000", 16)),
-    MANAGE_WEBHOOKS(BigInteger("0000000020000000", 16)),
-    MANAGE_GUILD_EXPRESSIONS(BigInteger("0000000040000000", 16)),
-    USE_APPLICATION_COMMANDS(BigInteger("0000000080000000", 16)),
-    REQUEST_TO_SPEAK(BigInteger("0000000100000000", 16)),
-    MANAGE_EVENTS(BigInteger("0000000200000000", 16)),
-    MANAGE_THREADS(BigInteger("0000000400000000", 16)),
-    CREATE_PUBLIC_THREADS(BigInteger("0000000800000000", 16)),
-    CREATE_PRIVATE_THREADS(BigInteger("0000001000000000", 16)),
-    USE_EXTERNAL_STICKERS(BigInteger("0000002000000000", 16)),
-    SEND_MESSAGE_IN_THREADS(BigInteger("0000004000000000", 16)),
-    USE_EMBEDDED_ACTIVITIES(BigInteger("0000008000000000", 16)),
-    MODERATE_MEMBERS(BigInteger("0000010000000000", 16)),
-    VIEW_CREATOR_MONETIZATION_ANALYTICS(BigInteger("0000020000000000", 16)),
-    USE_SOUNDBOARD(BigInteger("0000040000000000", 16)),
-    CREATE_GUILD_EXPRESSIONS(BigInteger("0000080000000000", 16)),
-    CREATE_EVENTS(BigInteger("0000100000000000", 16)),
-    USE_EXTERNAL_SOUNDS(BigInteger("0000200000000000", 16)),
-    SEND_VOICE_MESSAGES(BigInteger("0000400000000000", 16)),
-    SEND_POLLS(BigInteger("0002000000000000", 16)),
-    USE_EXTERNAL_APPS(BigInteger("0004000000000000", 16)),
+        @JvmField val IS_GUEST_INVITE = addPreset((1 shl 0).toBigInteger())
 
-    ;
-
-    infix fun and(other: Permission): PermissionSet {
-        return PermissionSet(value or other.value)
+        override fun createValue(newKey: BigInteger): GuildInviteFlag
+            = GuildInviteFlag(newKey)
     }
-    
+}
+
+@ConsistentCopyVisibility
+data class Permission
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, Permission>() {
+
+        @JvmField val CREATE_INSTANT_INVITE = addPreset(BigInteger("0000000000000001", 16))
+        @JvmField val KICK_MEMBERS = addPreset(BigInteger("0000000000000002", 16))
+        @JvmField val BAN_MEMBERS = addPreset(BigInteger("0000000000000004", 16))
+        @JvmField val ADMINISTRATOR = addPreset(BigInteger("0000000000000008", 16))
+        @JvmField val MANAGE_CHANNELS = addPreset(BigInteger("0000000000000010", 16))
+        @JvmField val MANAGE_GUILD = addPreset(BigInteger("0000000000000020", 16))
+        @JvmField val ADD_REACTIONS = addPreset(BigInteger("0000000000000040", 16))
+        @JvmField val VIEW_AUDIT_LOG = addPreset(BigInteger("0000000000000080", 16))
+        @JvmField val PRIORITY_SPEAKER = addPreset(BigInteger("0000000000000100", 16))
+        @JvmField val STREAM = addPreset(BigInteger("0000000000000200", 16))
+        @JvmField val VIEW_CHANNEL = addPreset(BigInteger("0000000000000400", 16))
+        @JvmField val SEND_MESSAGES = addPreset(BigInteger("0000000000000800", 16))
+        @JvmField val SEND_TTS_MESSAGES = addPreset(BigInteger("0000000000001000", 16))
+        @JvmField val MANAGE_MESSAGES = addPreset(BigInteger("0000000000002000", 16))
+        @JvmField val EMBED_LINKS = addPreset(BigInteger("0000000000004000", 16))
+        @JvmField val ATTACH_FILES = addPreset(BigInteger("0000000000008000", 16))
+        @JvmField val READ_MESSAGE_HISTORY = addPreset(BigInteger("0000000000010000", 16))
+        @JvmField val MENTION_EVERYONE = addPreset(BigInteger("0000000000020000", 16))
+        @JvmField val USE_EXTERNAL_EMOJIS = addPreset(BigInteger("0000000000040000", 16))
+        @JvmField val VIEW_GUILD_INSIGHTS = addPreset(BigInteger("0000000000080000", 16))
+        @JvmField val CONNECT = addPreset(BigInteger("0000000000100000", 16))
+        @JvmField val SPEAK = addPreset(BigInteger("0000000000200000", 16))
+        @JvmField val MUTE_MEMBERS = addPreset(BigInteger("0000000000400000", 16))
+        @JvmField val DEAFEN_MEMBERS = addPreset(BigInteger("0000000000800000", 16))
+        @JvmField val MOVE_MEMBERS = addPreset(BigInteger("0000000001000000", 16))
+        @JvmField val USE_VAD = addPreset(BigInteger("0000000002000000", 16))
+        @JvmField val CHANGE_NICKNAME = addPreset(BigInteger("0000000004000000", 16))
+        @JvmField val MANAGE_NICKNAMES = addPreset(BigInteger("0000000008000000", 16))
+        @JvmField val MANAGE_ROLES = addPreset(BigInteger("0000000010000000", 16))
+        @JvmField val MANAGE_WEBHOOKS = addPreset(BigInteger("0000000020000000", 16))
+        @JvmField val MANAGE_GUILD_EXPRESSIONS = addPreset(BigInteger("0000000040000000", 16))
+        @JvmField val USE_APPLICATION_COMMANDS = addPreset(BigInteger("0000000080000000", 16))
+        @JvmField val REQUEST_TO_SPEAK = addPreset(BigInteger("0000000100000000", 16))
+        @JvmField val MANAGE_EVENTS = addPreset(BigInteger("0000000200000000", 16))
+        @JvmField val MANAGE_THREADS = addPreset(BigInteger("0000000400000000", 16))
+        @JvmField val CREATE_PUBLIC_THREADS = addPreset(BigInteger("0000000800000000", 16))
+        @JvmField val CREATE_PRIVATE_THREADS = addPreset(BigInteger("0000001000000000", 16))
+        @JvmField val USE_EXTERNAL_STICKERS = addPreset(BigInteger("0000002000000000", 16))
+        @JvmField val SEND_MESSAGE_IN_THREADS = addPreset(BigInteger("0000004000000000", 16))
+        @JvmField val USE_EMBEDDED_ACTIVITIES = addPreset(BigInteger("0000008000000000", 16))
+        @JvmField val MODERATE_MEMBERS = addPreset(BigInteger("0000010000000000", 16))
+        @JvmField val VIEW_CREATOR_MONETIZATION_ANALYTICS = addPreset(BigInteger("0000020000000000", 16))
+        @JvmField val USE_SOUNDBOARD = addPreset(BigInteger("0000040000000000", 16))
+        @JvmField val CREATE_GUILD_EXPRESSIONS = addPreset(BigInteger("0000080000000000", 16))
+        @JvmField val CREATE_EVENTS = addPreset(BigInteger("0000100000000000", 16))
+        @JvmField val USE_EXTERNAL_SOUNDS = addPreset(BigInteger("0000200000000000", 16))
+        @JvmField val SEND_VOICE_MESSAGES = addPreset(BigInteger("0000400000000000", 16))
+        @JvmField val SEND_POLLS = addPreset(BigInteger("0002000000000000", 16))
+        @JvmField val USE_EXTERNAL_APPS = addPreset(BigInteger("0004000000000000", 16))
+        
+        override fun createValue(newKey: BigInteger): Permission
+            = Permission(newKey)
+    }
 }
 
 @ConsistentCopyVisibility
 data class OAuth2Scope
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
-    companion object : ExtensibleEnum<String, OAuth2Scope>() {
+    companion object Presets : ExtensibleEnum<String, OAuth2Scope>() {
         
         @JvmField val ACTIVITIES_READ = addPreset("activities.read")
         @JvmField val ACTIVITIES_WRITE = addPreset("activities.write")
@@ -220,7 +277,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 @ConsistentCopyVisibility
 data class ApplicationIntegrationType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationIntegrationType>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationIntegrationType>() {
         
         @JvmField val GUILD_INSTALL = addPreset(0)
         @JvmField val USER_INSTALL = addPreset(1)
@@ -233,7 +290,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class ApplicationRoleConnectionMetadataType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationRoleConnectionMetadataType>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationRoleConnectionMetadataType>() {
         
         @JvmField val INTEGER_LESS_THAN_OR_EQUAL = addPreset(1)
         @JvmField val INTEGER_GREATER_THAN_OR_EQUAL = addPreset(2)
@@ -254,7 +311,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class ApplicationFlag
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationFlag>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationFlag>() {
         
         @JvmField val APPLICATION_AUTO_MODERATION_RULE_CREATE_BADGE = addPreset(1 shl 6)
         @JvmField val GATEWAY_PRESENCE = addPreset(1 shl 12)
@@ -275,7 +332,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class ApplicationCommandType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationCommandType>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationCommandType>() {
 
         @JvmField val CHAT_INPUT = addPreset(1)
         @JvmField val USER = addPreset(2)
@@ -283,14 +340,14 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         @JvmField val PRIMARY_ENTRY_POINT = addPreset(4)
 
         override fun createValue(newKey: Int): ApplicationCommandType
-                = ApplicationCommandType(newKey)
+            = ApplicationCommandType(newKey)
     }
 }
 
 @ConsistentCopyVisibility
 data class ApplicationCommandOptionType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationCommandOptionType>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationCommandOptionType>() {
         
         @JvmField val SUB_COMMAND = addPreset(1)
         @JvmField val SUB_COMMAND_GROUP = addPreset(2)
@@ -305,34 +362,34 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         @JvmField val ATTACHMENT = addPreset(11)
         
         override fun createValue(newKey: Int): ApplicationCommandOptionType
-            = ApplicationCommandOptionType(newKey)
+        = ApplicationCommandOptionType(newKey)
     }
 }
 
 @ConsistentCopyVisibility
 data class InteractionContextType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, InteractionContextType>() {
+    companion object Presets : ExtensibleEnum<Int, InteractionContextType>() {
         
         @JvmField val GUILD = addPreset(0)
         @JvmField val BOT_DM = addPreset(1)
         @JvmField val PRIVATE_CHANNEL = addPreset(2)
         
         override fun createValue(newKey: Int): InteractionContextType
-                = InteractionContextType(newKey)
+            = InteractionContextType(newKey)
     }
 }
 
 @ConsistentCopyVisibility
 data class ApplicationCommandHandlerType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationCommandHandlerType>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationCommandHandlerType>() {
 
         @JvmField val APP_HANDLER = addPreset(1)
         @JvmField val DISCORD_LAUNCH_ACTIVITY = addPreset(2)
 
         override fun createValue(newKey: Int): ApplicationCommandHandlerType
-                = ApplicationCommandHandlerType(newKey)
+            = ApplicationCommandHandlerType(newKey)
     }
 }
 
@@ -340,7 +397,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class AuditLogEventType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, AuditLogEventType>() {
+    companion object Presets : ExtensibleEnum<Int, AuditLogEventType>() {
         
         @JvmField val GUILD_UPDATE = addPreset(1)
         @JvmField val CHANNEL_CREATE = addPreset(10)
@@ -418,7 +475,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class AutoModerationEventType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, AutoModerationEventType>() {
+    companion object Presets : ExtensibleEnum<Int, AutoModerationEventType>() {
         
         @JvmField val MESSAGE_SEND = addPreset(1)
         @JvmField val MEMBER_UPDATE = addPreset(2)
@@ -432,7 +489,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class AutoModerationTriggerType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, AutoModerationTriggerType>() {
+    companion object Presets : ExtensibleEnum<Int, AutoModerationTriggerType>() {
 
         @JvmField val KEYWORD = addPreset(1)
         @JvmField val SPAM = addPreset(3)
@@ -449,7 +506,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class AutoModerationKeywordPresetType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, AutoModerationKeywordPresetType>() {
+    companion object Presets : ExtensibleEnum<Int, AutoModerationKeywordPresetType>() {
 
         @JvmField val PROFANITY = addPreset(1)
         @JvmField val SEXUAL_CONTENT = addPreset(2)
@@ -464,7 +521,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class AutoModerationActionType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, AutoModerationActionType>() {
+    companion object Presets : ExtensibleEnum<Int, AutoModerationActionType>() {
 
         @JvmField val BLOCK_MESSAGE = addPreset(1)
         @JvmField val SEND_ALERT_MESSAGE = addPreset(2)
@@ -479,26 +536,26 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
 @ConsistentCopyVisibility
 data class UserFlag
-private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, UserFlag>() {
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, UserFlag>() {
         
-        @JvmField val STAFF = addPreset(1 shl 0)
-        @JvmField val PARTNER = addPreset(1 shl 1)
-        @JvmField val HYPESQUAD = addPreset(1 shl 2)
-        @JvmField val BUG_HUNTER_LEVEL_1 = addPreset(1 shl 3)
-        @JvmField val HYPESQUAD_ONLINE_HOUSE_1 = addPreset(1 shl 6)
-        @JvmField val HYPESQUAD_ONLINE_HOUSE_2 = addPreset(1 shl 7)
-        @JvmField val HYPESQUAD_ONLINE_HOUSE_3 = addPreset(1 shl 8)
-        @JvmField val PREMIUM_EARLY_SUPPORTER = addPreset(1 shl 9)
-        @JvmField val TEAM_PSEUDO_USER = addPreset(1 shl 10)
-        @JvmField val BUG_HUNTER_LEVEL_2 = addPreset(1 shl 14)
-        @JvmField val VERIFIED_BOT = addPreset(1 shl 16)
-        @JvmField val VERIFIED_DEVELOPER = addPreset(1 shl 17)
-        @JvmField val CERTIFIED_MODERATOR = addPreset(1 shl 18)
-        @JvmField val BOT_HTTP_INTERACTIONS = addPreset(1 shl 19)
-        @JvmField val ACTIVE_DEVELOPER = addPreset(1 shl 22)
+        @JvmField val STAFF = addPreset((1 shl 0).toBigInteger())
+        @JvmField val PARTNER = addPreset((1 shl 1).toBigInteger())
+        @JvmField val HYPESQUAD = addPreset((1 shl 2).toBigInteger())
+        @JvmField val BUG_HUNTER_LEVEL_1 = addPreset((1 shl 3).toBigInteger())
+        @JvmField val HYPESQUAD_ONLINE_HOUSE_1 = addPreset((1 shl 6).toBigInteger())
+        @JvmField val HYPESQUAD_ONLINE_HOUSE_2 = addPreset((1 shl 7).toBigInteger())
+        @JvmField val HYPESQUAD_ONLINE_HOUSE_3 = addPreset((1 shl 8).toBigInteger())
+        @JvmField val PREMIUM_EARLY_SUPPORTER = addPreset((1 shl 9).toBigInteger())
+        @JvmField val TEAM_PSEUDO_USER = addPreset((1 shl 10).toBigInteger())
+        @JvmField val BUG_HUNTER_LEVEL_2 = addPreset((1 shl 14).toBigInteger())
+        @JvmField val VERIFIED_BOT = addPreset((1 shl 16).toBigInteger())
+        @JvmField val VERIFIED_DEVELOPER = addPreset((1 shl 17).toBigInteger())
+        @JvmField val CERTIFIED_MODERATOR = addPreset((1 shl 18).toBigInteger())
+        @JvmField val BOT_HTTP_INTERACTIONS = addPreset((1 shl 19).toBigInteger())
+        @JvmField val ACTIVE_DEVELOPER = addPreset((1 shl 22).toBigInteger())
         
-        override fun createValue(newKey: Int): UserFlag
+        override fun createValue(newKey: BigInteger): UserFlag
             = UserFlag(newKey)
     }
 }
@@ -506,7 +563,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class UserPremiumType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, UserPremiumType>() {
+    companion object Presets : ExtensibleEnum<Int, UserPremiumType>() {
         
         @JvmField val NONE = addPreset(0)
         @JvmField val NITRO_CLASSIC = addPreset(1)
@@ -522,7 +579,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class UserNameplatePalette
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
-    companion object : ExtensibleEnum<String, UserNameplatePalette>() {
+    companion object Presets : ExtensibleEnum<String, UserNameplatePalette>() {
         
         @JvmField val CRIMSON = addPreset("crimson")
         @JvmField val BERRY = addPreset("berry")
@@ -545,7 +602,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 @ConsistentCopyVisibility
 data class TeamMembershipState
 private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, TeamMembershipState>() {
+    companion object Presets : ExtensibleEnum<Int, TeamMembershipState>() {
         
         @JvmField val INVITED = addPreset(1)
         @JvmField val ACCEPTED = addPreset(2)
@@ -559,7 +616,7 @@ private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class TeamMemberRole 
 private constructor(override val key: String?) : ExtensibleEnumValue<String?> {
-    companion object : ExtensibleEnum<String?, TeamMemberRole>() {
+    companion object Presets : ExtensibleEnum<String?, TeamMemberRole>() {
         
         @JvmField val OWNER = addPreset(null)
         @JvmField val ADMIN = addPreset("admin")
@@ -574,7 +631,7 @@ private constructor(override val key: String?) : ExtensibleEnumValue<String?> {
 @ConsistentCopyVisibility
 data class ApplicationEventWebhookStatus
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ApplicationEventWebhookStatus>() {
+    companion object Presets : ExtensibleEnum<Int, ApplicationEventWebhookStatus>() {
         
         @JvmField val DISABLED = addPreset(1)
         @JvmField val ENABLED = addPreset(2)
@@ -588,7 +645,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class WebhookEventType
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
-    companion object : ExtensibleEnum<String, WebhookEventType>() {
+    companion object Presets : ExtensibleEnum<String, WebhookEventType>() {
         
         @JvmField val APPLICATION_AUTHORIZED = addPreset("APPLICATION_AUTHORIZED")
         @JvmField val APPLICATION_DEAUTHORIZED = addPreset("APPLICATION_DEAUTHORIZED")
@@ -603,7 +660,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 @ConsistentCopyVisibility
 data class GuildVerificationLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildVerificationLevel>() {
+    companion object Presets : ExtensibleEnum<Int, GuildVerificationLevel>() {
         
         @JvmField val NONE = addPreset(0)
         @JvmField val LOW = addPreset(1)
@@ -619,7 +676,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildExplicitContentFilterLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildExplicitContentFilterLevel>() {
+    companion object Presets : ExtensibleEnum<Int, GuildExplicitContentFilterLevel>() {
         
         @JvmField val DISABLED = addPreset(0)
         @JvmField val MEMBERS_WITHOUT_ROLES = addPreset(1)
@@ -633,7 +690,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildDefaultMessageNotificationLevel
 private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildDefaultMessageNotificationLevel>() {
+    companion object Presets : ExtensibleEnum<Int, GuildDefaultMessageNotificationLevel>() {
         
         @JvmField val ALL_MESSAGES = addPreset(0)
         @JvmField val ONLY_MENTIONS = addPreset(1)
@@ -646,7 +703,7 @@ private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildFeature
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
-    companion object : ExtensibleEnum<String, GuildFeature>() {
+    companion object Presets : ExtensibleEnum<String, GuildFeature>() {
         
         @JvmField val ANIMATED_BANNER = addPreset("ANIMATED_BANNER")
         @JvmField val ANIMATED_ICON = addPreset("ANIMATED_ICON")
@@ -688,7 +745,7 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
 @ConsistentCopyVisibility
 data class GuildNsfwLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildNsfwLevel>() {
+    companion object Presets : ExtensibleEnum<Int, GuildNsfwLevel>() {
         
         @JvmField val DEFAULT = addPreset(0)
         @JvmField val EXPLICIT = addPreset(1)
@@ -703,7 +760,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildPremiumTier
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildPremiumTier>() {
+    companion object Presets : ExtensibleEnum<Int, GuildPremiumTier>() {
         
         @JvmField val NONE = addPreset(0)
         @JvmField val TIER_1 = addPreset(1)
@@ -718,7 +775,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class ChannelType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, ChannelType>() {
+    companion object Presets : ExtensibleEnum<Int, ChannelType>() {
         
         @JvmField val GUILD_TEXT = addPreset(0)
         @JvmField val DM = addPreset(1)
@@ -742,7 +799,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class EntitlementType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, EntitlementType>() {
+    companion object Presets : ExtensibleEnum<Int, EntitlementType>() {
         
         @JvmField val PURCHASE = addPreset(1)
         @JvmField val PREMIUM_SUBSCRIPTION = addPreset(2)
@@ -761,7 +818,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class EntitlementOwnerType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, EntitlementOwnerType>() {
+    companion object Presets : ExtensibleEnum<Int, EntitlementOwnerType>() {
 
         @JvmField val GUILD_SUBSCRIPTION = addPreset(1)
         @JvmField val USER_SUBSCRIPTION = addPreset(2)
@@ -774,7 +831,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildScheduledEventPrivacyLevel
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildScheduledEventPrivacyLevel>() {
+    companion object Presets : ExtensibleEnum<Int, GuildScheduledEventPrivacyLevel>() {
         
         @JvmField val GUILD_ONLY = addPreset(2)
         
@@ -786,7 +843,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildScheduledEventEntityType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildScheduledEventEntityType>() {
+    companion object Presets : ExtensibleEnum<Int, GuildScheduledEventEntityType>() {
         
         @JvmField val STAGE_INSTANCE = addPreset(1)
         @JvmField val VOICE = addPreset(2)
@@ -800,7 +857,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class GuildScheduledEventStatus
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, GuildScheduledEventStatus>() {
+    companion object Presets : ExtensibleEnum<Int, GuildScheduledEventStatus>() {
 
         @JvmField val SCHEDULED = addPreset(1)
         @JvmField val ACTIVE = addPreset(2)
@@ -815,7 +872,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class RecurrenceRuleFrequency
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, RecurrenceRuleFrequency>() {
+    companion object Presets : ExtensibleEnum<Int, RecurrenceRuleFrequency>() {
 
         @JvmField val YEARLY = addPreset(0)
         @JvmField val MONTHLY = addPreset(1)
@@ -830,7 +887,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class RecurrenceRuleWeekday
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, RecurrenceRuleWeekday>() {
+    companion object Presets : ExtensibleEnum<Int, RecurrenceRuleWeekday>() {
 
         @JvmField val MONDAY = addPreset(0)
         @JvmField val TUESDAY = addPreset(1)
@@ -848,7 +905,7 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 @ConsistentCopyVisibility
 data class RecurrenceRuleMonth
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
-    companion object : ExtensibleEnum<Int, RecurrenceRuleMonth>() {
+    companion object Presets : ExtensibleEnum<Int, RecurrenceRuleMonth>() {
 
         @JvmField val JANUARY = addPreset(1)
         @JvmField val FEBRUARY = addPreset(2)
@@ -865,6 +922,63 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): RecurrenceRuleMonth
             = RecurrenceRuleMonth(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class InviteType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, InviteType>() {
+        
+        @JvmField val GUILD = addPreset(0)
+        @JvmField val GROUP_DM = addPreset(1)
+        @JvmField val FRIEND = addPreset(2)
+        
+        override fun createValue(newKey: Int): InviteType
+            = InviteType(newKey)
+    }
+    
+}
+
+@ConsistentCopyVisibility
+data class InviteTargetType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, InviteTargetType>() {
+        
+        @JvmField val STREAM = addPreset(1)
+        @JvmField val EMBEDDED_APPLICATION = addPreset(2)
+        
+        override fun createValue(newKey: Int): InviteTargetType
+            = InviteTargetType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class SkuType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, SkuType>() {
+        
+        @JvmField val DURABLE = addPreset(2)
+        @JvmField val CONSUMABLE = addPreset(3)
+        @JvmField val SUBSCRIPTION = addPreset(5)
+        @JvmField val SUBSCRIPTION_GROUP = addPreset(6)
+        
+        override fun createValue(newKey: Int): SkuType
+            = SkuType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class SkuFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, SkuFlag>() {
+
+        @JvmField val AVAILABLE = addPreset((1 shl 2).toBigInteger())
+        @JvmField val GUILD_SUBSCRIPTION = addPreset((1 shl 7).toBigInteger())
+        @JvmField val USER_SUBSCRIPTION = addPreset((1 shl 8).toBigInteger())
+
+        override fun createValue(newKey: BigInteger): SkuFlag
+            = SkuFlag(newKey)
     }
 }
 

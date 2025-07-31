@@ -1,7 +1,6 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.user
 
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
-import xyz.darkcomet.cogwheel.framework.models.PartialUser
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
 data class User(
@@ -18,9 +17,9 @@ data class User(
     val locale: DiscordLocale?,
     val verified: Boolean?,
     val email: String?,
-    val flags: UserFlag?,
+    val flags: Bitmask<UserFlag>?,
     val premiumType: UserPremiumType?,
-    val publicFlags: UserFlag?,
+    val publicFlags: Bitmask<UserFlag>?,
     val avatarDecorationData: UserAvatarDecorationData?,
     val collectibles: UserCollectibles?,
     val primaryGuild: UserPrimaryGuild?

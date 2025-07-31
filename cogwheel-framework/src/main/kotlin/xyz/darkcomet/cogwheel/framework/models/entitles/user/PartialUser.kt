@@ -1,6 +1,7 @@
-package xyz.darkcomet.cogwheel.framework.models
+package xyz.darkcomet.cogwheel.framework.models.entitles.user
 
 import xyz.darkcomet.cogwheel.core.network.objects.UserObject
+import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
 
 open class PartialUser(
     open val username: String?,

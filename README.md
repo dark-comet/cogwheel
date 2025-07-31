@@ -10,14 +10,14 @@ Cogwheel is a Discord API library written in Kotlin, for building robust and tes
 Discord bots in Kotlin or Java. Other JVM-based languages may be supported but are not the 
 intended target audience.
 
-The main goal of Cogwheel is to enable bot developers across all levels to focus on their 
-own bot's behavior, and not be bogged down by API-specifics or library implementation details. 
+The main goal of Cogwheel is to provide developers with a Discord API library that is intuitive and 
+'just works' -- not to be bogged down by low level semantics or library implementation details. 
 
 To that end:
-- The public API is designed with developer productivity and self-documentation in mind.
-- The framework uses high-level domain models to allow the succinct expression of ideas.
-- Strongly typed domain primitives to prevent API misuse.
-- Comprehensively enumerated API option values to save time cross-checking Discord's 
+- The public API is designed to be intuitive, unmistakable, and self-documenting.
+- The framework uses high-level domain models for succinctness. Assuming moderate general-purpose use, 
+  performance is not a top concern.
+- Comprehensively enumerated option values to save time cross-checking Discord's 
   official documentation.
 
 It is a key design goal for Cogwheel to be intuitive to use, easy to get started, 

@@ -3,6 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventEntityMetadataObject
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
 
 class GuildScheduledEventEntityMetadata(
@@ -15,10 +16,22 @@ class GuildScheduledEventEntityMetadata(
     }
     
     internal fun toObject(): GuildScheduledEventEntityMetadataObject {
-//        return GuildScheduledEventEntityMetadataObject(
-//            location = location // TODO: Discern between MaybeAbsent<T>?
-//        )
-        TODO()
+        return GuildScheduledEventEntityMetadataObject(
+            location = if (location != null) MaybeAbsent(location) else null
+        )
+    }
+    
+    class BuilderSpec {
+        private var location: String? = null
+        
+        fun location(location: String?): BuilderSpec
+            = apply { this.location = location }
+        
+        fun build(): GuildScheduledEventEntityMetadata {
+            return GuildScheduledEventEntityMetadata(
+                location = this.location
+            )
+        }
     }
 }
 

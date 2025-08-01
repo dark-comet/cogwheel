@@ -1321,7 +1321,7 @@ data class StageInstanceObject(
     val topic: MaybeAbsent<String>? = null,
     @SerialName("privacy_level") val privacyLevel: MaybeAbsent<Int>? = null,
     @SerialName("discoverable_disabled") val discoverableDisabled: MaybeAbsent<Boolean>? = null,
-    @SerialName("guild_scheduled_event_id") val guildScheduledEventId: MaybeAbsent<Snowflake>? = null,
+    @SerialName("guild_scheduled_event_id") val guildScheduledEventId: MaybeAbsent<Snowflake?>? = null,
 )
 
 @Serializable

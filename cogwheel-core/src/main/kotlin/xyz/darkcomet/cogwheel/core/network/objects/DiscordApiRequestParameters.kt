@@ -2,7 +2,9 @@ package xyz.darkcomet.cogwheel.core.network.objects
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.darkcomet.cogwheel.core.primitives.*
+import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
+import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
+import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 
 @Serializable
 data class AddGuildMemberRequestParameters(
@@ -153,9 +155,9 @@ data class CreateGuildScheduledEventRequestParameters(
 data class CreateGuildSoundboardSoundRequestParameters(
     val name: String,
     val sound: String,
-    val volume: MaybeAbsent<Double>? = null,
-    @SerialName("emoji_id") val emojiId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("emoji_name") val emojiName: MaybeAbsent<String>? = null
+    val volume: MaybeAbsent<Double?>? = null,
+    @SerialName("emoji_id") val emojiId: MaybeAbsent<Snowflake?>? = null,
+    @SerialName("emoji_name") val emojiName: MaybeAbsent<String?>? = null
 )
 
 @Serializable
@@ -490,9 +492,10 @@ data class ModifyGuildScheduledEventRequestParameters(
 @Serializable
 data class ModifyGuildSoundboardSoundRequestParameters(
     val name: MaybeAbsent<String>? = null,
-    val volume: MaybeAbsent<Double>? = null,
-    @SerialName("emoji_id") val emojiId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("emoji_name") val emojiName: MaybeAbsent<String>? = null
+    val sound: MaybeAbsent<String>? = null,
+    val volume: MaybeAbsent<Double?>? = null,
+    @SerialName("emoji_id") val emojiId: MaybeAbsent<Snowflake?>? = null,
+    @SerialName("emoji_name") val emojiName: MaybeAbsent<String?>? = null
 )
 
 @Serializable
@@ -555,7 +558,7 @@ data class ModifyWebhookRequestParameters(
 @Serializable
 data class SendSoundboardSoundRequestParameters(
     @SerialName("sound_id") val soundId: Snowflake,
-    @SerialName("source_guild_id") val sourceGuildId: Snowflake,
+    @SerialName("source_guild_id") val sourceGuildId: MaybeAbsent<Snowflake>? = null,
 )
 
 @Serializable

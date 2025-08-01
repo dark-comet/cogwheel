@@ -61,3 +61,11 @@ fun Snowflake.asGuildScheduledEventId(): GuildScheduledEventId {
 fun Snowflake.asMessageId(): MessageId {
     return MessageId(this)
 }
+
+fun Snowflake.asSoundboardSoundId(): SoundboardSoundId {
+    return SoundboardSoundId(this)
+}
+
+fun Snowflake.asStageInstanceId(): StageInstanceId {
+    return StageInstanceId(this)
+}

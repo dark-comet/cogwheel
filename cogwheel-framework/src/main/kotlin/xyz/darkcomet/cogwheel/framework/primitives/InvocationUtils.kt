@@ -101,7 +101,7 @@ abstract class RequestInvocationS<TRequestSpec, TResponse> {
         return invoke(req)
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     fun async(config: Consumer<TRequestSpec>? = null) : Future<Response<TResponse>> {
         val req = createRequest()
         config?.accept(req)
@@ -115,7 +115,7 @@ abstract class RequestInvocationS<TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     fun block(config: Consumer<TRequestSpec>? = null) : Response<TResponse> {
         
         val req = createRequest()
@@ -148,7 +148,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
         return invoke(req)
     }
 
-    @JvmOverloads
+//    @JvmOverloads 
     open fun async(
         p1: P1,
         config: Consumer<TRequestSpec>? = null
@@ -166,7 +166,7 @@ abstract class RequestInvocation1S<P1, TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     open fun block(
         p1: P1,
         config: Consumer<TRequestSpec>? = null
@@ -190,7 +190,7 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
 
     abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
 
-    suspend operator fun invoke(
+    open suspend operator fun invoke(
         p1: P1, 
         p2: P2,
         request: TRequestSpec? = null,
@@ -203,7 +203,7 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
         return invoke(req)
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     open fun async(
         p1: P1, 
         p2: P2, 
@@ -222,7 +222,7 @@ abstract class RequestInvocation2S<P1, P2, TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     open fun block(
         p1: P1, 
         p2: P2, 
@@ -247,7 +247,7 @@ abstract class RequestInvocation3S<P1, P2, P3, TRequestSpec, TResponse> {
     
     abstract suspend operator fun invoke(request: TRequestSpec) : Response<TResponse>
     
-    suspend operator fun invoke(
+    open suspend operator fun invoke(
         p1: P1, 
         p2: P2, 
         p3: P3,
@@ -261,7 +261,7 @@ abstract class RequestInvocation3S<P1, P2, P3, TRequestSpec, TResponse> {
         return invoke(req)
     }
 
-    @JvmOverloads
+//    @JvmOverloads
     open fun async(
         p1: P1, 
         p2: P2, 
@@ -281,7 +281,7 @@ abstract class RequestInvocation3S<P1, P2, P3, TRequestSpec, TResponse> {
             .asCompletableFuture()
     }
     
-    @JvmOverloads
+//    @JvmOverloads
     open fun block(
         p1: P1, 
         p2: P2, 

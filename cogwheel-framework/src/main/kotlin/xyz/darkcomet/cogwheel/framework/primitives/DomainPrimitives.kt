@@ -36,6 +36,10 @@ data class GuildScheduledEventId(val snowflake: Snowflake)
 
 data class MessageId(val snowflake: Snowflake)
 
+data class SoundboardSoundId(val snowflake: Snowflake)
+
+data class StageInstanceId(val snowflake: Snowflake)
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -993,6 +997,19 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         
         override fun createValue(newKey: Int): PollLayoutType
             = PollLayoutType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class StageInstancePrivacyLevel
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, StageInstancePrivacyLevel>() {
+
+        @JvmField val PUBLIC = addPreset(1)
+        @JvmField val GUILD_ONLY = addPreset(2)
+
+        override fun createValue(newKey: Int): StageInstancePrivacyLevel
+            = StageInstancePrivacyLevel(newKey)
     }
 }
 

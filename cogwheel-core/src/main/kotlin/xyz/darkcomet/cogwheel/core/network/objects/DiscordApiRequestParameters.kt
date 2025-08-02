@@ -501,7 +501,7 @@ data class ModifyGuildSoundboardSoundRequestParameters(
 @Serializable
 data class ModifyGuildStickerRequestParameters(
     val name: MaybeAbsent<String>? = null,
-    val description: MaybeAbsent<String>? = null,
+    val description: MaybeAbsent<String?>? = null,
     val tags: MaybeAbsent<String>? = null
 )
 

@@ -11,8 +11,19 @@ import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 class SubscriptionResource 
 internal constructor(private val httpClient: CwHttpClient) {
     
-    suspend fun listSkuSubscriptions(skuId: Snowflake): CwHttpResponse<List<SubscriptionObject>> {
-        val httpRequest = CwHttpRequest.create(GET, "/skus/${skuId}/subscriptions")
+    suspend fun listSkuSubscriptions(
+        skuId: Snowflake,
+        before: Snowflake? = null,
+        after: Snowflake? = null,
+        limit: Int? = null,
+        userId: Snowflake? = null,
+    ): CwHttpResponse<List<SubscriptionObject>> {
+        val httpRequest = CwHttpRequest.create(GET, "/skus/${skuId}/subscriptions") {
+            optionalQueryStringParam("before", before)
+            optionalQueryStringParam("after", after)
+            optionalQueryStringParam("limit", limit)
+            optionalQueryStringParam("user_id", userId)
+        }
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ListSerializer(SubscriptionObject.serializer()))

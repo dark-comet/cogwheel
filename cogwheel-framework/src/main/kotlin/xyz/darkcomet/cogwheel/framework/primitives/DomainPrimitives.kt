@@ -40,6 +40,10 @@ data class SoundboardSoundId(val snowflake: Snowflake)
 
 data class StageInstanceId(val snowflake: Snowflake)
 
+data class StickerId (val snowflake: Snowflake)
+
+data class StickerPackId(val snowflake: Snowflake)
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -1010,6 +1014,48 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): StageInstancePrivacyLevel
             = StageInstancePrivacyLevel(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class StickerType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, StickerType>() {
+        
+        @JvmField val STANDARD = addPreset(1)
+        @JvmField val GUILD = addPreset(2)
+        
+        override fun createValue(newKey: Int): StickerType
+            = StickerType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class StickerFormatType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, StickerFormatType>() {
+        
+        @JvmField val PNG = addPreset(1)
+        @JvmField val APNG = addPreset(2)
+        @JvmField val LOTTIE = addPreset(3)
+        @JvmField val GIF = addPreset(4)
+        
+        override fun createValue(newKey: Int): StickerFormatType
+            = StickerFormatType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class SubscriptionStatus 
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, SubscriptionStatus>() {
+        
+        @JvmField val ACTIVE = addPreset(0)
+        @JvmField val ENDING = addPreset(1)
+        @JvmField val INACTIVE = addPreset(2)
+        
+        override fun createValue(newKey: Int): SubscriptionStatus
+            = SubscriptionStatus(newKey)
     }
 }
 

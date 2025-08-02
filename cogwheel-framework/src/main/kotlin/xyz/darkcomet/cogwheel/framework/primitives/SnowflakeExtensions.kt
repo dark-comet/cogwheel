@@ -69,3 +69,11 @@ fun Snowflake.asSoundboardSoundId(): SoundboardSoundId {
 fun Snowflake.asStageInstanceId(): StageInstanceId {
     return StageInstanceId(this)
 }
+
+fun Snowflake.asStickerId(): StickerId {
+    return StickerId(this)
+}
+
+fun Snowflake.asStickerPackId(): StickerPackId {
+    return StickerPackId(this)
+}

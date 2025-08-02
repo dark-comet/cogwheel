@@ -13,7 +13,7 @@ class StageInstance(
     val channelId: ChannelId,
     val topic: String,
     val privacyLevel: StageInstancePrivacyLevel,
-    val discoverableDisabled: Boolean,
+    @Deprecated("to be removed by Discord API") val discoverableDisabled: Boolean,
     val guildScheduledEventId: GuildScheduledEventId?
 ) {
     companion object {

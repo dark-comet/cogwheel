@@ -345,7 +345,7 @@ data class ModifyCurrentUserRequestParameters(
 data class ModifyCurrentUserVoiceStateRequestParameters(
     @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake>? = null,
     val suppress: MaybeAbsent<Boolean>? = null,
-    @SerialName("request_to_speak_timestamp") val requestToSpeakTimestamp: MaybeAbsent<ISO8601Timestamp>? = null
+    @SerialName("request_to_speak_timestamp") val requestToSpeakTimestamp: MaybeAbsent<ISO8601Timestamp?>? = null
 )
 
 @Serializable

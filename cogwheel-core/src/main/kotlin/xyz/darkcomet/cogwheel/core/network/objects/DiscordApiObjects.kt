@@ -1476,25 +1476,17 @@ data class UserPrimaryGuildObject(
 
 @Serializable
 data class VoiceRegionObject(
-    @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("user_id") val userId: MaybeAbsent<Snowflake>? = null,
-    val member: MaybeAbsent<GuildMemberObject>? = null,
-    @SerialName("session_id") val sessionId: MaybeAbsent<String>? = null,
-    val deaf: MaybeAbsent<Boolean>? = null,
-    val mute: MaybeAbsent<Boolean>? = null,
-    @SerialName("self_deaf") val selfDeaf: MaybeAbsent<Boolean>? = null,
-    @SerialName("self_mute") val selfMute: MaybeAbsent<Boolean>? = null,
-    @SerialName("self_stream") val selfStream: MaybeAbsent<Boolean>? = null,
-    @SerialName("self_video") val selfVideo: MaybeAbsent<Boolean>? = null,
-    val suppress: MaybeAbsent<Boolean>? = null,
-    @SerialName("request_to_speak_timestamp") val requestToSpeakTimestamp: MaybeAbsent<ISO8601Timestamp>? = null
+    val id: MaybeAbsent<String>? = null,
+    val name: MaybeAbsent<String>? = null,
+    val optimal: MaybeAbsent<Boolean>? = null,
+    val deprecated: MaybeAbsent<Boolean>? = null,
+    val custom: MaybeAbsent<Boolean>? = null
 )
 
 @Serializable
 data class VoiceStateObject(
     @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake>? = null,
+    @SerialName("channel_id") val channelId: MaybeAbsent<Snowflake?>? = null,
     @SerialName("user_id") val userId: MaybeAbsent<Snowflake>? = null,
     val member: MaybeAbsent<GuildMemberObject>? = null,
     @SerialName("session_id") val sessionId: MaybeAbsent<String>? = null,

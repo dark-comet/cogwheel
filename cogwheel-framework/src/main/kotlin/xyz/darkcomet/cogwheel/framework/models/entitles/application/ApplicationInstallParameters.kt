@@ -3,14 +3,14 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.application
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.primitives.Bitmask
+import xyz.darkcomet.cogwheel.framework.primitives.BitField
 import xyz.darkcomet.cogwheel.framework.primitives.OAuth2Scope
 import xyz.darkcomet.cogwheel.framework.primitives.Permission
 import java.math.BigInteger
 
 class ApplicationInstallParameters(
     val scopes: List<OAuth2Scope>,
-    val permissions: Bitmask<Permission>
+    val permissions: BitField<Permission>
 ) {
     internal fun toObject(): ApplicationInstallParamsObject {
         return ApplicationInstallParamsObject(
@@ -29,15 +29,15 @@ class ApplicationInstallParameters(
     
     class BuilderSpec {
         private var scopes: List<OAuth2Scope> = ArrayList(1)
-        private var permissions: Bitmask<Permission> = Bitmask(BigInteger("0", 10))
+        private var permissions: BitField<Permission> = BitField(BigInteger("0", 10))
         
         fun scopes(vararg scopes: OAuth2Scope): BuilderSpec
             = apply { this.scopes = scopes.toList() }
         
         fun permissions(vararg permissions: Permission): BuilderSpec 
-            = apply { this.permissions = Bitmask.from(*permissions) }
+            = apply { this.permissions = BitField.from(*permissions) }
         
-        fun permissions(permissions: Bitmask<Permission>): BuilderSpec
+        fun permissions(permissions: BitField<Permission>): BuilderSpec
             = apply { this.permissions = permissions }
         
         fun build(): ApplicationInstallParameters {
@@ -49,6 +49,6 @@ class ApplicationInstallParameters(
 internal fun ApplicationInstallParamsObject.toModel(): ApplicationInstallParameters {
     return ApplicationInstallParameters(
         scopes = requireNonNull(this, ApplicationInstallParamsObject::scopes).map { OAuth2Scope.fromOrAdd(it) },
-        permissions = requireNonNull(this, ApplicationInstallParamsObject::permissions).let { Bitmask.from(it) }
+        permissions = requireNonNull(this, ApplicationInstallParamsObject::permissions).let { BitField.from(it) }
     )
 }

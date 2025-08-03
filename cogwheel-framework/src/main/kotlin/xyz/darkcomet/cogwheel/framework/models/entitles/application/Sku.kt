@@ -12,7 +12,7 @@ class Sku(
     applicationId: ApplicationId,
     name: String,
     slug: String,
-    flags: Bitmask<SkuFlag>
+    flags: BitField<SkuFlag>
 ) {
     companion object {
         internal fun from(obj: SkuObject): Sku {
@@ -28,6 +28,6 @@ internal fun SkuObject.toModel(): Sku {
         applicationId = requireNonNull(this, SkuObject::applicationId).asApplicationId(),
         name = requireNonNull(this, SkuObject::name),
         slug = requireNonNull(this, SkuObject::slug),
-        flags = requireNonNull(this, SkuObject::flags).let { Bitmask.from(it) }
+        flags = requireNonNull(this, SkuObject::flags).let { BitField.from(it) }
     )
 }

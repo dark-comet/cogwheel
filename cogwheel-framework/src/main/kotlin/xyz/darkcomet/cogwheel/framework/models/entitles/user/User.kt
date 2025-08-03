@@ -17,9 +17,9 @@ data class User(
     val locale: DiscordLocale?,
     val verified: Boolean?,
     val email: String?,
-    val flags: Bitmask<UserFlag>?,
+    val flags: BitField<UserFlag>?,
     val premiumType: UserPremiumType?,
-    val publicFlags: Bitmask<UserFlag>?,
+    val publicFlags: BitField<UserFlag>?,
     val avatarDecorationData: UserAvatarDecorationData?,
     val collectibles: UserCollectibles?,
     val primaryGuild: UserPrimaryGuild?

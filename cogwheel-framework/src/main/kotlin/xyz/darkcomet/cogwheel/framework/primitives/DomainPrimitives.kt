@@ -22,6 +22,8 @@ data class RoleId(val snowflake: Snowflake)
 
 data class ChannelId(val snowflake: Snowflake)
 
+data class ChannelForumTagId(val snowflake: Snowflake)
+
 data class EmojiId(val snowflake: Snowflake)
 
 data class TeamId(val snowflake: Snowflake)
@@ -108,22 +110,22 @@ private constructor(override val key: String) : ExtensibleEnumValue<String> {
     }
 }
 
-data class Bitmask<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) {
+data class BitField<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) {
     
-    infix fun or(entry: T): Bitmask<T> {
-        return Bitmask(value or entry.key)
+    infix fun or(entry: T): BitField<T> {
+        return BitField(value or entry.key)
     }
 
-    infix fun or(otherSet: Bitmask<T>): Bitmask<T> {
-        return Bitmask(value or otherSet.value)
+    infix fun or(otherSet: BitField<T>): BitField<T> {
+        return BitField(value or otherSet.value)
     }
     
-    infix fun and(entry: T): Bitmask<T> {
-        return Bitmask(value and entry.key)
+    infix fun and(entry: T): BitField<T> {
+        return BitField(value and entry.key)
     }
     
-    infix fun and(otherSet: Bitmask<T>): Bitmask<T> {
-        return Bitmask(value and otherSet.value)
+    infix fun and(otherSet: BitField<T>): BitField<T> {
+        return BitField(value and otherSet.value)
     }
     
     fun contain(entry: T): Boolean {
@@ -140,35 +142,35 @@ data class Bitmask<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) {
     
     companion object {
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> from(vararg entries: T) : Bitmask<T> {
+        fun <T : ExtensibleEnumValue<BigInteger>> from(vararg entries: T) : BitField<T> {
             val value = entries.fold(BigInteger.ZERO) { acc, entry ->
                 acc or entry.key
             }
-            return Bitmask(value)
+            return BitField(value)
         }
         
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> from(base10String: String): Bitmask<T> {
+        fun <T : ExtensibleEnumValue<BigInteger>> from(base10String: String): BitField<T> {
             val value = BigInteger(base10String, 10)
-            return Bitmask(value)
+            return BitField(value)
         }
         
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Int): Bitmask<T> {
-            return Bitmask(value.toBigInteger())
+        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Int): BitField<T> {
+            return BitField(value.toBigInteger())
         }
 
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Long): Bitmask<T> {
-            return Bitmask(value.toBigInteger())
+        fun <T : ExtensibleEnumValue<BigInteger>> from(value: Long): BitField<T> {
+            return BitField(value.toBigInteger())
         }
         
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> allOf(enumSet: ExtensibleEnum<BigInteger, T>) : Bitmask<T> {
+        fun <T : ExtensibleEnumValue<BigInteger>> allOf(enumSet: ExtensibleEnum<BigInteger, T>) : BitField<T> {
             val value = enumSet.values().fold(BigInteger.ZERO) { acc, entry -> 
                 acc or entry.key
             }
-            return Bitmask(value)
+            return BitField(value)
         }
     }
 }
@@ -805,6 +807,61 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
             = ChannelType(newKey)
     }
 }
+
+@ConsistentCopyVisibility
+data class ChannelFlag
+private constructor(override val key: BigInteger): ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, ChannelFlag>() {
+
+        @JvmField val PINNED = addPreset((1 shl 1).toBigInteger())
+        @JvmField val REQUIRE_TAG = addPreset((1 shl 4).toBigInteger())
+        @JvmField val HIDE_MEDIA_DOWNLOAD_OPTIONS = addPreset((1 shl 15).toBigInteger())
+
+        override fun createValue(newKey: BigInteger): ChannelFlag
+                = ChannelFlag(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ChannelSortOrderType
+private constructor(override val key: Int): ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, ChannelSortOrderType>() {
+
+        @JvmField val LAST_ACTIVITY = addPreset(0)
+        @JvmField val CREATION_DATE = addPreset(1)
+
+        override fun createValue(newKey: Int): ChannelSortOrderType
+                = ChannelSortOrderType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ChannelForumLayoutType
+private constructor(override val key: Int): ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, ChannelForumLayoutType>() {
+
+        @JvmField val NOT_SET = addPreset(0)
+        @JvmField val LIST_VIEW = addPreset(1)
+        @JvmField val GALLERY_VIEW = addPreset(2)
+
+        override fun createValue(newKey: Int): ChannelForumLayoutType
+                = ChannelForumLayoutType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ChannelVideoQualityMode
+private constructor(override val key: Int): ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, ChannelVideoQualityMode>() {
+
+        @JvmField val AUTO = addPreset(1)
+        @JvmField val FULL = addPreset(2)
+
+        override fun createValue(newKey: Int): ChannelVideoQualityMode
+                = ChannelVideoQualityMode(newKey)
+    }
+}
+
 
 @ConsistentCopyVisibility
 data class EntitlementType

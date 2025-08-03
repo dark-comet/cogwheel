@@ -34,6 +34,10 @@ fun Snowflake.asChannelId(): ChannelId {
     return ChannelId(this)
 }
 
+fun Snowflake.asChannelForumTagId(): ChannelForumTagId {
+    return ChannelForumTagId(this)
+}
+
 fun Snowflake.asEmojiId(): EmojiId {
     return EmojiId(this)
 }

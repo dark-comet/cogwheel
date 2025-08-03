@@ -15,7 +15,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.user.toModel
 import xyz.darkcomet.cogwheel.framework.models.require
 import xyz.darkcomet.cogwheel.framework.models.requireNonNull
 import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
-import xyz.darkcomet.cogwheel.framework.primitives.Bitmask
+import xyz.darkcomet.cogwheel.framework.primitives.BitField
 import xyz.darkcomet.cogwheel.framework.primitives.GuildInviteFlag
 import xyz.darkcomet.cogwheel.framework.primitives.InviteTargetType
 import xyz.darkcomet.cogwheel.framework.primitives.InviteType
@@ -35,7 +35,7 @@ class Invite(
     val expiresAt: ISO8601Timestamp?,
     @Deprecated("to be removed by Discord API") val stageInstance: InviteStageInstance?,
     val guildScheduledEvent: GuildScheduledEvent?,
-    val flags: Bitmask<GuildInviteFlag>?
+    val flags: BitField<GuildInviteFlag>?
 ) {
     companion object {
         internal fun from(obj:  InviteObject): Invite {
@@ -59,6 +59,6 @@ internal fun InviteObject.toModel(): Invite {
         expiresAt = this.expiresAt?.value,
         stageInstance = requireNonNullIfPresent(this, InviteObject::stageInstance)?.toModel(),
         guildScheduledEvent = requireNonNullIfPresent(this, InviteObject::guildScheduledEvent)?.toModel(),
-        flags = requireNonNullIfPresent(this, InviteObject::flags)?.let { Bitmask.from(it) }
+        flags = requireNonNullIfPresent(this, InviteObject::flags)?.let { BitField.from(it) }
     )
 }

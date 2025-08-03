@@ -5,5 +5,5 @@ plugins {
 
 rootProject.name = "Cogwheel"
 
-include(":cogwheel-core")
-include(":cogwheel-framework")
+include(":core")
+include(":framework")

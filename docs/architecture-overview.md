@@ -26,7 +26,7 @@ subscribed to in `CwDiscordClient` (core) or in `DiscordClient` (framework). The
 
 ## Design Philosophy
 
-**For `cogwheel-core`**
+**For `core`**
 * The module should match Discord API as closely as possible, so to facilitate easy lookup of objects
 and API definitions for developers reading through Discord's official documentation.
 * Data models and public API should be defined in a way that maximizes compatibility with any 
@@ -38,8 +38,8 @@ developer to handle, or ignored.
 Discord API results in a new version of the `core` library, rather than attempting to support bot 
 developers to define new models or resources.
 
-**For `cogwheel-framework`**
+**For `framework`**
 * This module should make development with the framework as intuitive, concise and secure as possible. 
 In particular, this refers to providing idiomatic public APIs, and making use of stricter data types. 
 * This module is only focused on supporting the intended target Discord API version.
-* This module is closed for extension from the outside, like `cogwheel-core`.
+* This module is closed for extension from the outside, like `core`.

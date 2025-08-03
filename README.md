@@ -29,13 +29,13 @@ a delightful time crafting your own bots with it.
 
 ## Getting Started
 Architecturally, the project consists of two layers: 
-- `cogwheel-core` is the low-level module that defines the data transfer objects (DTOs) 
+- `core` is the low-level module that defines the data transfer objects (DTOs) 
    and the core network infrastructure to interface with Discord's REST and Gateway APIs.
-- `cogwheel-framework` builds on top of `cogwheel-core`, providing a set of opinionated, 
+- `framework` builds on top of `core`, providing a set of opinionated, 
    high-level, domain-driven language constructs. 
 
-In most cases, `cogwheel-framework` is the recommended dependency to quickly get started 
-with building your bot. Use `cogwheel-core` only if you want to provide a different set of 
+In most cases, `framework` is the recommended dependency to quickly get started 
+with building your bot. Use `core` only if you want to provide a different set of 
 high level constructs, without repeating the dry work of repeating low-level infrastructure.
 
 
@@ -43,7 +43,7 @@ high level constructs, without repeating the dry work of repeating low-level inf
 You may skip this section if you are only using the library lightly, or for basic bot functionality.
 For experts looking to make extensive use of the library, take note of the following.
 
-- `cogwheel-framework` models enumerated values (select option types, guild features, etc.)
+- `framework` models enumerated values (select option types, guild features, etc.)
   using `ExtensibleEnum<T>` to facilitate the discovery of new option values while the application is
   running. This is to allow the framework to safely handle newly introduced values from the 
   API. So **there is a very rare (but not non-existent) possibility that the full set of enumerable 

@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     implementation(libs.guava)
-    implementation(project(":cogwheel-core"))
+    implementation(project(":core"))
 
     testImplementation(libs.junit.jupiter.engine)
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

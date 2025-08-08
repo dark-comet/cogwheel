@@ -4,6 +4,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.channel
 
 import xyz.darkcomet.cogwheel.core.network.objects.ChannelObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
+import xyz.darkcomet.cogwheel.framework.models.entitles.message.Message
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.User
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
@@ -37,12 +38,13 @@ class Channel(
     val permissions: BitField<Permission>?,
     val flags: BitField<ChannelFlag>?,
     val totalMessageSent: Int?,
-    val availableTags: List<ChannelForumTag>?,
-    val appliedTags: List<ChannelForumTagId>?,
+    val availableTags: List<ForumTag>?,
+    val appliedTags: List<ForumTagId>?,
     val defaultReactionEmoji: ChannelDefaultReaction?,
     val defaultThreadRateLimitPerUser: Int?,
     val defaultSortOrder: ChannelSortOrderType?,
-    val defaultForumLayout: ChannelForumLayoutType?
+    val defaultForumLayout: ChannelForumLayoutType?,
+    val message: Message?,
 ) {
     companion object {
         internal fun from(obj: ChannelObject): Channel {

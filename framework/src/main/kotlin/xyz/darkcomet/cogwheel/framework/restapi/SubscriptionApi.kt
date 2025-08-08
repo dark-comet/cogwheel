@@ -14,76 +14,34 @@ class SubscriptionApi
 internal constructor(resource: SubscriptionResource) {
     
     @JvmField
-    val list = ListSkuSubscriptionsEndpoint(resource)
+    val list = object : RequestInvocation1S<SkuId, ListSkuSubscriptionsRequestSpec, List<Subscription>>() {
+        
+        override fun createRequest(p1: SkuId): ListSkuSubscriptionsRequestSpec {
+            return ListSkuSubscriptionsRequestSpec(p1)
+        }
+
+        override suspend fun invoke(request: ListSkuSubscriptionsRequestSpec): Response<List<Subscription>> {
+            val response = resource.listSkuSubscriptions(request.skuId.snowflake)
+            val result = response.data?.map { it.toModel() }
+
+            return Response(result, response)
+        }
+
+    }
     
     @JvmField
-    val get = GetSkuSubscriptionsEndpoint(resource)
+    val get = object : Invocation2<SkuId, SubscriptionId, Subscription>() {
+        
+        override suspend fun invoke(
+            p1: SkuId,
+            p2: SubscriptionId
+        ): Response<Subscription> {
+            val response = resource.getSkuSubscription(p1.snowflake, p2.snowflake)
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
     
-}
-
-class ListSkuSubscriptionsEndpoint
-internal constructor(private val resource: SubscriptionResource)
-    : RequestInvocation1S<SkuId, ListSkuSubscriptionsRequestSpec, List<Subscription>>() {
-        
-    override fun createRequest(skuId: SkuId): ListSkuSubscriptionsRequestSpec {
-        return ListSkuSubscriptionsRequestSpec(skuId)
-    }
-
-    override suspend fun invoke(request: ListSkuSubscriptionsRequestSpec): Response<List<Subscription>> {
-        val response = resource.listSkuSubscriptions(request.skuId.snowflake)
-        val result = response.data?.map { it.toModel() }
-        
-        return Response(result, response)
-    }
-
-    override suspend fun invoke(
-        skuId: SkuId,
-        request: ListSkuSubscriptionsRequestSpec?,
-        config: (ListSkuSubscriptionsRequestSpec.() -> Unit)?
-    ): Response<List<Subscription>> {
-        return super.invoke(skuId, request, config)
-    }
-
-    override fun async(
-        skuId: SkuId,
-        config: Consumer<ListSkuSubscriptionsRequestSpec>?
-    ): Future<Response<List<Subscription>>> {
-        return super.async(skuId, config)
-    }
-
-    override fun block(
-        skuId: SkuId,
-        config: Consumer<ListSkuSubscriptionsRequestSpec>?
-    ): Response<List<Subscription>> {
-        return super.block(skuId, config)
-    }
-}
-
-class GetSkuSubscriptionsEndpoint
-internal constructor(private val resource: SubscriptionResource)
-    : Invocation2<SkuId, SubscriptionId, Subscription>() {
-        
-    override suspend fun invoke(
-        skuId: SkuId,
-        subscriptionId: SubscriptionId
-    ): Response<Subscription> {
-        val response = resource.getSkuSubscription(skuId.snowflake, subscriptionId.snowflake)
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override fun async(
-        skuId: SkuId,
-        subscriptionId: SubscriptionId
-    ): Future<Response<Subscription>> {
-        return super.async(skuId, subscriptionId)
-    }
-
-    override fun block(
-        skuId: SkuId,
-        subscriptionId: SubscriptionId
-    ): Response<Subscription> {
-        return super.block(skuId, subscriptionId)
-    }
 }

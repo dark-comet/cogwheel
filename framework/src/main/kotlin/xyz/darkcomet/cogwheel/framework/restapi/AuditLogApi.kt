@@ -18,51 +18,25 @@ class AuditLogApi
 internal constructor(resource: AuditLogResource) {
     
     @JvmField
-    val get = GetGuildAuditLogEndpoint(resource)
+    val get = object : RequestInvocation1S<GuildId, GetGuildAuditLogRequestSpec, GuildAuditLog>() {
+        
+        override fun createRequest(p1: GuildId): GetGuildAuditLogRequestSpec {
+            return GetGuildAuditLogRequestSpec(p1)
+        }
+
+        override suspend fun invoke(request: GetGuildAuditLogRequestSpec): Response<GuildAuditLog> {
+            val response: CwHttpResponse<GuildAuditLogObject> = resource.getGuildAuditLog(
+                guildId = request.guildId.snowflake,
+                userId = request.userId,
+                actionType = request.actionType,
+                before = request.before,
+                after = request.after,
+            )
+            val result = response.data?.toModel()
+            
+            return Response(result, response)
+        }
+        
+    }
     
-}
-
-class GetGuildAuditLogEndpoint 
-internal constructor(private val resource: AuditLogResource)
-    : RequestInvocation1S<GuildId, GetGuildAuditLogRequestSpec, GuildAuditLog>() {
-        
-    override fun createRequest(guildId: GuildId): GetGuildAuditLogRequestSpec {
-        return GetGuildAuditLogRequestSpec(guildId)
-    }
-
-    override suspend fun invoke(request: GetGuildAuditLogRequestSpec): Response<GuildAuditLog> {
-        val response: CwHttpResponse<GuildAuditLogObject> = resource.getGuildAuditLog(
-            guildId = request.guildId.snowflake,
-            userId = request.userId,
-            actionType = request.actionType,
-            before = request.before,
-            after = request.after,
-        )
-        
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override suspend fun invoke(
-        guildId: GuildId,
-        request: GetGuildAuditLogRequestSpec?,
-        config: (GetGuildAuditLogRequestSpec.() -> Unit)?
-    ): Response<GuildAuditLog> {
-        return super.invoke(guildId, request, config)
-    }
-
-    override fun async(
-        guildId: GuildId,
-        config: Consumer<GetGuildAuditLogRequestSpec>?
-    ): Future<Response<GuildAuditLog>> {
-        return super.async(guildId, config)
-    }
-
-    override fun block(
-        guildId: GuildId,
-        config: Consumer<GetGuildAuditLogRequestSpec>?
-    ): Response<GuildAuditLog> {
-        return super.block(guildId, config)
-    }
 }

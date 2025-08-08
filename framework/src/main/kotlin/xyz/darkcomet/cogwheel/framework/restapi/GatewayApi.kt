@@ -10,19 +10,15 @@ class GatewayApi
 internal constructor(resource: GatewayResource) {
     
     @JvmField
-    val getUrl = GetGatewayUrlEndpoint(resource)
-    
-}
+    val getUrl = object : Invocation0<String>() {
+        
+        override suspend fun invoke(): Response<String> {
+            val response = resource.getGatewayUrl()
+            val result = response.data?.url
 
-class GetGatewayUrlEndpoint
-internal constructor(private val resource: GatewayResource) 
-    : Invocation0<String>() {
-        
-    override suspend fun invoke(): Response<String> {
-        val response = resource.getGatewayUrl()
-        val result = response.data?.url
-        
-        return Response(result, response)
+            return Response(result, response)
+        }
+
     }
     
 }

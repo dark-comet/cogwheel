@@ -34,8 +34,8 @@ fun Snowflake.asChannelId(): ChannelId {
     return ChannelId(this)
 }
 
-fun Snowflake.asChannelForumTagId(): ChannelForumTagId {
-    return ChannelForumTagId(this)
+fun Snowflake.asForumTagId(): ForumTagId {
+    return ForumTagId(this)
 }
 
 fun Snowflake.asEmojiId(): EmojiId {
@@ -80,4 +80,8 @@ fun Snowflake.asStickerId(): StickerId {
 
 fun Snowflake.asStickerPackId(): StickerPackId {
     return StickerPackId(this)
+}
+
+fun Snowflake.asWebhookId(): WebhookId {
+    return WebhookId(this)
 }

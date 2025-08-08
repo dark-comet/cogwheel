@@ -9,79 +9,41 @@ import xyz.darkcomet.cogwheel.framework.models.request.GetInviteRequestSpec
 import xyz.darkcomet.cogwheel.framework.primitives.Invocation1
 import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
 import xyz.darkcomet.cogwheel.framework.primitives.Response
-import java.util.concurrent.Future
-import java.util.function.Consumer
 
 class InviteApi
 internal constructor(resource: InviteResource) {
     
     @JvmField
-    val get = GetInviteEndpoint(resource)
+    val get = object : RequestInvocation1S<String, GetInviteRequestSpec, Invite>() {
+        
+        override fun createRequest(p1: String): GetInviteRequestSpec {
+            return GetInviteRequestSpec(p1)
+        }
+
+        override suspend fun invoke(request: GetInviteRequestSpec): Response<Invite> {
+            val response = resource.getInvite(
+                request.inviteCode,
+                request.withCounts,
+                request.withExpiration,
+                request.guildScheduledEventId
+            )
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
     
     @JvmField
-    val delete = DeleteInviteEndpoint(resource)
+    val delete = object : Invocation1<String, Invite>() {
+        
+        override suspend fun invoke(inviteCode: String): Response<Invite> {
+            val response = resource.deleteInvite(inviteCode)
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
     
-}
-
-class GetInviteEndpoint
-internal constructor(private val resource: InviteResource)
-    : RequestInvocation1S<String, GetInviteRequestSpec, Invite>() {
-        
-    override fun createRequest(inviteCode: String): GetInviteRequestSpec {
-        return GetInviteRequestSpec(inviteCode)
-    }
-
-    override suspend fun invoke(request: GetInviteRequestSpec): Response<Invite> {
-        val response = resource.getInvite(
-            request.inviteCode,
-            request.withCounts,
-            request.withExpiration,
-            request.guildScheduledEventId
-        )
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override suspend fun invoke(
-        inviteCode: String,
-        request: GetInviteRequestSpec?,
-        config: (GetInviteRequestSpec.() -> Unit)?
-    ): Response<Invite> {
-        return super.invoke(inviteCode, request, config)
-    }
-
-    override fun async(
-        inviteCode: String,
-        config: Consumer<GetInviteRequestSpec>?
-    ): Future<Response<Invite>> {
-        return super.async(inviteCode, config)
-    }
-
-    override fun block(
-        inviteCode: String,
-        config: Consumer<GetInviteRequestSpec>?
-    ): Response<Invite> {
-        return super.block(inviteCode, config)
-    }
-}
-
-class DeleteInviteEndpoint 
-internal constructor(private val resource: InviteResource)
-    : Invocation1<String, Invite>() {
-        
-    override suspend fun invoke(inviteCode: String): Response<Invite> {
-        val response = resource.deleteInvite(inviteCode)
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override fun async(inviteCode: String): Future<Response<Invite>> {
-        return super.async(inviteCode)
-    }
-
-    override fun block(inviteCode: String): Response<Invite> {
-        return super.block(inviteCode)
-    }
 }

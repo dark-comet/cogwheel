@@ -9,67 +9,39 @@ import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.Invocation1
 import xyz.darkcomet.cogwheel.framework.primitives.Invocation2
 import xyz.darkcomet.cogwheel.framework.primitives.Response
-import java.util.concurrent.Future
 
 class ApplicationRoleConnectionMetadataApi
 internal constructor(resource: ApplicationRoleConnectionMetadataResource) {
     
     @JvmField
-    val getRecords = GetRecordsEndpoint(resource)
+    val getRecords = object : Invocation1<ApplicationId, List<ApplicationRoleConnectionMetadata>>() {
+        
+        override suspend fun invoke(p1: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
+            val response = resource.getApplicationRoleConnectionMetadataRecords(p1.snowflake);
+            val result = response.data?.map { it.toModel() }
+
+            return Response(result, response)
+        }
+        
+    }
     
+    // TODO: Convert p2 to RequestSpec
     @JvmField
-    val updateRecords = UpdateRecordsEndpoint(resource)
+    val updateRecords = object : Invocation2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
+        
+        override suspend fun invoke(
+            p1: ApplicationId,
+            p2: List<ApplicationRoleConnectionMetadata>
+        ): Response<List<ApplicationRoleConnectionMetadata>> {
+            val applicationId = p1.snowflake
+            val newRecords = p2.map { it.toObject() }
+
+            val response = resource.updateApplicationRoleConnectionMetadataRecords(applicationId, newRecords);
+            val result = response.data?.map { it.toModel() }
+
+            return Response(result, response)
+        }
+        
+    }
     
-}
-
-class GetRecordsEndpoint
-internal constructor(private val resource: ApplicationRoleConnectionMetadataResource)
-    : Invocation1<ApplicationId, List<ApplicationRoleConnectionMetadata>>() {
-
-    override suspend fun invoke(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
-        val response = resource.getApplicationRoleConnectionMetadataRecords(id.snowflake);
-        val result = response.data?.map { it.toModel() }
-
-        return Response(result, response)
-    }
-
-    override fun async(id: ApplicationId): Future<Response<List<ApplicationRoleConnectionMetadata>>> {
-        return super.async(id)
-    }
-
-    override fun block(id: ApplicationId): Response<List<ApplicationRoleConnectionMetadata>> {
-        return super.block(id)
-    }
-}
-
-class UpdateRecordsEndpoint
-internal constructor(private val resource: ApplicationRoleConnectionMetadataResource) 
-    : Invocation2<ApplicationId, List<ApplicationRoleConnectionMetadata>, List<ApplicationRoleConnectionMetadata>>() {
-
-    override suspend fun invoke(
-        id: ApplicationId,
-        newMetadata: List<ApplicationRoleConnectionMetadata>
-    ): Response<List<ApplicationRoleConnectionMetadata>> {
-        val applicationId = id.snowflake
-        val newRecords = newMetadata.map { it.toObject() }
-
-        val response = resource.updateApplicationRoleConnectionMetadataRecords(applicationId, newRecords);
-        val result = response.data?.map { it.toModel() }
-
-        return Response(result, response)
-    }
-
-    override fun async(
-        id: ApplicationId,
-        newMetadata: List<ApplicationRoleConnectionMetadata>
-    ): Future<Response<List<ApplicationRoleConnectionMetadata>>> {
-        return super.async(id, newMetadata)
-    }
-
-    override fun block(
-        id: ApplicationId,
-        newMetadata: List<ApplicationRoleConnectionMetadata>
-    ): Response<List<ApplicationRoleConnectionMetadata>> {
-        return super.block(id, newMetadata)
-    }
 }

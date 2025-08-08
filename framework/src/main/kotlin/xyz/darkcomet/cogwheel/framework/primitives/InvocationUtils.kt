@@ -84,7 +84,7 @@ abstract class Invocation2<P1, P2, TResponse> {
 }
 
 // no mandatory parameter, optional request spec
-abstract class RequestInvocationS<TRequestSpec, TResponse> {
+abstract class RequestInvocation0S<TRequestSpec, TResponse> {
     
     protected abstract fun createRequest(): TRequestSpec
     

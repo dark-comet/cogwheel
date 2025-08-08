@@ -349,7 +349,7 @@ data class UserAvatarDecorationDataObject(
 
 @Serializable
 data class ChannelDefaultReactionObject(
-    @SerialName("emoji_id") val emojiId: MaybeAbsent<String>? = null,
+    @SerialName("emoji_id") val emojiId: MaybeAbsent<Snowflake>? = null,
     @SerialName("emoji_name") val emojiName: MaybeAbsent<String>? = null
 )
 
@@ -405,8 +405,8 @@ data class ChannelObject(
 data class ChannelPermissionOverwriteObject(
     val id: MaybeAbsent<Snowflake>? = null,
     val type: MaybeAbsent<Int>? = null,
-    val allow: MaybeAbsent<String?>? = null,
-    val deny: MaybeAbsent<String?>? = null
+    val allow: MaybeAbsent<String>? = null,
+    val deny: MaybeAbsent<String>? = null
 )
 
 @Serializable

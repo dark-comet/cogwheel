@@ -22,7 +22,7 @@ data class RoleId(val snowflake: Snowflake)
 
 data class ChannelId(val snowflake: Snowflake)
 
-data class ChannelForumTagId(val snowflake: Snowflake)
+data class ForumTagId(val snowflake: Snowflake)
 
 data class EmojiId(val snowflake: Snowflake)
 
@@ -45,6 +45,8 @@ data class StageInstanceId(val snowflake: Snowflake)
 data class StickerId (val snowflake: Snowflake)
 
 data class StickerPackId(val snowflake: Snowflake)
+
+data class WebhookId(val snowflake: Snowflake)
 
 data class LocalizationMap(private val map: Map<String, String>) {
     
@@ -795,13 +797,13 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         @JvmField val GROUP_DM = addPreset(3)
         @JvmField val GUILD_CATEGORY = addPreset(4)
         @JvmField val GUILD_ANNOUNCEMENT = addPreset(5)
-        @JvmField val ANNOUNCEMENT_THREAD = addPreset(6)
-        @JvmField val PUBLIC_THREAD = addPreset(7)
-        @JvmField val PRIVATE_THREAD = addPreset(8)
-        @JvmField val GUILD_STAGE_VOICE = addPreset(9)
-        @JvmField val GUILD_DIRECTORY = addPreset(10)
-        @JvmField val GUILD_FORUM = addPreset(11)
-        @JvmField val GUILD_MEDIA = addPreset(12)
+        @JvmField val ANNOUNCEMENT_THREAD = addPreset(10)
+        @JvmField val PUBLIC_THREAD = addPreset(11)
+        @JvmField val PRIVATE_THREAD = addPreset(12)
+        @JvmField val GUILD_STAGE_VOICE = addPreset(13)
+        @JvmField val GUILD_DIRECTORY = addPreset(14)
+        @JvmField val GUILD_FORUM = addPreset(15)
+        @JvmField val GUILD_MEDIA = addPreset(16)
 
         override fun createValue(newKey: Int): ChannelType
             = ChannelType(newKey)
@@ -818,7 +820,7 @@ private constructor(override val key: BigInteger): ExtensibleEnumValue<BigIntege
         @JvmField val HIDE_MEDIA_DOWNLOAD_OPTIONS = addPreset((1 shl 15).toBigInteger())
 
         override fun createValue(newKey: BigInteger): ChannelFlag
-                = ChannelFlag(newKey)
+            = ChannelFlag(newKey)
     }
 }
 
@@ -831,7 +833,7 @@ private constructor(override val key: Int): ExtensibleEnumValue<Int> {
         @JvmField val CREATION_DATE = addPreset(1)
 
         override fun createValue(newKey: Int): ChannelSortOrderType
-                = ChannelSortOrderType(newKey)
+            = ChannelSortOrderType(newKey)
     }
 }
 
@@ -845,7 +847,7 @@ private constructor(override val key: Int): ExtensibleEnumValue<Int> {
         @JvmField val GALLERY_VIEW = addPreset(2)
 
         override fun createValue(newKey: Int): ChannelForumLayoutType
-                = ChannelForumLayoutType(newKey)
+            = ChannelForumLayoutType(newKey)
     }
 }
 
@@ -858,7 +860,20 @@ private constructor(override val key: Int): ExtensibleEnumValue<Int> {
         @JvmField val FULL = addPreset(2)
 
         override fun createValue(newKey: Int): ChannelVideoQualityMode
-                = ChannelVideoQualityMode(newKey)
+            = ChannelVideoQualityMode(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ChannelPermissionOverwriteType
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, ChannelPermissionOverwriteType>() {
+        
+        @JvmField val ROLE = addPreset(0)
+        @JvmField val MEMBER = addPreset(1)
+        
+        override fun createValue(newKey: Int): ChannelPermissionOverwriteType
+            = ChannelPermissionOverwriteType(newKey)
     }
 }
 

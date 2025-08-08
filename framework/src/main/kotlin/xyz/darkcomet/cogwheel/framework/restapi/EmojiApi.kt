@@ -9,313 +9,183 @@ import xyz.darkcomet.cogwheel.framework.models.request.CreateApplicationEmojiReq
 import xyz.darkcomet.cogwheel.framework.models.request.CreateGuildEmojiRequestSpec
 import xyz.darkcomet.cogwheel.framework.models.request.ModifyApplicationEmojiRequestSpec
 import xyz.darkcomet.cogwheel.framework.models.request.ModifyGuildEmojiRequestSpec
-import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
-import xyz.darkcomet.cogwheel.framework.primitives.EmojiId
-import xyz.darkcomet.cogwheel.framework.primitives.GuildId
-import xyz.darkcomet.cogwheel.framework.primitives.Invocation1
-import xyz.darkcomet.cogwheel.framework.primitives.Invocation2
-import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation1S
-import xyz.darkcomet.cogwheel.framework.primitives.RequestInvocation2S
-import xyz.darkcomet.cogwheel.framework.primitives.Response
-import java.util.concurrent.Future
-import java.util.function.Consumer
+import xyz.darkcomet.cogwheel.framework.primitives.*
 
 class EmojiApi
 internal constructor(resource: EmojiResource) {
     
     @JvmField
-    val listForGuild = ListGuildEmojisEndpoint(resource)
-    
-    @JvmField
-    val getForGuild = GetGuildEmojiEndpoint(resource)
-    
-    @JvmField
-    val createForGuild = CreateGuildEmojiEndpoint(resource)
-    
-    @JvmField
-    val modifyForGuild = ModifyGuildEmojiEndpoint(resource)
-    
-    @JvmField
-    val deleteForGuild = DeleteGuildEmojiEndpoint(resource)
-    
-    @JvmField
-    val listForApplication = ListApplicationEmojisEndpoint(resource)
-    
-    @JvmField
-    val getForApplication = GetApplicationEmojiEndpoint(resource)
-    
-    @JvmField
-    val createForApplication = CreateApplicationEmojiEndpoint(resource)
-    
-    @JvmField
-    val modifyForApplication = ModifyApplicationEmojiEndpoint(resource)
-    
-    @JvmField
-    val deleteForApplication = DeleteApplicationEmojiEndpoint(resource)
-    
-}
-
-class ListGuildEmojisEndpoint
-internal constructor (private val resource: EmojiResource) 
-    : Invocation1<GuildId, List<Emoji>>() {
+    val listForGuild = object : Invocation1<GuildId, List<Emoji>>() {
         
-    override suspend fun invoke(guildId: GuildId): Response<List<Emoji>> {
-        val response = resource.listGuildEmojis(guildId.snowflake)
-        val result = response.data?.map { it.toModel() }
-        
-        return Response(result, response)
-    }
+        override suspend fun invoke(p1: GuildId): Response<List<Emoji>> {
+            val response = resource.listGuildEmojis(p1.snowflake)
+            val result = response.data?.map { it.toModel() }
 
-    override fun async(guildId: GuildId): Future<Response<List<Emoji>>> {
-        return super.async(guildId)
-    }
-
-    override fun block(guildId: GuildId): Response<List<Emoji>> {
-        return super.block(guildId)
-    }
-    
-}
-
-class GetGuildEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : Invocation2<GuildId, EmojiId, Emoji>() {
-        
-    override suspend fun invoke(guildId: GuildId, emojiId: EmojiId): Response<Emoji> {
-        val response = resource.getGuildEmoji(guildId.snowflake, emojiId.snowflake)
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override fun async(guildId: GuildId, emojiId: EmojiId): Future<Response<Emoji>> {
-        return super.async(guildId, emojiId)
-    }
-
-    override fun block(guildId: GuildId, emojiId: EmojiId): Response<Emoji> {
-        return super.block(guildId, emojiId)
-    }
-    
-}
-
-class CreateGuildEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : RequestInvocation1S<GuildId, CreateGuildEmojiRequestSpec, Emoji>() {
-        
-    override fun createRequest(guildId: GuildId): CreateGuildEmojiRequestSpec {
-        return CreateGuildEmojiRequestSpec(guildId)
-    }
-
-    override suspend fun invoke(request: CreateGuildEmojiRequestSpec): Response<Emoji> {
-        val response = resource.createGuildEmoji(
-            request.guildId.snowflake, 
-            request.buildParameters(), 
-            request.auditLogReason
-        )
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override suspend fun invoke(
-        guildId: GuildId,
-        request: CreateGuildEmojiRequestSpec?,
-        config: (CreateGuildEmojiRequestSpec.() -> Unit)?
-    ): Response<Emoji> {
-        return super.invoke(guildId, request, config)
-    }
-
-    override fun async(
-        guildId: GuildId,
-        config: Consumer<CreateGuildEmojiRequestSpec>?
-    ): Future<Response<Emoji>> {
-        return super.async(guildId, config)
-    }
-
-    override fun block(
-        guildId: GuildId,
-        config: Consumer<CreateGuildEmojiRequestSpec>?
-    ): Response<Emoji> {
-        return super.block(guildId, config)
-    }
-}
-
-class ModifyGuildEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : RequestInvocation2S<GuildId, EmojiId, ModifyGuildEmojiRequestSpec, Emoji>() {
-        
-    override fun createRequest(guildId: GuildId, emojiId: EmojiId): ModifyGuildEmojiRequestSpec {
-        return ModifyGuildEmojiRequestSpec(guildId, emojiId)
-    }
-
-    override suspend fun invoke(request: ModifyGuildEmojiRequestSpec): Response<Emoji> {
-        val response = resource.modifyGuildEmoji(
-            request.guildId.snowflake,
-            request.emojiId.snowflake,
-            request.buildParameters(),
-            request.auditLogReason
-        )
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override fun async(
-        guildId: GuildId,
-        emojiId: EmojiId,
-        config: Consumer<ModifyGuildEmojiRequestSpec>?
-    ): Future<Response<Emoji>> {
-        return super.async(guildId, emojiId, config)
-    }
-
-    override fun block(
-        guildId: GuildId,
-        emojiId: EmojiId,
-        config: Consumer<ModifyGuildEmojiRequestSpec>?
-    ): Response<Emoji> {
-        return super.block(guildId, emojiId, config)
-    }
-}
-
-class DeleteGuildEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : Invocation2<GuildId, EmojiId, Boolean>() {
-        
-    override suspend fun invoke(guildId: GuildId, emojiId: EmojiId): Response<Boolean> {
-        val response = resource.deleteGuildEmoji(guildId.snowflake, emojiId.snowflake)
-        val result = response.raw.success
-        
-        return Response(result, response)
-    }
-
-    override fun async(guildId: GuildId, emojiId: EmojiId): Future<Response<Boolean>> {
-        return super.async(guildId, emojiId)
-    }
-
-    override fun block(guildId: GuildId, emojiId: EmojiId): Response<Boolean> {
-        return super.block(guildId, emojiId)
-    }
-}
-
-class ListApplicationEmojisEndpoint
-internal constructor (private val resource: EmojiResource)
-    : Invocation1<ApplicationId, List<Emoji>>() {
-        
-    override suspend fun invoke(applicationId: ApplicationId): Response<List<Emoji>> {
-        val response = resource.listApplicationEmojis(applicationId.snowflake)
-        
-        val result: List<Emoji>? = response.data?.let { responseObj -> 
-            responseObj.items.map { emojiObj -> emojiObj.toModel() }
+            return Response(result, response)
         }
-        
-        return Response(result, response)
-    }
 
-    override fun async(applicationId: ApplicationId): Future<Response<List<Emoji>>> {
-        return super.async(applicationId)
     }
-
-    override fun block(applicationId: ApplicationId): Response<List<Emoji>> {
-        return super.block(applicationId)
-    }
-}
-
-class GetApplicationEmojiEndpoint
-internal constructor(private val resource: EmojiResource)
-    : Invocation2<ApplicationId, EmojiId, Emoji>() {
-        
-    override suspend fun invoke(applicationId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
-        val response = resource.getApplicationEmoji(applicationId.snowflake, emojiId.snowflake)
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-
-    override fun async(applicationId: ApplicationId, emojiId: EmojiId): Future<Response<Emoji>> {
-        return super.async(applicationId, emojiId)
-    }
-
-    override fun block(applicationId: ApplicationId, emojiId: EmojiId): Response<Emoji> {
-        return super.block(applicationId, emojiId)
-    }
-}
-
-class CreateApplicationEmojiEndpoint
-internal constructor(private val resource: EmojiResource)
-    : RequestInvocation1S<ApplicationId, CreateApplicationEmojiRequestSpec, Emoji>() {
     
-        override fun createRequest(applicationId: ApplicationId): CreateApplicationEmojiRequestSpec {
-        return CreateApplicationEmojiRequestSpec(applicationId)
-    }
-
-    override suspend fun invoke(request: CreateApplicationEmojiRequestSpec): Response<Emoji> {
-        val response = resource.createApplicationEmoji(
-            request.applicationId.snowflake,
-            request.buildParameters()
-        )
-        val result = response.data?.toModel()
+    @JvmField
+    val getForGuild = object : Invocation2<GuildId, EmojiId, Emoji>() {
         
-        return Response(result, response)
-    }
+        override suspend fun invoke(
+            p1: GuildId,
+            p2: EmojiId
+        ): Response<Emoji> {
+            val response = resource.getGuildEmoji(p1.snowflake, p2.snowflake)
+            val result = response.data?.toModel()
 
-    override suspend fun invoke(
-        applicationId: ApplicationId,
-        request: CreateApplicationEmojiRequestSpec?,
-        config: (CreateApplicationEmojiRequestSpec.() -> Unit)?
-    ): Response<Emoji> {
-        return super.invoke(applicationId, request, config)
-    }
+            return Response(result, response)
+        }
 
-    override fun async(
-        applicationId: ApplicationId,
-        config: Consumer<CreateApplicationEmojiRequestSpec>?
-    ): Future<Response<Emoji>> {
-        return super.async(applicationId, config)
     }
-
-    override fun block(
-        applicationId: ApplicationId,
-        config: Consumer<CreateApplicationEmojiRequestSpec>?
-    ): Response<Emoji> {
-        return super.block(applicationId, config)
-    }
-}
-
-class ModifyApplicationEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : RequestInvocation2S<ApplicationId, EmojiId, ModifyApplicationEmojiRequestSpec, Emoji>() {
-        
-    override fun createRequest(applicationId: ApplicationId, emojiId: EmojiId): ModifyApplicationEmojiRequestSpec {
-        return ModifyApplicationEmojiRequestSpec(applicationId, emojiId)
-    }
-
-    override suspend fun invoke(request: ModifyApplicationEmojiRequestSpec): Response<Emoji> {
-        val response = resource.modifyApplicationEmoji(
-            request.applicationId.snowflake,
-            request.emojiId.snowflake,
-            request.buildParameters()
-        )
-        val result = response.data?.toModel()
-        
-        return Response(result, response)
-    }
-}
-
-class DeleteApplicationEmojiEndpoint
-internal constructor (private val resource: EmojiResource)
-    : Invocation2<ApplicationId, EmojiId, Boolean>() {
     
-    override suspend fun invoke(applicationId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
-        val response = resource.deleteApplicationEmoji(applicationId.snowflake, emojiId.snowflake)
-        val result = response.raw.success
+    @JvmField
+    val createForGuild = object : RequestInvocation1S<GuildId, CreateGuildEmojiRequestSpec, Emoji>() {
         
-        return Response(result, response)
-    }
+        override fun createRequest(p1: GuildId): CreateGuildEmojiRequestSpec {
+            return CreateGuildEmojiRequestSpec(p1)
+        }
 
-    override fun async(applicationId: ApplicationId, emojiId: EmojiId): Future<Response<Boolean>> {
-        return super.async(applicationId, emojiId)
-    }
+        override suspend fun invoke(request: CreateGuildEmojiRequestSpec): Response<Emoji> {
+            val response = resource.createGuildEmoji(
+                request.guildId.snowflake,
+                request.buildParameters(),
+                request.auditLogReason
+            )
+            val result = response.data?.toModel()
 
-    override fun block(applicationId: ApplicationId, emojiId: EmojiId): Response<Boolean> {
-        return super.block(applicationId, emojiId)
+            return Response(result, response)            
+        }
+
     }
+    
+    @JvmField
+    val modifyForGuild = object : RequestInvocation2S<GuildId, EmojiId, ModifyGuildEmojiRequestSpec, Emoji>() {
+        
+        override fun createRequest(
+            p1: GuildId,
+            p2: EmojiId
+        ): ModifyGuildEmojiRequestSpec {
+            
+            return ModifyGuildEmojiRequestSpec(p1, p2)
+        }
+
+        override suspend fun invoke(request: ModifyGuildEmojiRequestSpec): Response<Emoji> {
+            val response = resource.modifyGuildEmoji(
+                request.guildId.snowflake,
+                request.emojiId.snowflake,
+                request.buildParameters(),
+                request.auditLogReason
+            )
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val deleteForGuild = object : Invocation2<GuildId, EmojiId, Boolean>() {
+        
+        override suspend fun invoke(
+            p1: GuildId,
+            p2: EmojiId
+        ): Response<Boolean> {
+            val response = resource.deleteGuildEmoji(p1.snowflake, p1.snowflake)
+            val result = response.raw.success
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val listForApplication = object : Invocation1<ApplicationId, List<Emoji>>() {
+        
+        override suspend fun invoke(p1: ApplicationId): Response<List<Emoji>> {
+            val response = resource.listApplicationEmojis(p1.snowflake)
+
+            val result: List<Emoji>? = response.data?.let { responseObj ->
+                responseObj.items.map { emojiObj -> emojiObj.toModel() }
+            }
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val getForApplication = object : Invocation2<ApplicationId, EmojiId, Emoji>() {
+        
+        override suspend fun invoke(
+            p1: ApplicationId,
+            p2: EmojiId
+        ): Response<Emoji> {
+            val response = resource.getApplicationEmoji(p1.snowflake, p2.snowflake)
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val createForApplication = object : RequestInvocation1S<ApplicationId, CreateApplicationEmojiRequestSpec, Emoji>() {
+        
+        override fun createRequest(p1: ApplicationId): CreateApplicationEmojiRequestSpec {
+            return CreateApplicationEmojiRequestSpec(p1)
+        }
+
+        override suspend fun invoke(request: CreateApplicationEmojiRequestSpec): Response<Emoji> {
+            val response = resource.createApplicationEmoji(
+                request.applicationId.snowflake,
+                request.buildParameters()
+            )
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val modifyForApplication = object : RequestInvocation2S<ApplicationId, EmojiId, ModifyApplicationEmojiRequestSpec, Emoji>() {
+        
+        override fun createRequest(
+            p1: ApplicationId,
+            p2: EmojiId
+        ): ModifyApplicationEmojiRequestSpec {
+            return ModifyApplicationEmojiRequestSpec(p1, p2)
+        }
+
+        override suspend fun invoke(request: ModifyApplicationEmojiRequestSpec): Response<Emoji> {
+            val response = resource.modifyApplicationEmoji(
+                request.applicationId.snowflake,
+                request.emojiId.snowflake,
+                request.buildParameters()
+            )
+            val result = response.data?.toModel()
+
+            return Response(result, response)
+        }
+
+    }
+    
+    @JvmField
+    val deleteForApplication = object : Invocation2<ApplicationId, EmojiId, Boolean>() {
+        
+        override suspend fun invoke(
+            p1: ApplicationId,
+            p2: EmojiId
+        ): Response<Boolean> {
+            val response = resource.deleteApplicationEmoji(p1.snowflake, p2.snowflake)
+            val result = response.raw.success
+
+            return Response(result, response)
+        }
+
+    }
+    
 }

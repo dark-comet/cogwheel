@@ -63,7 +63,7 @@ internal constructor(
             rateLimitRouteIdentifier: String = urlPath,
             init: (Builder.() -> Unit)? = null
         ): CwHttpRequest {
-            val builder = Builder(method, urlPath)
+            val builder = Builder(method, urlPath, rateLimitRouteIdentifier)
             init?.invoke(builder)
             
             return builder.build()

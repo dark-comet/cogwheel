@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildWelcomeScreenChannelObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelId
 import xyz.darkcomet.cogwheel.framework.primitives.EmojiId
 import xyz.darkcomet.cogwheel.framework.primitives.asChannelId

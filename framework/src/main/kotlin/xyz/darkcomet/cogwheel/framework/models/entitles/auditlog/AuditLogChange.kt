@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.auditlog
 
 import xyz.darkcomet.cogwheel.core.network.objects.AuditLogChangeObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.AuditLogEventType
 
 data class AuditLogChange(

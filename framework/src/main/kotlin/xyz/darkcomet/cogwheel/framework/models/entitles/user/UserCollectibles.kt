@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.user
 
 import xyz.darkcomet.cogwheel.core.network.objects.UserCollectiblesObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 data class UserCollectibles(
     val nameplate: UserNameplate?

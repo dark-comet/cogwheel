@@ -4,7 +4,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventEntityMetadataObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 class GuildScheduledEventEntityMetadata(
     val location: String?

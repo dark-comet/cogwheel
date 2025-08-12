@@ -5,7 +5,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.poll
 import xyz.darkcomet.cogwheel.core.network.objects.PollMediaObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.emoji.Emoji
 import xyz.darkcomet.cogwheel.framework.models.entitles.emoji.toModel
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 class PollMedia(
     val text: String?,

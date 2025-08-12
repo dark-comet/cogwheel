@@ -4,8 +4,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.sticker
 
 import xyz.darkcomet.cogwheel.core.network.objects.StickerPackObject
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.SkuId
 import xyz.darkcomet.cogwheel.framework.primitives.StickerId
 import xyz.darkcomet.cogwheel.framework.primitives.StickerPackId

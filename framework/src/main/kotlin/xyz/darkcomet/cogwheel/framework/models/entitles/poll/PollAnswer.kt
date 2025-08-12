@@ -3,8 +3,8 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.poll
 
 import xyz.darkcomet.cogwheel.core.network.objects.PollAnswerObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 class PollAnswer(
     val answerId: Int?,

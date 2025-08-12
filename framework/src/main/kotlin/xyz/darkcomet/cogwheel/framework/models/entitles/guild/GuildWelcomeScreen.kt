@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildWelcomeScreenObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 data class GuildWelcomeScreen(
     val description: String,

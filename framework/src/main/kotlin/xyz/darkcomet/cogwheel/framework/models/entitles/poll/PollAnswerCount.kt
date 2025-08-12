@@ -3,7 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.poll
 
 import xyz.darkcomet.cogwheel.core.network.objects.PollAnswerCountObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 class PollAnswerCount(
     val id: Int,

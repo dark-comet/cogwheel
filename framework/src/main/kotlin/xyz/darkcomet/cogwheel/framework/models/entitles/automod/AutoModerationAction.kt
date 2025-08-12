@@ -2,8 +2,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.automod
 
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationActionObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.AutoModerationActionType
 
 data class AutoModerationAction(

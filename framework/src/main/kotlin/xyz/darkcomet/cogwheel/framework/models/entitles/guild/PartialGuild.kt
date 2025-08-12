@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildObject
 import xyz.darkcomet.cogwheel.framework.primitives.DiscordImage
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.GuildFeature
 import xyz.darkcomet.cogwheel.framework.primitives.GuildId
 import xyz.darkcomet.cogwheel.framework.primitives.GuildNsfwLevel

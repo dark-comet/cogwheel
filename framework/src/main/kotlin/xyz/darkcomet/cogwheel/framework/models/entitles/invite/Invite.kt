@@ -12,9 +12,9 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toModel
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toPartialModel
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.User
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.toModel
-import xyz.darkcomet.cogwheel.framework.models.require
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.require
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.BitField
 import xyz.darkcomet.cogwheel.framework.primitives.GuildInviteFlag
 import xyz.darkcomet.cogwheel.framework.primitives.InviteTargetType

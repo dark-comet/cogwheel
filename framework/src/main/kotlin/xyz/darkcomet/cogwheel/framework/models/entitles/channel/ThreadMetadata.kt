@@ -4,8 +4,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.channel
 
 import xyz.darkcomet.cogwheel.core.network.objects.ThreadMetadataObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 class ThreadMetadata(
     val archived: Boolean,

@@ -15,7 +15,7 @@ import xyz.darkcomet.cogwheel.framework.models.entitles.user.User
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.toModel
 import xyz.darkcomet.cogwheel.framework.models.entitles.webhook.Webhook
 import xyz.darkcomet.cogwheel.framework.models.entitles.webhook.toModel
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 data class GuildAuditLog(
     val applicationCommands: List<ApplicationCommand>,

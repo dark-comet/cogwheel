@@ -3,8 +3,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.interactions
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationCommandOptionDoubleChoiceObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationCommandOptionIntegerChoiceObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationCommandOptionStringChoiceObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.LocalizationMap
 
 sealed interface ApplicationCommandOptionChoice 

@@ -6,8 +6,8 @@ import xyz.darkcomet.cogwheel.core.network.objects.ThreadMemberObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildMember
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toModel
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
 sealed class AbstractThreadMember(

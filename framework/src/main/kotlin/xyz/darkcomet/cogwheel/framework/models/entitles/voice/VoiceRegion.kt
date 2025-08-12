@@ -3,7 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.voice
 
 import xyz.darkcomet.cogwheel.core.network.objects.VoiceRegionObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 class VoiceRegion(
     val id: String,

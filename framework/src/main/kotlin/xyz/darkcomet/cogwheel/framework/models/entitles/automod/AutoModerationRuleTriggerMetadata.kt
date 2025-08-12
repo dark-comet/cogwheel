@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.automod
 
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationRuleTriggerMetadataObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.AutoModerationKeywordPresetType
 
 data class AutoModerationRuleTriggerMetadata(

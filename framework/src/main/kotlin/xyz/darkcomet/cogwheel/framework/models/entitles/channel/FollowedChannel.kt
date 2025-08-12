@@ -3,7 +3,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.channel
 
 import xyz.darkcomet.cogwheel.core.network.objects.FollowedChannelObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelId
 import xyz.darkcomet.cogwheel.framework.primitives.WebhookId
 import xyz.darkcomet.cogwheel.framework.primitives.asChannelId

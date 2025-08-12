@@ -3,8 +3,8 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles
 
 import xyz.darkcomet.cogwheel.core.network.objects.StageInstanceObject
-import xyz.darkcomet.cogwheel.framework.models.require
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.require
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.*
 
 class StageInstance(

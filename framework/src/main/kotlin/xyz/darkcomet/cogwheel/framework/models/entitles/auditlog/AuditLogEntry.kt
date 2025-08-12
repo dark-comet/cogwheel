@@ -1,9 +1,9 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.auditlog
 
 import xyz.darkcomet.cogwheel.core.network.objects.AuditLogEntryObject
-import xyz.darkcomet.cogwheel.framework.models.require
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.require
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.AuditLogEntryId
 import xyz.darkcomet.cogwheel.framework.primitives.AuditLogEventType
 import xyz.darkcomet.cogwheel.framework.primitives.UserId

@@ -137,6 +137,14 @@ data class BitField<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) 
     fun containsAll(vararg entries: T): Boolean {
         return entries.all { contain(it) }
     }
+    
+    fun toInt(): Int {
+        return this.value.intValueExact()
+    }
+    
+    fun toLong(): Long {
+        return this.value.longValueExact()
+    }
 
     override fun toString(): String {
         return value.toString(10)
@@ -150,7 +158,15 @@ data class BitField<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) 
             }
             return BitField(value)
         }
-        
+
+        @JvmStatic
+        fun <T : ExtensibleEnumValue<BigInteger>> from(entries: Array<T>) : BitField<T> {
+            val value = entries.fold(BigInteger.ZERO) { acc, entry ->
+                acc or entry.key
+            }
+            return BitField(value)
+        }
+
         @JvmStatic
         fun <T : ExtensibleEnumValue<BigInteger>> from(base10String: String): BitField<T> {
             val value = BigInteger(base10String, 10)
@@ -807,6 +823,24 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): ChannelType
             = ChannelType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class ThreadChannelType 
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    
+    fun asChannelType(): ChannelType
+        = ChannelType.fromOrAdd(this.key)
+    
+    companion object Presets : ExtensibleEnum<Int, ThreadChannelType>() {
+        
+        @JvmField val ANNOUNCEMENT = addPreset(ChannelType.ANNOUNCEMENT_THREAD.key)
+        @JvmField val PUBLIC = addPreset(ChannelType.PUBLIC_THREAD.key)
+        @JvmField val PRIVATE = addPreset(ChannelType.PRIVATE_THREAD.key)
+        
+        override fun createValue(newKey: Int): ThreadChannelType
+            = ThreadChannelType(newKey)
     }
 }
 

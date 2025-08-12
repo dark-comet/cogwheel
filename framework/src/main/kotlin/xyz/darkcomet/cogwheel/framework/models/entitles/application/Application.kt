@@ -3,12 +3,14 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.application
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationObject
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
-import xyz.darkcomet.cogwheel.framework.models.*
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.PartialGuild
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toPartialModel
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.PartialUser
 import xyz.darkcomet.cogwheel.framework.models.entitles.user.toPartialUserModel
 import xyz.darkcomet.cogwheel.framework.primitives.*
+import xyz.darkcomet.cogwheel.framework.utils.require
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 
 @Suppress("unused")
 class Application(
@@ -73,18 +75,39 @@ internal fun ApplicationObject.toModel(): Application {
         slug = requireNonNullIfPresent(this, ApplicationObject::slug),
         coverImage = requireNonNullIfPresent(this, ApplicationObject::coverImage)?.let { DiscordImage.fromDataUriScheme(it) },
         flags = requireNonNullIfPresent(this, ApplicationObject::flags)?.let { ApplicationFlag.fromOrAdd(it) },
-        approximateGuildCount = requireNonNullIfPresent(this, ApplicationObject::approximateGuildCount),
-        approximateUserInstallCount = requireNonNullIfPresent(this, ApplicationObject::approximateUserInstallCount),
-        approximateUserAuthorizationCount = requireNonNullIfPresent(this, ApplicationObject::approximateUserAuthorizationCount),
+        approximateGuildCount = requireNonNullIfPresent(
+            this,
+            ApplicationObject::approximateGuildCount
+        ),
+        approximateUserInstallCount = requireNonNullIfPresent(
+            this,
+            ApplicationObject::approximateUserInstallCount
+        ),
+        approximateUserAuthorizationCount = requireNonNullIfPresent(
+            this,
+            ApplicationObject::approximateUserAuthorizationCount
+        ),
         redirectUris = requireNonNullIfPresent(this, ApplicationObject::redirectUris),
-        interactionsEndpointUrl = requireNonNullIfPresent(this, ApplicationObject::interactionsEndpointUrl),
-        roleConnectionsVerificationUrl = requireNonNullIfPresent(this, ApplicationObject::roleConnectionsVerificationUrl),
+        interactionsEndpointUrl = requireNonNullIfPresent(
+            this,
+            ApplicationObject::interactionsEndpointUrl
+        ),
+        roleConnectionsVerificationUrl = requireNonNullIfPresent(
+            this,
+            ApplicationObject::roleConnectionsVerificationUrl
+        ),
         eventWebhooksUrl = requireNonNullIfPresent(this, ApplicationObject::eventWebhooksUrl),
-        eventWebhooksStatus = requireNonNullIfPresent(this, ApplicationObject::eventWebhooksStatus)?.let { ApplicationEventWebhookStatus.fromOrAdd(it) },
+        eventWebhooksStatus = requireNonNullIfPresent(
+            this,
+            ApplicationObject::eventWebhooksStatus
+        )?.let { ApplicationEventWebhookStatus.fromOrAdd(it) },
         eventWebhooksTypes = requireNonNullIfPresent(this, ApplicationObject::eventWebhookTypes),
         tags = requireNonNullIfPresent(this, ApplicationObject::tags),
         installParams = requireNonNullIfPresent(this, ApplicationObject::installParams)?.toModel(),
-        integrationTypesConfig = requireNonNullIfPresent(this, ApplicationObject::integrationTypesConfig)?.let { transformIntegrationTypesConfig(it) },
+        integrationTypesConfig = requireNonNullIfPresent(
+            this,
+            ApplicationObject::integrationTypesConfig
+        )?.let { transformIntegrationTypesConfig(it) },
         customInstallUrl = requireNonNullIfPresent(this, ApplicationObject::customInstallUrl),
     )
 }

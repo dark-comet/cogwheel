@@ -5,7 +5,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.invite
 import xyz.darkcomet.cogwheel.core.network.objects.InviteStageInstanceObject
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.GuildMember
 import xyz.darkcomet.cogwheel.framework.models.entitles.guild.toModel
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 @Deprecated("to be removed by Discord API")
 class InviteStageInstance(

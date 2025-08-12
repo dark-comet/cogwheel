@@ -1,4 +1,4 @@
-package xyz.darkcomet.cogwheel.framework.models
+package xyz.darkcomet.cogwheel.framework.utils
 
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException

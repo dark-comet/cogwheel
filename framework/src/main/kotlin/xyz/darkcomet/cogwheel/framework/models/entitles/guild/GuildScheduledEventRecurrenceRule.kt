@@ -6,8 +6,8 @@ import xyz.darkcomet.cogwheel.core.network.objects.GuildScheduledEventRecurrence
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.framework.exceptions.InvalidModelException
-import xyz.darkcomet.cogwheel.framework.models.require
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.require
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.RecurrenceRuleFrequency
 import xyz.darkcomet.cogwheel.framework.primitives.RecurrenceRuleMonth
 import xyz.darkcomet.cogwheel.framework.primitives.RecurrenceRuleWeekday

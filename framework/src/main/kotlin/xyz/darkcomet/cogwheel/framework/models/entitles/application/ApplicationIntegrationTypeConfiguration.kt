@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationIntegrationTypeConfigurationObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 
 class ApplicationIntegrationTypeConfiguration(
     val oauth2InstallParams: ApplicationInstallParameters

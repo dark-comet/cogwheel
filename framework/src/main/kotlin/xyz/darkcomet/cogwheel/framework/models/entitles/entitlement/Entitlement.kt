@@ -4,8 +4,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.entitlement
 
 import xyz.darkcomet.cogwheel.core.network.objects.EntitlementObject
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationId
 import xyz.darkcomet.cogwheel.framework.primitives.EntitlementId
 import xyz.darkcomet.cogwheel.framework.primitives.EntitlementType

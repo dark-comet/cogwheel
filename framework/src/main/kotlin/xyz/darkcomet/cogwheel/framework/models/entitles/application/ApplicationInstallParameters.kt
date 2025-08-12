@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.application
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationInstallParamsObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.BitField
 import xyz.darkcomet.cogwheel.framework.primitives.OAuth2Scope
 import xyz.darkcomet.cogwheel.framework.primitives.Permission

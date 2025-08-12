@@ -42,13 +42,13 @@ data class CreateApplicationEmojiRequestParameters(
 
 @Serializable
 data class CreateChannelInviteRequestParameters(
-    @SerialName("max_age") val maxAge: Int,
-    @SerialName("max_uses") val maxUses: Int,
-    val temporary: Boolean,
-    val unique: Boolean,
-    @SerialName("target_type") val targetType: Int,
-    @SerialName("target_user_id") val targetUserId: Snowflake,
-    @SerialName("target_application_id") val targetApplicationId: Snowflake
+    @SerialName("max_age") val maxAge: MaybeAbsent<Int>? = null,
+    @SerialName("max_uses") val maxUses: MaybeAbsent<Int>? = null,
+    val temporary: MaybeAbsent<Boolean>? = null,
+    val unique: MaybeAbsent<Boolean>? = null,
+    @SerialName("target_type") val targetType: MaybeAbsent<Int>? = null,
+    @SerialName("target_user_id") val targetUserId: MaybeAbsent<Snowflake>? = null,
+    @SerialName("target_application_id") val targetApplicationId: MaybeAbsent<Snowflake>? = null
 )
 
 @Serializable
@@ -378,22 +378,22 @@ data class ModifyGuildChannelPositionsRequestParameters(
 data class ModifyGuildChannelRequestParameters(
     val name: MaybeAbsent<String>? = null,
     val type: MaybeAbsent<Int>? = null,
-    val position: MaybeAbsent<Int>? = null,
-    val topic: MaybeAbsent<String>? = null,
-    val nsfw: MaybeAbsent<Boolean>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int>? = null,
-    val bitrate: MaybeAbsent<Int>? = null,
-    @SerialName("user_limit") val userLimit: MaybeAbsent<Int>? = null,
-    @SerialName("permission_overwrites") val permissionOverwrites: MaybeAbsent<List<ChannelPermissionOverwriteObject>>? = null,
-    @SerialName("parent_id") val parentId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("rtc_region") val rtcRegion: MaybeAbsent<String>? = null,
-    @SerialName("video_quality_mode") val videoQualityMode: MaybeAbsent<Int>? = null,
-    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: MaybeAbsent<Int>? = null,
+    val position: MaybeAbsent<Int?>? = null,
+    val topic: MaybeAbsent<String?>? = null,
+    val nsfw: MaybeAbsent<Boolean?>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int?>? = null,
+    val bitrate: MaybeAbsent<Int?>? = null,
+    @SerialName("user_limit") val userLimit: MaybeAbsent<Int?>? = null,
+    @SerialName("permission_overwrites") val permissionOverwrites: MaybeAbsent<List<ChannelPermissionOverwriteObject>?>? = null,
+    @SerialName("parent_id") val parentId: MaybeAbsent<Snowflake?>? = null,
+    @SerialName("rtc_region") val rtcRegion: MaybeAbsent<String?>? = null,
+    @SerialName("video_quality_mode") val videoQualityMode: MaybeAbsent<Int?>? = null,
+    @SerialName("default_auto_archive_duration") val defaultAutoArchiveDuration: MaybeAbsent<Int?>? = null,
     val flags: MaybeAbsent<Int>? = null,
     @SerialName("available_tags") val availableTags: MaybeAbsent<List<ForumTagObject>>? = null,
-    @SerialName("default_reaction_emoji") val defaultReactionEmoji: MaybeAbsent<ChannelDefaultReactionObject>? = null,
+    @SerialName("default_reaction_emoji") val defaultReactionEmoji: MaybeAbsent<ChannelDefaultReactionObject?>? = null,
     @SerialName("default_thread_rate_limit_per_user") val defaultThreadRateLimitPerUser: MaybeAbsent<Int>? = null,
-    @SerialName("default_sort_order") val defaultSortOrder: MaybeAbsent<Int>? = null,
+    @SerialName("default_sort_order") val defaultSortOrder: MaybeAbsent<Int?>? = null,
     @SerialName("default_forum_layout") val defaultForumLayout: MaybeAbsent<Int>? = null,
 )
 
@@ -537,7 +537,7 @@ data class ModifyThreadChannelRequestParameters(
     @SerialName("auto_archive_duration") val autoArchiveDuration: MaybeAbsent<Int>? = null,
     val locked: MaybeAbsent<Boolean>? = null,
     val invitable: MaybeAbsent<Boolean>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int?>? = null,
     val flags: MaybeAbsent<Int>? = null,
     @SerialName("applied_tags") val appliedTags: MaybeAbsent<List<Snowflake>>? = null
 )
@@ -565,7 +565,7 @@ data class SendSoundboardSoundRequestParameters(
 data class StartThreadFromMessageRequestParameters(
     val name: String,
     @SerialName("auto_archive_duration") val autoArchiveDuration: MaybeAbsent<Int>? = null,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int?>? = null,
 )
 
 @Serializable
@@ -584,8 +584,8 @@ data class StartThreadWithoutMessageRequestParameters(
     val name: String,
     @SerialName("auto_archive_duration") val autoArchiveDuration: MaybeAbsent<Int>? = null,
     val type: MaybeAbsent<Int>? = null,
-    val invitable: Boolean,
-    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int>? = null
+    val invitable: MaybeAbsent<Boolean>? = null,
+    @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int?>? = null
 )
 
 @Serializable

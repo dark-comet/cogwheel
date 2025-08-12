@@ -2,8 +2,8 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.arcmetadata
 
 import xyz.darkcomet.cogwheel.core.network.objects.ApplicationRoleConnectionMetadataObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.ApplicationRoleConnectionMetadataType
 import xyz.darkcomet.cogwheel.framework.primitives.LocalizationMap
 

@@ -2,7 +2,7 @@ package xyz.darkcomet.cogwheel.framework.models.entitles.automod
 
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationActionMetadataObject
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
-import xyz.darkcomet.cogwheel.framework.models.requireNonNullIfPresent
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNullIfPresent
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelId
 import xyz.darkcomet.cogwheel.framework.primitives.asChannelId
 

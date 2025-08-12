@@ -1,7 +1,7 @@
 package xyz.darkcomet.cogwheel.framework.models.entitles.invite
 
 import xyz.darkcomet.cogwheel.core.network.objects.ChannelObject
-import xyz.darkcomet.cogwheel.framework.models.requireNonNull
+import xyz.darkcomet.cogwheel.framework.utils.requireNonNull
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelId
 import xyz.darkcomet.cogwheel.framework.primitives.ChannelType
 import xyz.darkcomet.cogwheel.framework.primitives.asChannelId

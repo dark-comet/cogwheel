@@ -66,6 +66,9 @@ data class DiscordColor
 private constructor(val value: Int) {
     companion object {
         // TODO
+        fun from(color: Int): DiscordColor {
+            TODO()
+        }
     }
 }
 
@@ -1162,6 +1165,48 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
         
         override fun createValue(newKey: Int): SubscriptionStatus
             = SubscriptionStatus(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class EmbedType
+private constructor(override val key: String) : ExtensibleEnumValue<String> {
+    companion object Presets : ExtensibleEnum<String, EmbedType>() {
+        
+        @JvmField val RICH = addPreset("rich")
+        @JvmField val IMAGE = addPreset("image")
+        @JvmField val VIDEO = addPreset("video")
+        @JvmField val GIFV = addPreset("gifv")
+        @JvmField val ARTICLE = addPreset("article")
+        @JvmField val LINK = addPreset("link")
+        @JvmField val POLL_RESULT = addPreset("pollResult")
+        
+        override fun createValue(newKey: String): EmbedType
+            = EmbedType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class MessageFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, MessageFlag>() {
+        
+        @JvmField val CROSSPOSTED = addPreset((1 shl 0).toBigInteger())
+        @JvmField val IS_CROSSPOST = addPreset((1 shl 1).toBigInteger())
+        @JvmField val SUPPRESS_EMBEDS = addPreset((1 shl 2).toBigInteger())
+        @JvmField val SOURCE_MESSAGE_DELETED = addPreset((1 shl 3).toBigInteger())
+        @JvmField val URGENT = addPreset((1 shl 4).toBigInteger())
+        @JvmField val HAS_THREAD = addPreset((1 shl 5).toBigInteger())
+        @JvmField val EPHEMERAL = addPreset((1 shl 6).toBigInteger())
+        @JvmField val LOADING = addPreset((1 shl 7).toBigInteger())
+        @JvmField val FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = addPreset((1 shl 8).toBigInteger())
+        @JvmField val SUPPRESS_NOTIFICATIONS = addPreset((1 shl 12).toBigInteger())
+        @JvmField val IS_VOICE_MESSAGE = addPreset((1 shl 13).toBigInteger())
+        @JvmField val HAS_SNAPSHOT = addPreset((1 shl 14).toBigInteger())
+        @JvmField val IS_COMPONENTS_V2 = addPreset((1 shl 15).toBigInteger())
+
+        override fun createValue(newKey: BigInteger): MessageFlag
+            = MessageFlag(newKey)
     }
 }
 

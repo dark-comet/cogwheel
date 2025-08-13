@@ -481,8 +481,8 @@ data class EmbedThumbnailObject(
 data class EmbedVideoObject(
     val url: MaybeAbsent<String>? = null,
     @SerialName("proxy_url") val proxyUrl: MaybeAbsent<String>? = null,
-    val width: MaybeAbsent<String>? = null,
-    val height: MaybeAbsent<String>? = null
+    val width: MaybeAbsent<Int>? = null,
+    val height: MaybeAbsent<Int>? = null
 )
 
 @Serializable

@@ -5,48 +5,367 @@ package xyz.darkcomet.cogwheel.framework.primitives
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
 import java.math.BigInteger
 
+sealed class IdGenerator<T> {
+    abstract fun of(vararg snowflake: Snowflake): List<T>
+    abstract fun of(vararg snowflake: Long): List<T>
+}
 
-data class ApplicationId(val snowflake: Snowflake)
+data class ApplicationId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
 
-data class ApplicationCommandId(val snowflake: Snowflake)
+    companion object : IdGenerator<ApplicationId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<ApplicationId> {
+            return snowflake.map { ApplicationId(it) }
+        }
+        
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<ApplicationId> {
+            return snowflake.map { ApplicationId(it) }
+        }
+    }
+}
 
-data class AuditLogEntryId(val snowflake: Snowflake)
+data class ApplicationCommandId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<ApplicationCommandId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<ApplicationCommandId> {
+            return snowflake.map { ApplicationCommandId(it) }
+        }
+        
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<ApplicationCommandId> {
+            return snowflake.map { ApplicationCommandId(it) }
+        }
+    }
+}
 
-data class AutoModerationRuleId(val snowflake: Snowflake)
+data class AuditLogEntryId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<AuditLogEntryId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<AuditLogEntryId> {
+            return snowflake.map { AuditLogEntryId(it) }
+        }
 
-data class UserId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<AuditLogEntryId> {
+            return snowflake.map { AuditLogEntryId(it) }
+        }
+    }
+}
 
-data class GuildId(val snowflake: Snowflake)
+data class AutoModerationRuleId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
 
-data class RoleId(val snowflake: Snowflake)
+    companion object : IdGenerator<AutoModerationRuleId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<AutoModerationRuleId> {
+            return snowflake.map { AutoModerationRuleId(it) }
+        }
 
-data class ChannelId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<AutoModerationRuleId> {
+            return snowflake.map { AutoModerationRuleId(it) }
+        }
+    }
+}
 
-data class ForumTagId(val snowflake: Snowflake)
+data class UserId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<UserId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<UserId> {
+            return snowflake.map { UserId(it) }
+        }
+        
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<UserId> {
+            return snowflake.map { UserId(it) }
+        }
+    }
+}
 
-data class EmojiId(val snowflake: Snowflake)
+data class GuildId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<GuildId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<GuildId> {
+            return snowflake.map { GuildId(it) }
+        }
+        
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<GuildId> {
+            TODO("Not yet implemented")
+        }
+    }
+}
 
-data class TeamId(val snowflake: Snowflake)
+data class RoleId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<RoleId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<RoleId> {
+            return snowflake.map { RoleId(it) }
+        }
 
-data class SkuId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<RoleId> {
+            return snowflake.map { RoleId(it) }
+        }
+    }
+}
 
-data class EntitlementId(val snowflake: Snowflake)
+data class ChannelId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<ChannelId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<ChannelId> {
+            return snowflake.map { ChannelId(it) }
+        }
 
-data class SubscriptionId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<ChannelId> {
+            return snowflake.map { ChannelId(it) }
+        }
+    }
+}
 
-data class GuildScheduledEventId(val snowflake: Snowflake)
+data class ForumTagId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<ForumTagId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<ForumTagId> {
+            return snowflake.map { ForumTagId(it) }
+        }
 
-data class MessageId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<ForumTagId> {
+            return snowflake.map { ForumTagId(it) }
+        }
+    }
+}
 
-data class SoundboardSoundId(val snowflake: Snowflake)
+data class EmojiId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<EmojiId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<EmojiId> {
+            return snowflake.map { EmojiId(it) }
+        }
 
-data class StageInstanceId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<EmojiId> {
+            return snowflake.map { EmojiId(it) }
+        }
+    }
+}
 
-data class StickerId (val snowflake: Snowflake)
+data class TeamId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<TeamId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<TeamId> {
+            return snowflake.map { TeamId(it) }
+        }
 
-data class StickerPackId(val snowflake: Snowflake)
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<TeamId> {
+            return snowflake.map { TeamId(it) }
+        }
+    }
+}
 
-data class WebhookId(val snowflake: Snowflake)
+data class SkuId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<SkuId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<SkuId> {
+            return snowflake.map { SkuId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<SkuId> {
+            return snowflake.map { SkuId(it) }
+        }
+    }
+}
+
+data class EntitlementId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<EntitlementId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<EntitlementId> {
+            return snowflake.map { EntitlementId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<EntitlementId> {
+            return snowflake.map { EntitlementId(it) }
+        }
+    }
+}
+
+data class SubscriptionId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<SubscriptionId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<SubscriptionId> {
+            return snowflake.map { SubscriptionId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<SubscriptionId> {
+            return snowflake.map { SubscriptionId(it) }
+        }
+    }
+}
+
+data class GuildScheduledEventId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<GuildScheduledEventId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<GuildScheduledEventId> {
+            return snowflake.map { GuildScheduledEventId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<GuildScheduledEventId> {
+            return snowflake.map { GuildScheduledEventId(it) }
+        }
+    }
+}
+
+data class MessageId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<MessageId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<MessageId> {
+            return snowflake.map { MessageId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<MessageId> {
+            return snowflake.map { MessageId(it) }
+        }
+    }
+}
+
+data class SoundboardSoundId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<SoundboardSoundId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<SoundboardSoundId> {
+            return snowflake.map { SoundboardSoundId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<SoundboardSoundId> {
+            return snowflake.map { SoundboardSoundId(it) }
+        }
+    }
+}
+
+data class StageInstanceId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<StageInstanceId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<StageInstanceId> {
+            return snowflake.map { StageInstanceId(it) }
+        }
+        
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<StageInstanceId> {
+            return snowflake.map { StageInstanceId(it) }
+        }
+    }
+}
+
+data class StickerId (val snowflake: Snowflake) {
+ 
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<StickerId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<StickerId> {
+            return snowflake.map { StickerId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<StickerId> {
+            return snowflake.map { StickerId(it) }
+        }
+    }
+}
+
+data class StickerPackId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<StickerPackId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<StickerPackId> {
+            return snowflake.map { StickerPackId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<StickerPackId> {
+            return snowflake.map { StickerPackId(it) }
+        }
+    }
+}
+
+data class WebhookId(val snowflake: Snowflake) {
+    
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<WebhookId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<WebhookId> {
+            return snowflake.map { WebhookId(it) }
+        }
+
+        @JvmStatic
+        override fun of(vararg snowflake: Long): List<WebhookId> {
+            return snowflake.map { WebhookId(it) }
+        }
+    }
+}
 
 data class LocalizationMap(private val map: Map<String, String>) {
     

@@ -44,7 +44,7 @@ class ModifyThreadChannelRequestSpec(
         = apply { this.flags = MaybeAbsent(flags.toInt()) }
 
     fun flags(vararg flags: ChannelFlag): ModifyThreadChannelRequestSpec
-        = apply { this.flags = MaybeAbsent(BitField.from(flags).toInt()) }
+        = apply { this.flags = MaybeAbsent(BitField.from(*flags).toInt()) }
 
     fun appliedTags(vararg tagIds: ForumTagId): ModifyThreadChannelRequestSpec
         = apply { this.appliedTags = MaybeAbsent(tagIds.map { it.snowflake }) }

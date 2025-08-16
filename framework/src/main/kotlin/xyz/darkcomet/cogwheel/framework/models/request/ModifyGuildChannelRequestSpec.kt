@@ -90,7 +90,7 @@ class ModifyGuildChannelRequestSpec(
         = apply { this.flags = MaybeAbsent(flags.toInt()) }
     
     fun flags(vararg flags: ChannelFlag): ModifyGuildChannelRequestSpec
-        = apply { this.flags = MaybeAbsent(BitField.from(flags).toInt()) }
+        = apply { this.flags = MaybeAbsent(BitField.from(*flags).toInt()) }
     
     fun defaultReactionEmoji(emoji: ChannelDefaultReaction?): ModifyGuildChannelRequestSpec
         = apply { this.defaultReactionEmoji = MaybeAbsent(emoji?.toObject()) }

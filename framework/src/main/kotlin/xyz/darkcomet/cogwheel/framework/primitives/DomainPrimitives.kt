@@ -482,14 +482,6 @@ data class BitField<T : ExtensibleEnumValue<BigInteger>>(val value: BigInteger) 
         }
 
         @JvmStatic
-        fun <T : ExtensibleEnumValue<BigInteger>> from(entries: Array<T>) : BitField<T> {
-            val value = entries.fold(BigInteger.ZERO) { acc, entry ->
-                acc or entry.key
-            }
-            return BitField(value)
-        }
-
-        @JvmStatic
         fun <T : ExtensibleEnumValue<BigInteger>> from(base10String: String): BitField<T> {
             val value = BigInteger(base10String, 10)
             return BitField(value)

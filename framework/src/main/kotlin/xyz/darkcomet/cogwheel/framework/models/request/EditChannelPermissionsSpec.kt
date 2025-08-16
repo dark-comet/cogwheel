@@ -22,13 +22,13 @@ class EditChannelPermissionsSpec(
     internal var auditLogReason: String? = null 
     
     fun allow(vararg permission: Permission): EditChannelPermissionsSpec
-        = apply { this.allow = MaybeAbsent(BitField.from(permission).toString()) }
+        = apply { this.allow = MaybeAbsent(BitField.from(*permission).toString()) }
     
     fun allow(permission: BitField<Permission>): EditChannelPermissionsSpec
         = apply { this.allow = MaybeAbsent(permission.toString()) }
     
     fun deny(vararg permission: Permission): EditChannelPermissionsSpec
-        = apply { this.deny = MaybeAbsent(BitField.from(permission).toString()) }
+        = apply { this.deny = MaybeAbsent(BitField.from(*permission).toString()) }
     
     fun deny(permission: BitField<Permission>): EditChannelPermissionsSpec
         = apply { this.deny = MaybeAbsent(permission.toString()) }

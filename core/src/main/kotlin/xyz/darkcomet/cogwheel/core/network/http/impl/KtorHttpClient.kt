@@ -3,6 +3,7 @@ package xyz.darkcomet.cogwheel.core.network.http.impl
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import okhttp3.OkHttpClient
@@ -14,8 +15,11 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
+import xyz.darkcomet.cogwheel.core.network.objects.FileSupplier
+import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.io.path.readBytes
 
 internal class KtorHttpClient(
     private val settings: CwDiscordClientSettings,
@@ -57,17 +61,21 @@ internal class KtorHttpClient(
 
     override suspend fun submit(request: CwHttpRequest): CwHttpResponse.Raw {
         val endpointUrl = getEndpointUrl(request.route)
-        val contentType = if (request.bodyContent != null) ContentType.Application.Json else ContentType.Any
-        val requestBody = request.bodyContent ?: ""
-        
         val traceId = UUID.randomUUID()
-        
-        logger.trace("Submitting HttpRequest: traceId={}, {} {}, bodyContent={}", traceId, request.method, endpointUrl, requestBody)
+
+        logger.trace(
+            "Submitting HttpRequest: traceId={}, {} {}, files.count={}, jsonParams={}", 
+            traceId, 
+            request.method, 
+            endpointUrl, 
+            request.fileContent?.files?.size ?: 0, 
+            request.jsonContent ?: ""
+        )
         
         val response: HttpResponse?
         
         if (rateLimitStrategy == null || rateLimitStrategy.prepareRequestSubmit(request)) {
-            response = submitRequestWithRetry(request, endpointUrl, contentType, requestBody)
+            response = submitRequestWithRetry(request, endpointUrl, request.jsonContent ?: "", request.fileContent)
             val responseBody = response.bodyAsText()
             logger.trace("Received HttpResponse for id={}, {}, bodyContent={}", traceId, response.toString(), responseBody)
             
@@ -82,8 +90,8 @@ internal class KtorHttpClient(
     private suspend fun submitRequestWithRetry(
         request: CwHttpRequest,
         endpointUrl: String,
-        contentType: ContentType,
-        requestBody: String
+        jsonBody: String,
+        files: FileSupplier?
     ): HttpResponse {
         
         var finalResponse: HttpResponse? = null
@@ -92,7 +100,7 @@ internal class KtorHttpClient(
         do {
             submitAttemptCount++
 
-            val response = submitRequest(request, endpointUrl, contentType, requestBody)
+            val response = submitRequest(request, endpointUrl, jsonBody, files)
 
             rateLimitStrategy?.record(request, response)
 
@@ -120,8 +128,8 @@ internal class KtorHttpClient(
     private suspend fun submitRequest(
         request: CwHttpRequest,
         endpointUrl: String,
-        contentType: ContentType,
-        requestBody: String
+        jsonBody: String,
+        fileAttachments: FileSupplier?
     ): HttpResponse {
         
         return httpClient.request(endpointUrl) {
@@ -139,9 +147,30 @@ internal class KtorHttpClient(
                     append(it.key, it.value)
                 }
             }
+            
+            if (fileAttachments != null) {
+                contentType(ContentType.MultiPart.FormData)
+                formData() {
+                    // TODO: Validate the files
+                    for (file in fileAttachments.files) {
+                        val fileName = file.fileName.toString().lowercase()
+                        val extension = Paths.get(fileName).toFile().extension
 
-            contentType(contentType)
-            setBody(requestBody)
+                        append("file", file.readBytes(), Headers.build {
+                            append(HttpHeaders.ContentDisposition, "form-data")
+                            append(HttpHeaders.ContentType, "image/$extension")
+                        })
+                    }
+
+                    append("payload_json", jsonBody, Headers.build {
+                        append(HttpHeaders.ContentDisposition, "form-data")
+                        append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                    })
+                }
+            } else {
+                contentType(ContentType.Application.Json)
+                setBody(jsonBody)
+            }
         }
     }
 

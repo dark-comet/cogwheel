@@ -267,7 +267,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     ): CwHttpResponse<ChannelObject> {
         
         val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/threads") {
-            jsonParams(request, StartThreadInForumOrMediaChannelRequestParameters.serializer())
+            jsonParams(request.jsonBody, StartThreadInForumOrMediaChannelRequestParameters.JsonBody.serializer())
+            files(request.files)
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)

@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import xyz.darkcomet.cogwheel.core.primitives.ISO8601Timestamp
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
+import java.nio.file.Path
 
 @Serializable
 data class AddGuildMemberRequestParameters(
@@ -568,16 +569,22 @@ data class StartThreadFromMessageRequestParameters(
     @SerialName("rate_limit_per_user") val rateLimitPerUser: MaybeAbsent<Int?>? = null,
 )
 
-@Serializable
 data class StartThreadInForumOrMediaChannelRequestParameters(
-    val name: String,
-    val autoArchiveDuration: MaybeAbsent<Int>? = null,
-    val rateLimitPerUser: MaybeAbsent<Int>? = null,
-    val message: MaybeAbsent<ForumThreadMessageParametersObject>? = null,
-    val appliedTags: MaybeAbsent<List<Snowflake>>? = null,
-    val files: MaybeAbsent<List<String>>? = null,
-    val payloadJson: MaybeAbsent<String>? = null
-)
+    val jsonBody: JsonBody,
+    val files: Files? = null,
+) {
+    @Serializable
+    data class JsonBody(
+        val name: String,
+        val autoArchiveDuration: MaybeAbsent<Int>? = null,
+        val rateLimitPerUser: MaybeAbsent<Int>? = null,
+        val message: ForumThreadMessageParametersObject,
+        val appliedTags: MaybeAbsent<List<Snowflake>>? = null,
+        val files: MaybeAbsent<List<String>>? = null,
+    )
+    
+    data class Files(override val files: List<Path>) : FileSupplier
+}
 
 @Serializable
 data class StartThreadWithoutMessageRequestParameters(
@@ -594,3 +601,7 @@ data class UpdateCurrentUserApplicationRoleConnectionRequestParameters(
     @SerialName("platform_username") val platformUsername: MaybeAbsent<String>? = null,
     val metadata: MaybeAbsent<Map<String, ApplicationRoleConnectionMetadataObject>>? = null
 )
+
+sealed interface FileSupplier {
+    val files: List<Path>
+}

@@ -2,6 +2,7 @@
 
 package xyz.darkcomet.cogwheel.framework.models.request
 
+import xyz.darkcomet.cogwheel.core.network.objects.FileSupplier
 import xyz.darkcomet.cogwheel.core.network.objects.ForumThreadMessageParametersObject
 import xyz.darkcomet.cogwheel.core.network.objects.StartThreadInForumOrMediaChannelRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
@@ -39,6 +40,9 @@ class StartThreadInForumOrMediaChannelRequestSpec(
     fun appliedTags(vararg tagId: ForumTagId): StartThreadInForumOrMediaChannelRequestSpec
         = apply { this.appliedTags = MaybeAbsent(tagId.map { it.snowflake }) }
   
+    fun appliedTags(tagIds: Iterable<ForumTagId>): StartThreadInForumOrMediaChannelRequestSpec
+        = apply { this.appliedTags = MaybeAbsent(tagIds.map { it.snowflake }) }
+    
     fun files(files: Collection<Path>): StartThreadInForumOrMediaChannelRequestSpec
         = apply { this.files = files.toList() }
     
@@ -49,21 +53,16 @@ class StartThreadInForumOrMediaChannelRequestSpec(
         = apply { this.auditLogReason = reason }
    
     internal fun buildParameters(): StartThreadInForumOrMediaChannelRequestParameters {
-        val jsonBody = StartThreadInForumOrMediaChannelRequestParameters.JsonBody(
+        
+        val payloadJson = StartThreadInForumOrMediaChannelRequestParameters.PayloadJson(
             name = this.name ?: throw InvalidModelException("'name' is required"),
             autoArchiveDuration = this.autoArchiveDuration,
             rateLimitPerUser = this.rateLimitPerUser,
             message = this.message ?: throw InvalidModelException("'message' is required"),
             appliedTags = this.appliedTags,
         )
+        val filesAttachments = this.files?.let { FileSupplier(it) }
         
-        val files = this.files
-        val filesAttachments = files?.let {
-            StartThreadInForumOrMediaChannelRequestParameters.Files(
-                files = files
-            )
-        } 
-        
-        return StartThreadInForumOrMediaChannelRequestParameters(jsonBody, filesAttachments)
+        return StartThreadInForumOrMediaChannelRequestParameters(payloadJson, filesAttachments)
     }
 }

@@ -121,7 +121,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     ): CwHttpResponse<MessageObject?> {
         
         val httpRequest = CwHttpRequest.create(POST, "/webhooks/${webhookId}/${webhookToken}") {
-            jsonParams(request, ExecuteWebhookRequestParameters.serializer())
+            jsonParams(request.payloadJson, ExecuteWebhookRequestParameters.PayloadJson.serializer())
+            files(request.files)
             optionalQueryStringParam("wait", wait)
             optionalQueryStringParam("threadId", threadId)
         }
@@ -183,7 +184,8 @@ internal constructor(private val httpClient: CwHttpClient) {
             PATCH, "/webhooks/${webhookId}/${webhookToken}/messages/${messageId}",
             rateLimitRouteIdentifier = "/webhooks/${webhookId}/${webhookToken}/messages/*"
         ) {
-            jsonParams(request, EditWebhookMessageRequestParameters.serializer())
+            jsonParams(request.payloadJson, EditWebhookMessageRequestParameters.PayloadJson.serializer())
+            files(request.files)
             optionalQueryStringParam("thread_id", threadId)
         }
         val response = httpClient.submit(httpRequest)

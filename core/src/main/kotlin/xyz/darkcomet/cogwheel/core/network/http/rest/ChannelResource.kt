@@ -69,7 +69,9 @@ internal constructor(private val httpClient: CwHttpClient) {
         auditLogReason: String? = null
     ): CwHttpResponse<ChannelObject> {
         
-        val httpRequest = CwHttpRequest.create(DELETE, "/channels/${channelId}")
+        val httpRequest = CwHttpRequest.create(DELETE, "/channels/${channelId}") {
+            optionalAuditLogReason(auditLogReason)
+        }
         val response = httpClient.submit(httpRequest)
 
         return response.withData(ChannelObject.serializer())
@@ -154,47 +156,6 @@ internal constructor(private val httpClient: CwHttpClient) {
         return response.withNoData()
     }
     
-    suspend fun getPinnedMessages(channelId: Snowflake): CwHttpResponse<List<MessageObject>> {
-        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/pins")
-        val response = httpClient.submit(httpRequest)
-
-        return response.withData(ListSerializer(MessageObject.serializer()))
-    }
-    
-    suspend fun pinMessage(
-        channelId: Snowflake, 
-        messageId: Snowflake, 
-        auditLogReason: String? = null
-    ): CwHttpResponse<Unit> {
-        
-        val httpRequest = CwHttpRequest.create(
-            PUT, "/channels/${channelId}/pins/${messageId}",
-            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*" 
-        ) {
-            optionalAuditLogReason(auditLogReason)
-        }
-        val response = httpClient.submit(httpRequest)
-
-        return response.withNoData()
-    }
-    
-    suspend fun unpinMessage(
-        channelId: Snowflake, 
-        messageId: Snowflake, 
-        auditLogReason: String? = null
-    ): CwHttpResponse<Unit> {
-        
-        val httpRequest = CwHttpRequest.create(
-            DELETE, "/channels/${channelId}/pins/${messageId}",
-            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*"
-        ) {
-            optionalAuditLogReason(auditLogReason)
-        }
-        val response = httpClient.submit(httpRequest)
-
-        return response.withNoData()
-    }
-    
     suspend fun groupDmAddRecipient(
         channelId: Snowflake, 
         userId: Snowflake, 
@@ -267,7 +228,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     ): CwHttpResponse<ChannelObject> {
         
         val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/threads") {
-            jsonParams(request.jsonBody, StartThreadInForumOrMediaChannelRequestParameters.JsonBody.serializer())
+            jsonParams(request.payloadJson, StartThreadInForumOrMediaChannelRequestParameters.PayloadJson.serializer())
             files(request.files)
             optionalAuditLogReason(auditLogReason)
         }

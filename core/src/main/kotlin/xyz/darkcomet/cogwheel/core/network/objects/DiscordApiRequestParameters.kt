@@ -175,23 +175,26 @@ data class CreateGuildTemplateRequestParameters(
     val description: MaybeAbsent<String>? = null
 )
 
-@Serializable
 data class CreateMessageRequestParameters(
-    val content: MaybeAbsent<String>? = null,
-    val nonce: MaybeAbsent<String>? = null,
-    val tts: MaybeAbsent<Boolean>? = null,
-    val embeds: MaybeAbsent<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
-    @SerialName("message_reference") val messageReference: MaybeAbsent<MessageReferenceObject>? = null,
-    val components: MaybeAbsent<List<MessageComponentObject>>? = null,
-    @SerialName("sticker_ids") val stickerIds: MaybeAbsent<List<Snowflake>>? = null,
-//    val filesN
-    @SerialName("payload_json") val payloadJson: MaybeAbsent<String>? = null,
-    val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
-    val flags: MaybeAbsent<Int>? = null,
-    @SerialName("enforce_nonce") val enforceNonce: MaybeAbsent<Boolean>? = null,
-    val poll: MaybeAbsent<PollObject>? = null
-)
+    val payloadJson: PayloadJson,
+    val files: FileSupplier?,
+) {
+    @Serializable
+    data class PayloadJson(
+        val content: MaybeAbsent<String>? = null,
+        val nonce: MaybeAbsent<String>? = null,
+        val tts: MaybeAbsent<Boolean>? = null,
+        val embeds: MaybeAbsent<List<EmbedObject>>? = null,
+        @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
+        @SerialName("message_reference") val messageReference: MaybeAbsent<MessageReferenceObject>? = null,
+        val components: MaybeAbsent<List<MessageComponentObject>>? = null,
+        @SerialName("sticker_ids") val stickerIds: MaybeAbsent<List<Snowflake>>? = null,
+        val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
+        val flags: MaybeAbsent<Int>? = null,
+        @SerialName("enforce_nonce") val enforceNonce: MaybeAbsent<Boolean>? = null,
+        val poll: MaybeAbsent<PollObject>? = null
+    )
+}
 
 @Serializable
 data class CreateStageInstanceRequestParameters(
@@ -228,47 +231,56 @@ data class EditChannelPermissionsParameters(
     val type: Int
 )
 
-@Serializable
 data class EditMessageRequestParameters(
-    val content: MaybeAbsent<String>? = null,
-    val embeds: MaybeAbsent<List<EmbedObject>>? = null,
-    val flags: MaybeAbsent<Int>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
-    val components: MaybeAbsent<List<MessageComponentObject>>? = null,
-//    val filesN
-    @SerialName("payload_json") val payloadJson: MaybeAbsent<String>? = null,
-    val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
-)
+    val payloadJson: PayloadJson,
+    val files: FileSupplier?,
+) {
+    @Serializable
+    data class PayloadJson(
+        val content: MaybeAbsent<String>? = null,
+        val embeds: MaybeAbsent<List<EmbedObject>>? = null,
+        val flags: MaybeAbsent<Int>? = null,
+        @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
+        val components: MaybeAbsent<List<MessageComponentObject>>? = null,
+        val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
+    )
+}
 
-@Serializable
 data class EditWebhookMessageRequestParameters(
-    val content: MaybeAbsent<String>? = null,
-    val embeds: MaybeAbsent<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
-    val components: MaybeAbsent<List<MessageComponentObject>>? = null,
-//    val filesN
-    @SerialName("payload_json") val payloadJson: MaybeAbsent<String>? = null,
-    val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
-    val poll: MaybeAbsent<PollObject>? = null
-)
+    val payloadJson: PayloadJson,
+    val files: FileSupplier?,
+) {
+    @Serializable
+    data class PayloadJson(
+        val content: MaybeAbsent<String>? = null,
+        val embeds: MaybeAbsent<List<EmbedObject>>? = null,
+        @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
+        val components: MaybeAbsent<List<MessageComponentObject>>? = null,
+        val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
+        val poll: MaybeAbsent<PollObject>? = null
+    )
+}
 
-@Serializable
 data class ExecuteWebhookRequestParameters(
-    val content: MaybeAbsent<String>? = null,
-    val username: MaybeAbsent<String>? = null,
-    @SerialName("avatar_url") val avatarUrl: MaybeAbsent<String>? = null,
-    val tts: MaybeAbsent<Boolean>? = null,
-    val embeds: MaybeAbsent<List<EmbedObject>>? = null,
-    @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
-    val components: MaybeAbsent<List<MessageComponentObject>>? = null,
-//    val filesN
-    @SerialName("payload_json") val payloadJson: MaybeAbsent<String>? = null,
-    val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
-    val flags: MaybeAbsent<Int>? = null,
-    @SerialName("thread_name") val threadName: MaybeAbsent<String>? = null,
-    @SerialName("applied_tags") val appliedTags: MaybeAbsent<List<Snowflake>>? = null,
-    val poll: MaybeAbsent<PollObject>? = null
-)
+    val payloadJson: PayloadJson,
+    val files: FileSupplier?,
+) {
+    @Serializable
+    data class PayloadJson(
+        val content: MaybeAbsent<String>? = null,
+        val username: MaybeAbsent<String>? = null,
+        @SerialName("avatar_url") val avatarUrl: MaybeAbsent<String>? = null,
+        val tts: MaybeAbsent<Boolean>? = null,
+        val embeds: MaybeAbsent<List<EmbedObject>>? = null,
+        @SerialName("allowed_mentions") val allowedMentions: MaybeAbsent<AllowedMentionsObject>? = null,
+        val components: MaybeAbsent<List<MessageComponentObject>>? = null,
+        val attachments: MaybeAbsent<List<AttachmentObject>>? = null,
+        val flags: MaybeAbsent<Int>? = null,
+        @SerialName("thread_name") val threadName: MaybeAbsent<String>? = null,
+        @SerialName("applied_tags") val appliedTags: MaybeAbsent<List<Snowflake>>? = null,
+        val poll: MaybeAbsent<PollObject>? = null
+    )
+}
 
 @Serializable
 data class FollowAnnouncementChannelRequestParameters(
@@ -570,11 +582,11 @@ data class StartThreadFromMessageRequestParameters(
 )
 
 data class StartThreadInForumOrMediaChannelRequestParameters(
-    val jsonBody: JsonBody,
-    val files: Files? = null,
+    val payloadJson: PayloadJson,
+    val files: FileSupplier? = null,
 ) {
     @Serializable
-    data class JsonBody(
+    data class PayloadJson(
         val name: String,
         val autoArchiveDuration: MaybeAbsent<Int>? = null,
         val rateLimitPerUser: MaybeAbsent<Int>? = null,
@@ -582,8 +594,6 @@ data class StartThreadInForumOrMediaChannelRequestParameters(
         val appliedTags: MaybeAbsent<List<Snowflake>>? = null,
         val files: MaybeAbsent<List<String>>? = null,
     )
-    
-    data class Files(override val files: List<Path>) : FileSupplier
 }
 
 @Serializable
@@ -602,6 +612,4 @@ data class UpdateCurrentUserApplicationRoleConnectionRequestParameters(
     val metadata: MaybeAbsent<Map<String, ApplicationRoleConnectionMetadataObject>>? = null
 )
 
-sealed interface FileSupplier {
-    val files: List<Path>
-}
+class FileSupplier(val files: List<Path>)

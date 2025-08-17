@@ -50,7 +50,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     ): CwHttpResponse<MessageObject> {
         
         val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/messages") {
-            jsonParams(request, CreateMessageRequestParameters.serializer())
+            jsonParams(request.payloadJson, CreateMessageRequestParameters.PayloadJson.serializer())
+            files(request.files)
         }
         val response = httpClient.submit(httpRequest)
 
@@ -177,7 +178,8 @@ internal constructor(private val httpClient: CwHttpClient) {
             PATCH, "/channels/${channelId}/messages/${messageId}",
             rateLimitRouteIdentifier = "/channels/${channelId}/messages/*"
         ) {
-            jsonParams(request, EditMessageRequestParameters.serializer())
+            jsonParams(request.payloadJson, EditMessageRequestParameters.PayloadJson.serializer())
+            files(request.files)
         }
         val response = httpClient.submit(httpRequest)
 
@@ -209,6 +211,47 @@ internal constructor(private val httpClient: CwHttpClient) {
         
         val httpRequest = CwHttpRequest.create(POST, "/channels/${channelId}/messages/bulk-delete") {
             jsonParams(request, BulkDeleteMessagesRequestParameters.serializer())
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
+    }
+    
+    suspend fun getPinnedMessages(channelId: Snowflake): CwHttpResponse<List<MessageObject>> {
+        val httpRequest = CwHttpRequest.create(GET, "/channels/${channelId}/pins")
+        val response = httpClient.submit(httpRequest)
+
+        return response.withData(ListSerializer(MessageObject.serializer()))
+    }
+
+    suspend fun pinMessage(
+        channelId: Snowflake,
+        messageId: Snowflake,
+        auditLogReason: String? = null
+    ): CwHttpResponse<Unit> {
+
+        val httpRequest = CwHttpRequest.create(
+            PUT, "/channels/${channelId}/pins/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*"
+        ) {
+            optionalAuditLogReason(auditLogReason)
+        }
+        val response = httpClient.submit(httpRequest)
+
+        return response.withNoData()
+    }
+
+    suspend fun unpinMessage(
+        channelId: Snowflake,
+        messageId: Snowflake,
+        auditLogReason: String? = null
+    ): CwHttpResponse<Unit> {
+
+        val httpRequest = CwHttpRequest.create(
+            DELETE, "/channels/${channelId}/pins/${messageId}",
+            rateLimitRouteIdentifier = "/channels/${channelId}/pins/*"
+        ) {
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)

@@ -34,7 +34,7 @@ internal constructor(private val httpClient: CwHttpClient) {
         applicationId: Snowflake, 
         instanceId: String
     ): CwHttpResponse<ApplicationActivityInstanceObject?> {
-        val httpRequest = CwHttpRequest.create(GET, "/applications/@me")
+        val httpRequest = CwHttpRequest.create(GET, "/applications/${applicationId}/activity-instances/${instanceId}")
         val response = httpClient.submit(httpRequest)
         
         return response.withData(ApplicationActivityInstanceObject.serializer())

@@ -151,11 +151,10 @@ internal class KtorHttpClient(
             if (fileAttachments != null) {
                 contentType(ContentType.MultiPart.FormData)
                 formData() {
-                    // TODO: Validate the files
                     for (file in fileAttachments.files) {
                         val fileName = file.fileName.toString().lowercase()
                         val extension = Paths.get(fileName).toFile().extension
-
+                        
                         append("file", file.readBytes(), Headers.build {
                             append(HttpHeaders.ContentDisposition, "form-data")
                             append(HttpHeaders.ContentType, "image/$extension")

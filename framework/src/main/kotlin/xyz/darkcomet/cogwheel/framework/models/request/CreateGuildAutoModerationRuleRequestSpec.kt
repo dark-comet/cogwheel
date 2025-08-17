@@ -54,7 +54,7 @@ class CreateGuildAutoModerationRuleRequestSpec(internal val guildId: GuildId) {
         return this 
     }
     
-    fun actions(actions: List<AutoModerationAction>): CreateGuildAutoModerationRuleRequestSpec
+    fun actions(actions: Collection<AutoModerationAction>): CreateGuildAutoModerationRuleRequestSpec
         = apply { this.actions = actions.map { it.toObject() } }
     
     fun actions(vararg actions: AutoModerationAction): CreateGuildAutoModerationRuleRequestSpec

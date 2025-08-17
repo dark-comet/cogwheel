@@ -16,6 +16,9 @@ import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpResponse
 import xyz.darkcomet.cogwheel.core.network.objects.FileSupplier
+import xyz.darkcomet.cogwheel.core.network.objects.MultiFileSupplier
+import xyz.darkcomet.cogwheel.core.network.objects.SingleFileSupplier
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -68,7 +71,7 @@ internal class KtorHttpClient(
             traceId, 
             request.method, 
             endpointUrl, 
-            request.fileContent?.files?.size ?: 0, 
+            request.fileContent?.count ?: 0, 
             request.jsonContent ?: ""
         )
         
@@ -149,28 +152,68 @@ internal class KtorHttpClient(
             }
             
             if (fileAttachments != null) {
-                contentType(ContentType.MultiPart.FormData)
-                formData() {
-                    for (file in fileAttachments.files) {
-                        val fileName = file.fileName.toString().lowercase()
-                        val extension = Paths.get(fileName).toFile().extension
-                        
-                        append("file", file.readBytes(), Headers.build {
-                            append(HttpHeaders.ContentDisposition, "form-data")
-                            append(HttpHeaders.ContentType, "image/$extension")
-                        })
-                    }
-
-                    append("payload_json", jsonBody, Headers.build {
-                        append(HttpHeaders.ContentDisposition, "form-data")
-                        append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                    })
-                }
+                multipartFormBody(this@request, jsonBody, fileAttachments)
             } else {
-                contentType(ContentType.Application.Json)
-                setBody(jsonBody)
+                applicationJsonBody(this@request, jsonBody)
             }
         }
+    }
+    
+    private fun multipartFormBody(
+        builder: HttpRequestBuilder,
+        jsonBody: String,
+        fileAttachments: FileSupplier
+    ) {
+        // Helper function to append multi-part file data in the form
+        fun attachFile(form: FormBuilder, fileIndex: Int?, filePath: Path) {
+            val fileName = filePath.fileName.toString().lowercase()
+            val extension = Paths.get(fileName).toFile().extension
+            
+            // Reference: https://www.iana.org/assignments/media-types/media-types.xhtml
+            val contentType = when (extension) {
+                "jpg", "jpeg", -> ContentType.Image.JPEG.toString()
+                "png", "gif", "webp", "avif" -> "image/$extension"
+                "json" -> "application/json"
+                "zip" -> ContentType.Application.Zip.toString()
+                else -> ContentType.Application.OctetStream.toString() // safe default for other attachments (binaries etc.)
+            }
+            
+            val name = if (fileIndex != null) "files[$fileIndex]" else "file"
+            
+            form.append(name, filePath.readBytes(), Headers.build {
+                append(HttpHeaders.ContentDisposition, "form-data")
+                append(HttpHeaders.ContentType, contentType)
+            })
+        }
+        
+        // Method begins here
+        builder.contentType(ContentType.MultiPart.FormData)
+        
+        val form = formData {
+            append("payload_json", jsonBody, Headers.build {
+                append(HttpHeaders.ContentDisposition, "form-data")
+                append(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            })
+
+            when (fileAttachments) {
+                is SingleFileSupplier -> {
+                    attachFile(this@formData, null, fileAttachments.file)
+                }
+                is MultiFileSupplier -> {
+                    for (i in fileAttachments.files.indices) {
+                        val file = fileAttachments.files[i]
+                        attachFile(this@formData, i, file)
+                    }
+                }
+            }
+        }
+        
+        builder.setBody(form)
+    }
+    
+    private fun applicationJsonBody(builder: HttpRequestBuilder, jsonBody: String) {
+        builder.contentType(ContentType.Application.Json)
+        builder.setBody(jsonBody)
     }
 
     private fun getEndpointUrl(endpointUrl: String): String {

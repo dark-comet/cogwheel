@@ -383,10 +383,41 @@ data class LocalizationMap(private val map: Map<String, String>) {
 @ConsistentCopyVisibility
 data class DiscordColor 
 private constructor(val value: Int) {
+    
+    val red
+        get() = (value shr 16) and 0xFF
+    
+    val green
+        get() = (value shr 8) and 0xFF
+    
+    val blue
+        get() = value and 0xFF
+    
+    fun toHex(): String = String.format("#%02X%02X%02X", red, green, blue)
+    
+    fun toRGB(): String = "rgb($red, $green, $blue)"
+
     companion object {
-        // TODO
-        fun from(color: Int): DiscordColor {
-            TODO()
+        @JvmStatic
+        fun from(rgbCode: Int): DiscordColor {
+            return DiscordColor(rgbCode)
+        }
+
+        @JvmStatic
+        fun fromHex(hexCode: String): DiscordColor {
+            val colorHex = if (hexCode.startsWith("#")) {
+                hexCode.substring(1)
+            } else {
+                hexCode
+            }
+            
+            return from(colorHex.toInt(16))
+        }
+
+        @JvmStatic
+        fun from(red: Int, green: Int, blue: Int): DiscordColor {
+            val code = red and 0xFF shl 16 or (green and 0xFF shl 8) or (blue and 0xFF)
+            return DiscordColor(code)
         }
     }
 }

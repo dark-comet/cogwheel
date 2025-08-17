@@ -2,8 +2,8 @@
 
 package xyz.darkcomet.cogwheel.framework.models.request
 
-import xyz.darkcomet.cogwheel.core.network.objects.FileSupplier
 import xyz.darkcomet.cogwheel.core.network.objects.ForumThreadMessageParametersObject
+import xyz.darkcomet.cogwheel.core.network.objects.MultiFileSupplier
 import xyz.darkcomet.cogwheel.core.network.objects.StartThreadInForumOrMediaChannelRequestParameters
 import xyz.darkcomet.cogwheel.core.primitives.MaybeAbsent
 import xyz.darkcomet.cogwheel.core.primitives.Snowflake
@@ -61,7 +61,7 @@ class StartThreadInForumOrMediaChannelRequestSpec(
             message = this.message ?: throw InvalidModelException("'message' is required"),
             appliedTags = this.appliedTags,
         )
-        val filesAttachments = this.files?.let { FileSupplier(it) }
+        val filesAttachments = this.files?.let { MultiFileSupplier(it) }
         
         return StartThreadInForumOrMediaChannelRequestParameters(payloadJson, filesAttachments)
     }

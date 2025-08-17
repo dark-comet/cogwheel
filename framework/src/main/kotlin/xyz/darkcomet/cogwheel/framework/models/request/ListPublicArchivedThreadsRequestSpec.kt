@@ -6,8 +6,12 @@ import xyz.darkcomet.cogwheel.framework.primitives.ChannelId
 class ListPublicArchivedThreadsRequestSpec(
     internal val channelId: ChannelId
 ) {
-    
     internal var before: ISO8601Timestamp? = null
     internal var limit: Int? = null
+   
+    fun before(timestamp: ISO8601Timestamp): ListPublicArchivedThreadsRequestSpec
+        = apply { this.before = timestamp }
     
+    fun limit(quantity: Int): ListPublicArchivedThreadsRequestSpec
+        = apply { this.limit = quantity }
 }

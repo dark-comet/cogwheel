@@ -2,6 +2,7 @@ package xyz.darkcomet.cogwheel.core.network.http.rest
 
 import io.ktor.client.request.forms.*
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpClient
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpMethod.*
 import xyz.darkcomet.cogwheel.core.network.http.CwHttpRequest
@@ -65,12 +66,8 @@ internal constructor(private val httpClient: CwHttpClient) {
     ): CwHttpResponse<StickerObject> {
         
         val httpRequest = CwHttpRequest.create(POST, "/guilds/${guildId}/stickers") {
-            formData { 
-                append("name", request.name)
-                append("description", request.description)
-                append("tags", request.tags)
-                append("file", request.file)
-            }
+            jsonParams(request.payloadJson, CreateGuildStickerRequestParameters.PayloadJson.serializer())
+            files(request.file)
             optionalAuditLogReason(auditLogReason)
         }
         val response = httpClient.submit(httpRequest)

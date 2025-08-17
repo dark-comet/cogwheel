@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.entitles.automod
 
 import xyz.darkcomet.cogwheel.core.network.objects.AutoModerationRuleTriggerMetadataObject
@@ -33,6 +35,7 @@ data class AutoModerationRuleTriggerMetadata(
     }
     
     class BuilderSpec {
+        
         private var keywordFilter: List<String> = listOf()
         private var regexPatterns: List<String> = listOf()
         private var presets: List<AutoModerationKeywordPresetType> = listOf()
@@ -49,7 +52,13 @@ data class AutoModerationRuleTriggerMetadata(
         fun presets(vararg presets: AutoModerationKeywordPresetType): BuilderSpec
             = apply { this.presets = presets.toList() }
         
+        fun presets(presets: Collection<AutoModerationKeywordPresetType>): BuilderSpec
+            = apply { this.presets = presets.toList() }
+        
         fun allowList(vararg allowList: String): BuilderSpec
+            = apply { this.allowList = allowList.toList() }
+
+        fun allowList(allowList: Collection<String>): BuilderSpec
             = apply { this.allowList = allowList.toList() }
         
         fun mentionTotalLimit(count: Int): BuilderSpec

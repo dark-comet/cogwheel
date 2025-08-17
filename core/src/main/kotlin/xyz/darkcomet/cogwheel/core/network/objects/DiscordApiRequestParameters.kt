@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.core.network.objects
 
 import kotlinx.serialization.SerialName
@@ -161,13 +163,17 @@ data class CreateGuildSoundboardSoundRequestParameters(
     @SerialName("emoji_name") val emojiName: MaybeAbsent<String?>? = null
 )
 
-@Serializable
 data class CreateGuildStickerRequestParameters(
-    val name: String,
-    val description: String,
-    val tags: String,
-    val file: String
-)
+    val payloadJson: PayloadJson,
+    val file: FileSupplier
+) {
+    @Serializable
+    data class PayloadJson(
+        val name: String,
+        val description: String,
+        val tags: String
+    )
+}
 
 @Serializable
 data class CreateGuildTemplateRequestParameters(
@@ -612,4 +618,16 @@ data class UpdateCurrentUserApplicationRoleConnectionRequestParameters(
     val metadata: MaybeAbsent<Map<String, ApplicationRoleConnectionMetadataObject>>? = null
 )
 
-class FileSupplier(val files: List<Path>)
+interface FileSupplier {
+    val count: Int
+}
+
+class SingleFileSupplier(val file: Path) : FileSupplier {
+    override val count: Int
+        get() = 1
+}
+
+class MultiFileSupplier(val files: List<Path>) : FileSupplier {
+    override val count: Int
+        get() = files.size
+}

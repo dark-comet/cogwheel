@@ -23,7 +23,7 @@ class CreateGuildEmojiRequestSpec(internal val guildId: GuildId) {
     fun image(image: DiscordImage): CreateGuildEmojiRequestSpec
         = apply { this.image = image.data.toString() }
     
-    fun roles(roles: List<RoleId>): CreateGuildEmojiRequestSpec
+    fun roles(roles: Collection<RoleId>): CreateGuildEmojiRequestSpec
         = apply { this.roles = roles.map { it.snowflake } }
     
     fun roles(vararg roles: RoleId): CreateGuildEmojiRequestSpec

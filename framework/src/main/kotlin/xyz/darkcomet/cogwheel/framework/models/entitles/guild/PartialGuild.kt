@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package xyz.darkcomet.cogwheel.framework.models.entitles.guild
 
 import xyz.darkcomet.cogwheel.core.network.objects.GuildObject
@@ -9,7 +11,7 @@ import xyz.darkcomet.cogwheel.framework.primitives.GuildNsfwLevel
 import xyz.darkcomet.cogwheel.framework.primitives.GuildVerificationLevel
 import xyz.darkcomet.cogwheel.framework.primitives.asGuildId
 
-data class PartialGuild(
+class PartialGuild(
     val id: GuildId?,
     val name: String?,
     val description: String?,

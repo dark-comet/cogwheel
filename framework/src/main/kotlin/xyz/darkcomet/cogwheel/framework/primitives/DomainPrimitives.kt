@@ -367,6 +367,21 @@ data class WebhookId(val snowflake: Snowflake) {
     }
 }
 
+data class IntegrationId(val snowflake: Snowflake) {
+    constructor(id: Long) : this(Snowflake(id))
+    
+    companion object : IdGenerator<IntegrationId>() {
+        @JvmStatic
+        override fun of(vararg snowflake: Snowflake): List<IntegrationId> {
+            return snowflake.map { IntegrationId(it) }
+        }
+
+        override fun of(vararg snowflake: Long): List<IntegrationId> {
+            return snowflake.map { IntegrationId(it) }
+        }
+    }
+}
+
 data class LocalizationMap(private val map: Map<String, String>) {
     
     fun toObject(): Map<String, String> {
@@ -547,6 +562,18 @@ private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteg
 
         override fun createValue(newKey: BigInteger): GuildInviteFlag
             = GuildInviteFlag(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class RoleFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, RoleFlag>() {
+        
+        @JvmField val IN_PROMPT = addPreset((1 shl 0).toBigInteger())
+        
+        override fun createValue(newKey: BigInteger): RoleFlag
+            = RoleFlag(newKey)
     }
 }
 
@@ -1076,6 +1103,19 @@ private constructor (override val key: Int) : ExtensibleEnumValue<Int> {
 }
 
 @ConsistentCopyVisibility
+data class GuildMfaLevel
+private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
+    companion object Presets : ExtensibleEnum<Int, GuildMfaLevel>() {
+        
+        @JvmField val NONE = addPreset(0)
+        @JvmField val ELEVATED = addPreset(1)
+        
+        override fun createValue(newKey: Int): GuildMfaLevel
+            = GuildMfaLevel(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
 data class GuildFeature
 private constructor(override val key: String) : ExtensibleEnumValue<String> {
     companion object Presets : ExtensibleEnum<String, GuildFeature>() {
@@ -1148,6 +1188,27 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 }
 
 @ConsistentCopyVisibility
+data class GuildMemberFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, GuildMemberFlag>() {
+        
+        @JvmField val DID_REJOIN = addPreset((1 shl 0).toBigInteger())
+        @JvmField val COMPLETED_ONBOARDING = addPreset((1 shl 1).toBigInteger())
+        @JvmField val BYPASSES_VERIFICATION = addPreset((1 shl 2).toBigInteger())
+        @JvmField val STARTED_ONBOARDING = addPreset((1 shl 3).toBigInteger())
+        @JvmField val IS_GUEST = addPreset((1 shl 4).toBigInteger())
+        @JvmField val STARTED_HOME_ACTIONS = addPreset((1 shl 5).toBigInteger())
+        @JvmField val COMPLETED_HOME_ACTIONS = addPreset((1 shl 6).toBigInteger())
+        @JvmField val AUTOMOD_QUARANTINED_USERNAME = addPreset((1 shl 7).toBigInteger())
+        @JvmField val DM_SETTINGS_UPSELL_ACKNOWLEDGED = addPreset((1 shl 8).toBigInteger())
+        @JvmField val AUTOMOD_QUARANTINED_GUILD_TAG = addPreset((1 shl 9).toBigInteger())
+
+        override fun createValue(newKey: BigInteger): GuildMemberFlag
+            = GuildMemberFlag(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
 data class ChannelType
 private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
     companion object Presets : ExtensibleEnum<Int, ChannelType>() {
@@ -1168,6 +1229,23 @@ private constructor(override val key: Int) : ExtensibleEnumValue<Int> {
 
         override fun createValue(newKey: Int): ChannelType
             = ChannelType(newKey)
+    }
+}
+
+@ConsistentCopyVisibility
+data class SystemChannelFlag
+private constructor(override val key: BigInteger) : ExtensibleEnumValue<BigInteger> {
+    companion object Presets : ExtensibleEnum<BigInteger, SystemChannelFlag>() {
+        
+        @JvmField val SUPPRESS_JOIN_NOTIFICATIONS = addPreset((1 shl 0).toBigInteger())
+        @JvmField val SUPPRESS_PREMIUM_SUBSCRIPTIONS = addPreset((1 shl 1).toBigInteger())
+        @JvmField val SUPPRESS_GUILD_REMINDER_NOTIFICATIONS = addPreset((1 shl 2).toBigInteger())
+        @JvmField val SUPPRESS_JOIN_NOTIFICATION_REPLIES = addPreset((1 shl 3).toBigInteger())
+        @JvmField val SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATIONS = addPreset((1 shl 4).toBigInteger())
+        @JvmField val SUPPRESS_ROLE_SUBSCRIPTION_PURCHASE_NOTIFICATION_REPLIES = addPreset((1 shl 5).toBigInteger())
+        
+        override fun createValue(newKey: BigInteger): SystemChannelFlag
+            = SystemChannelFlag(newKey)
     }
 }
 

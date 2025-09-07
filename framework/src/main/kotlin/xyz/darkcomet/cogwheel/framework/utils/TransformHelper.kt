@@ -13,10 +13,9 @@ internal fun <TObject, TValue> require(
     obj: TObject,
     property: KProperty1<TObject, MaybeAbsent<TValue>?>
 ): TValue? {
-    val field = property.get(obj);
-    if (field == null) {
-        throw InvalidModelException("Required object field '${property.name}' is absent")
-    }
+    val field = property.get(obj)
+        ?: throw InvalidModelException("Required object field '${property.name}' is absent");
+    
     return field.value
 }
 
@@ -35,10 +34,7 @@ internal fun <TObject, TValue> requireNonNullIfPresent(
     obj: TObject,
     property: KProperty1<TObject, MaybeAbsent<TValue>?>
 ): TValue? {
-    val field = property.get(obj)
-    if (field == null) {
-        return null 
-    }
+    val field = property.get(obj) ?: return null
     if (field.value == null) {
         throw InvalidModelException("Required object field '${property.name}' is present but is null")
     }

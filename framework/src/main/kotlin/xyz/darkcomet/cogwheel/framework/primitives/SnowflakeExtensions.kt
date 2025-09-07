@@ -85,3 +85,7 @@ fun Snowflake.asStickerPackId(): StickerPackId {
 fun Snowflake.asWebhookId(): WebhookId {
     return WebhookId(this)
 }
+
+fun Snowflake.asIntegrationId(): IntegrationId {
+    return IntegrationId(this)
+}

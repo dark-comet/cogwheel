@@ -602,20 +602,20 @@ data class GuildIntegrationObject(
 
 @Serializable
 data class GuildMemberObject(
-    val user: MaybeAbsent<UserObject>? = null,
-    val nick: MaybeAbsent<String>? = null,
-    val avatar: MaybeAbsent<String>? = null,
-    val banner: MaybeAbsent<String>? = null,
+    val user: MaybeAbsent<UserObject?>? = null,
+    val nick: MaybeAbsent<String?>? = null,
+    val avatar: MaybeAbsent<String?>? = null,
+    val banner: MaybeAbsent<String?>? = null,
     val roles: MaybeAbsent<List<Snowflake>>? = null,
-    @SerialName("joined_at") val joinedAt: MaybeAbsent<ISO8601Timestamp>? = null,
-    @SerialName("premium_since") val premiumSince: MaybeAbsent<ISO8601Timestamp>? = null,
+    @SerialName("joined_at") val joinedAt: MaybeAbsent<ISO8601Timestamp?>? = null,
+    @SerialName("premium_since") val premiumSince: MaybeAbsent<ISO8601Timestamp?>? = null,
     val deaf: MaybeAbsent<Boolean>? = null,
     val mute: MaybeAbsent<Boolean>? = null,
     val flags: MaybeAbsent<Int>? = null,
     val pending: MaybeAbsent<Boolean>? = null,
     val permissions: MaybeAbsent<String>? = null,
-    @SerialName("communication_disabled_until") val communicationDisabledUntil: MaybeAbsent<ISO8601Timestamp>? = null,
-    @SerialName("avatar_decoration_data") val avatarDecorationData: MaybeAbsent<UserAvatarDecorationDataObject>? = null,
+    @SerialName("communication_disabled_until") val communicationDisabledUntil: MaybeAbsent<ISO8601Timestamp?>? = null,
+    @SerialName("avatar_decoration_data") val avatarDecorationData: MaybeAbsent<UserAvatarDecorationDataObject?>? = null,
     @SerialName("guild_id") val guildId: MaybeAbsent<Snowflake>? = null
 )
 
@@ -632,7 +632,7 @@ data class GuildObject(
     @SerialName("icon_hash") val iconHash: MaybeAbsent<String>? = null,
     val splash: MaybeAbsent<String>? = null,
     @SerialName("discovery_splash") val discoverySplash: MaybeAbsent<String>? = null,
-    val owner: MaybeAbsent<String>? = null, //Only set when using the GET Current User Guilds endpoint, and are relative to the requested user
+    val owner: MaybeAbsent<Boolean>? = null, //Only set when using the GET Current User Guilds endpoint, and are relative to the requested user
     @SerialName("owner_id") val ownerId: MaybeAbsent<Snowflake>? = null,
     val permissions: MaybeAbsent<String>? = null,
     @Deprecated("replaced by channel.rtc_region") val region: MaybeAbsent<String>? = null,
@@ -669,6 +669,7 @@ data class GuildObject(
     val stickers: MaybeAbsent<List<StickerObject>>? = null,
     @SerialName("premium_progress_bar_enabled") val premiumProgressBarEnabled: MaybeAbsent<Boolean>? = null,
     @SerialName("safety_alerts_channel_id") val safetyAlertsChannelId: MaybeAbsent<Snowflake>? = null,
+    @SerialName("incidents_data") val incidentsData: MaybeAbsent<GuildIncidentsDataObject?>? = null,
     val unavailable: MaybeAbsent<Boolean>? = null,
     // From Gateway Guild Create Event
     @SerialName("joined_at") val joinedAt: MaybeAbsent<ISO8601Timestamp>? = null,
@@ -682,6 +683,14 @@ data class GuildObject(
     @SerialName("stage_instances") val stageInstances: MaybeAbsent<List<StageInstanceObject>>? = null,
     @SerialName("guild_scheduled_events") val guildScheduledEvents: MaybeAbsent<List<GuildScheduledEventObject>>? = null,
     @SerialName("soundboard_sounds") val soundboardSounds: MaybeAbsent<List<SoundboardSoundObject>>? = null,
+)
+
+@Serializable
+data class GuildIncidentsDataObject(
+    @SerialName("invites_disabled_until") val invitesDisabledUntil: MaybeAbsent<ISO8601Timestamp?>? = null,
+    @SerialName("dms_disabled_until") val dmsDisabledUntil: MaybeAbsent<ISO8601Timestamp?>? = null,
+    @SerialName("dm_spam_detected_at") val dmSpamDetectedAt: MaybeAbsent<ISO8601Timestamp?>? = null,
+    @SerialName("raid_detected_at") val raidDetectedAt: MaybeAbsent<ISO8601Timestamp?>? = null,
 )
 
 @Serializable
@@ -1261,7 +1270,8 @@ data class ResolvedDataObject(
 data class RoleObject(
     val id: MaybeAbsent<Snowflake>? = null,
     val name: MaybeAbsent<String>? = null,
-    val color: MaybeAbsent<Int>? = null,
+    @Deprecated("to be removed by Discord API") val color: MaybeAbsent<Int>? = null,
+    val colors: MaybeAbsent<RoleColorsObject>? = null,
     val hoist: MaybeAbsent<Boolean>? = null,
     val icon: MaybeAbsent<String>? = null,
     @SerialName("unicode_emoji") val unicodeEmoji: MaybeAbsent<String>? = null,
@@ -1274,6 +1284,13 @@ data class RoleObject(
 )
 
 @Serializable
+data class RoleColorsObject(
+    @SerialName("primary_color") val primaryColor: MaybeAbsent<Int>? = null,
+    @SerialName("secondary_color") val secondaryColor: MaybeAbsent<Int?>? = null,
+    @SerialName("tertiary_color") val tertiaryColor: MaybeAbsent<Int?>? = null,
+)
+
+@Serializable
 data class RoleSubscriptionDataObject(
     @SerialName("role_subscription_listing_id") val roleSubscriptionListingId: MaybeAbsent<Snowflake>? = null,
     @SerialName("tier_name") val tierName: MaybeAbsent<String>? = null,
@@ -1283,12 +1300,12 @@ data class RoleSubscriptionDataObject(
 
 @Serializable
 data class RoleTagsObject(
-    val botId: MaybeAbsent<Snowflake>? = null,
+    @SerialName("bot_id") val botId: MaybeAbsent<Snowflake>? = null,
     @SerialName("integration_id") val integrationId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("premium_subscriber") val premiumSubscriber: MaybeAbsent<Boolean>? = null,
+    @SerialName("premium_subscriber") val premiumSubscriber: MaybeAbsent<Boolean?>? = null,
     @SerialName("subscription_listing_id") val subscriptionListingId: MaybeAbsent<Snowflake>? = null,
-    @SerialName("available_for_purchase") val availableForPurchase: MaybeAbsent<Boolean>? = null,
-    @SerialName("guild_connections") val guildConnections: MaybeAbsent<Boolean>? = null
+    @SerialName("available_for_purchase") val availableForPurchase: MaybeAbsent<Boolean?>? = null,
+    @SerialName("guild_connections") val guildConnections: MaybeAbsent<Boolean?>? = null
 )
 
 @Serializable

@@ -385,7 +385,7 @@ data class ModifyGuildAutoModerationRuleRequestParameters(
 )
 
 @Serializable
-data class ModifyGuildChannelPositionsRequestParameters(
+data class ModifyGuildChannelPositionRequestParameters(
     val id: Snowflake,
     val position: MaybeAbsent<Int>? = null,
     @SerialName("lock_permissions") val lockPermissions: MaybeAbsent<Boolean>? = null,

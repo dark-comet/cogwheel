@@ -83,22 +83,22 @@ internal constructor(private val httpClient: CwHttpClient) {
 
     suspend fun modifyGuildChannelPositions(
         guildId: Snowflake, 
-        request: List<ModifyGuildChannelPositionsRequestParameters>
+        request: List<ModifyGuildChannelPositionRequestParameters>
     ): CwHttpResponse<Unit> {
         
         val httpRequest = CwHttpRequest.create(PATCH, "/guilds/${guildId}/channels") {
-            jsonParams(request, ListSerializer(ModifyGuildChannelPositionsRequestParameters.serializer()))
+            jsonParams(request, ListSerializer(ModifyGuildChannelPositionRequestParameters.serializer()))
         }
         val response = httpClient.submit(httpRequest)
 
         return response.withNoData()
     }
 
-    suspend fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListGuildActiveThreadsResponseObject> {
+    suspend fun listActiveGuildThreads(guildId: Snowflake): CwHttpResponse<ListActiveGuildThreadsResponseObject> {
         val httpRequest = CwHttpRequest.create(GET, "/guilds/${guildId}/threads/active")
         val response = httpClient.submit(httpRequest)
 
-        return response.withData(ListGuildActiveThreadsResponseObject.serializer())
+        return response.withData(ListActiveGuildThreadsResponseObject.serializer())
     }
 
     suspend fun getGuildMember(
@@ -133,7 +133,7 @@ internal constructor(private val httpClient: CwHttpClient) {
     suspend fun searchGuildMembers(
         guildId: Snowflake, 
         query: String,
-        limit: Int = 1
+        limit: Int? = null
     ): CwHttpResponse<List<GuildMemberObject>> {
         
         val httpRequest = CwHttpRequest.create(GET, "/guilds/${guildId}/members/search") {

@@ -31,7 +31,7 @@ data class ListApplicationEmojisResponseObject(
 )
 
 @Serializable
-data class ListGuildActiveThreadsResponseObject(
+data class ListActiveGuildThreadsResponseObject(
     val threads: List<ChannelObject>,
     val members: List<ThreadMemberObject>
 )
